@@ -8,6 +8,7 @@
     huawei: { name: 'Huawei Health', platform: 'Android / HarmonyOS', bridge: 'huawei' }
   };
 
+  const detailsFor = (provider) => PROVIDERS[provider] || PROVIDERS.apple;
   const numberOrZero = (value) => Number(value || 0);
   const average = (entries, key) => entries.length ? entries.reduce((sum, item) => sum + numberOrZero(item[key]), 0) / entries.length : 0;
 
@@ -154,9 +155,8 @@
           return;
         }
       }
-      ctx.updateState((state) => { state.healthSources.push({ provider: selectedProvider, status: 'connected', mode: 'demo', lastSync: new Date().toISOString() }); });
-      ctx.toast(ctx.t('health.demoConnected'));
-      openProvider(selectedProvider);
+      ctx.toast(ctx.t('health.connectionFailed'), 'error');
+      statusRoot.innerHTML = `<div class="connection-state"><span></span><div><strong>${ctx.escape(detailsFor(selectedProvider).name)}</strong><small>Application mobile native requise. Utilisez l’import de démonstration uniquement pour tester l’interface.</small></div></div>`;
     }
 
     async function importDemo() {
@@ -168,6 +168,7 @@
           entries = (await window.SUM_NATIVE_HEALTH.sync(selectedProvider, 14)).map((item) => ({ id: item.id || ctx.uid(), source: selectedProvider, ...item }));
         } catch { return ctx.toast(ctx.t('health.connectionFailed'), 'error'); }
       }
+      if (mode === 'native' && !entries.length) return ctx.toast(ctx.t('health.connectionFailed'), 'error');
       if (!entries.length) { entries = demoEntries(selectedProvider); mode = 'demo'; }
       ctx.updateState((state) => {
         const existingDates = new Set(state.health.filter((item) => item.source === selectedProvider).map((item) => item.date));
@@ -176,7 +177,7 @@
         if (source) { source.lastSync = new Date().toISOString(); source.mode = mode; }
         else state.healthSources.push({ provider: selectedProvider, status: 'connected', mode, lastSync: new Date().toISOString() });
       });
-      ctx.toast(ctx.t('health.demoImported'));
+      ctx.toast(mode === 'native' ? ctx.t('health.connected') : ctx.t('health.demoImported'));
       openProvider(selectedProvider);
     }
 
