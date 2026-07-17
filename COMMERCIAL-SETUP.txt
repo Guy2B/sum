@@ -1,0 +1,47 @@
+SUM by Al.G.B.r. — CONFIGURATION COMMERCIALE V1.5.1 FINAL
+
+1. TESTER LOCALEMENT
+- Extraire le ZIP.
+- Lancer START-SUM.bat.
+- Tester les cinq éditions.
+- Activer SUM-OWNER-PREVIEW dans Compte.
+- Charger une démo pour chaque édition.
+
+2. COMPLÉTER config.js
+- appsScriptUrl
+- paymentProvider
+- paymentMode
+- monthlyCheckoutUrl
+- annualCheckoutUrl
+- supportEmail
+- legalEntity
+- legalAddress
+- legalCountry
+
+3. CONFIGURER LE PAIEMENT
+- Créer un produit mensuel.
+- Créer un produit annuel.
+- Activer les licences si la plateforme les gère.
+- Copier les deux liens dans config.js.
+- Tester d’abord en mode test.
+
+4. CONFIGURER GOOGLE APPS SCRIPT
+- Créer un Google Sheet administrateur.
+- Copier backend/google-apps-script/Code.gs.
+- Déployer comme application web.
+- Copier l’URL dans config.js.
+- Tester activation, sauvegarde et restauration.
+
+5. PERSONNALISER LES TEXTES LÉGAUX
+- legal/privacy.html
+- legal/terms.html
+- legal/support.html
+
+6. PUBLIER
+- Utiliser un hébergement HTTPS.
+- Vérifier la PWA.
+- Tester les liens app.html?edition=student|solo|creator|life|nomad.
+- Effectuer une vraie transaction contrôlée avant l’ouverture publique.
+
+IMPORTANT
+Le code de mode propriétaire n’est pas une sécurité de production. Il est limité au test local. Utiliser une licence propriétaire vérifiée sur le site public.

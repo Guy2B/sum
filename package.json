@@ -1,0 +1,13 @@
+{
+  "name": "sigma-life-os",
+  "private": true,
+  "version": "1.5.1",
+  "description": "Sigma Life OS by Al.G.B.r. — multilingual local-first life and work command center.",
+  "scripts": {
+    "check": "node scripts/validate.mjs",
+    "serve": "python3 -m http.server 8080"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

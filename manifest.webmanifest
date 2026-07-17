@@ -1,0 +1,63 @@
+{
+  "name": "Σ Life OS by Al.G.B.r.",
+  "short_name": "Σ Life OS",
+  "description": "A multilingual, local-first Life & Work OS with dedicated editions, grounded guidance, mail, finance, health and learning.",
+  "id": "sum-by-algbr",
+  "start_url": "app.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f5f8ff",
+  "theme_color": "#506cf0",
+  "categories": [
+    "productivity",
+    "business",
+    "lifestyle"
+  ],
+  "icons": [
+    {
+      "src": "assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Tasks",
+      "url": "app.html#tasks",
+      "icons": [
+        {
+          "src": "assets/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Calendar & habits",
+      "url": "app.html#planner",
+      "icons": [
+        {
+          "src": "assets/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Ask Σ",
+      "url": "app.html#coach",
+      "icons": [
+        {
+          "src": "assets/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}

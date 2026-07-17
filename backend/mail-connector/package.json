@@ -1,0 +1,26 @@
+{
+  "name": "sum-mail-connector",
+  "version": "1.5.0",
+  "private": true,
+  "description": "Optional secure mail connector for SUM V1.5",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "check": "node --check server.js && node --check lib/store.js && node --check lib/state.js && node --check lib/providers/gmail.js && node --check lib/providers/outlook.js && node --check lib/providers/imap.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.0.1",
+    "googleapis": "^156.0.0",
+    "helmet": "^8.1.0",
+    "imapflow": "^1.0.191"
+  }
+}
