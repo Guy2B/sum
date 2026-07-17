@@ -118,4 +118,86 @@ if (!appHtml.includes('id="coach-signal-strip"')) {
   process.exit(1);
 }
 
+if (!appHtml.includes('modules/social.js') || !worker.includes('modules/social.js')) {
+  console.error('Σ Social is not included in both the app and offline shell.');
+  process.exit(1);
+}
+const socialCode = await readFile(path.join(root, 'modules/social.js'), 'utf8');
+for (const id of ['panel-social','social-interaction-list','social-connect-dialog','dashboard-social-summary']) {
+  if (!appHtml.includes(`id="${id}"`)) {
+    console.error(`Missing Social Hub UI: ${id}`);
+    process.exit(1);
+  }
+}
+if (!socialCode.includes("window.SUM_MODULES.initSocial")) {
+  console.error('Social Hub module is not registered.');
+  process.exit(1);
+}
+
+
+// V1.6.1 context, unified mail and local intelligence checks.
+for (const id of ['panel-context','context-profile-form','context-checkin-form','dashboard-context-summary','mail-unified-form','mail-unified-email','ai-settings-dialog']) {
+  if (!appHtml.includes(`id="${id}"`)) {
+    console.error(`Missing V1.6.1 UI: ${id}`);
+    process.exit(1);
+  }
+}
+const contextCode = await readFile(path.join(root, 'modules/context.js'), 'utf8');
+const mailCode = await readFile(path.join(root, 'modules/mail.js'), 'utf8');
+const localAiCode = await readFile(path.join(root, 'modules/local-ai.js'), 'utf8');
+if (!contextCode.includes('window.SUM_MODULES.initContext')) {
+  console.error('Context Center module is not registered.');
+  process.exit(1);
+}
+if (!mailCode.includes('detectProvider') || mailCode.includes('mail-provider-grid')) {
+  console.error('Unified Mail Setup regression detected.');
+  process.exit(1);
+}
+if (!localAiCode.includes('prepareSemantic') || !localAiCode.includes('@huggingface/transformers')) {
+  console.error('Local semantic AI layer is missing.');
+  process.exit(1);
+}
+if (!worker.includes('modules/context.js') || !worker.includes('modules/ai-settings.js')) {
+  console.error('V1.6.1 modules are missing from the offline shell.');
+  process.exit(1);
+}
+
+// V1.7 decision-first experience and commercial administration checks.
+for (const id of ['panel-attention','panel-plan','panel-connections','panel-admin','v17-today-recommendations','v17-attention-list','v17-plan-outcomes','v17-connections-calendar','calendar-connect-dialog','v17-admin-checks']) {
+  if (!appHtml.includes(`id="${id}"`)) {
+    console.error(`Missing V1.7 UI: ${id}`);
+    process.exit(1);
+  }
+}
+for (const moduleName of ['modules/intelligence-v17.js','modules/experience-v17.js','modules/native-health-bridge.js','modules/calendar-connect.js']) {
+  if (!appHtml.includes(moduleName) || !worker.includes(moduleName)) {
+    console.error(`V1.7 module is missing from app or offline shell: ${moduleName}`);
+    process.exit(1);
+  }
+}
+const intelligenceCode = await readFile(path.join(root, 'modules/intelligence-v17.js'), 'utf8');
+const experienceCode = await readFile(path.join(root, 'modules/experience-v17.js'), 'utf8');
+const configCode = await readFile(path.join(root, 'config.js'), 'utf8');
+if (!intelligenceCode.includes('window.SUM_INTELLIGENCE_V17') || !experienceCode.includes('initExperienceV17')) {
+  console.error('V1.7 intelligence or experience module is not registered.');
+  process.exit(1);
+}
+if (!configCode.includes("version: '1.7.0-admin-beta'") || !configCode.includes('adminQaEnabled: true')) {
+  console.error('V1.7 admin beta configuration is missing.');
+  process.exit(1);
+}
+if (!files.includes(path.join(root, 'backend/calendar-connector/server.js'))) { console.error('Calendar connector backend is missing.'); process.exit(1); }
+for (const providerFile of ['x.js','linkedin.js','tiktok.js']) {
+  if (!files.includes(path.join(root, 'backend/social-connector/lib/providers', providerFile))) {
+    console.error(`Missing direct social connector scaffold: ${providerFile}`);
+    process.exit(1);
+  }
+}
+for (const releaseScript of ['scripts/release-check.mjs','scripts/build-commercial.mjs']) {
+  if (!files.includes(path.join(root, releaseScript))) {
+    console.error(`Missing commercial release script: ${releaseScript}`);
+    process.exit(1);
+  }
+}
+
 console.log(`Validation passed: ${javascript.length} JavaScript files, ${allIds.size} unique HTML IDs, ${referencedIds.length} DOM references, ${languageKeys.en.length} translated keys × 4 languages.`);

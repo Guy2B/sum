@@ -45,7 +45,7 @@ function upsertAccount(sessionId, account) { store.updateSession(sessionId, (dra
 function updateTokens(sessionId, accountId, tokens) { store.updateSession(sessionId, (draft) => { const account = (draft.accounts || []).find((item) => item.id === accountId); if (account) account.auth.tokens = tokens; }); }
 function redirectResult(ok, provider, message = '') { const url = new URL(returnUrl); url.searchParams.set('mail', ok ? 'connected' : 'error'); url.searchParams.set('provider', provider); if (message) url.searchParams.set('message', message.slice(0, 180)); return url.toString(); }
 
-app.get('/health', (req,res) => res.json({ ok:true, version:'1.5.0', providers:{ gmail:gmail.configured(env), outlook:outlook.configured(env), yahoo:true, gmx:true } }));
+app.get('/health', (req,res) => res.json({ ok:true, version:'1.6.1', providers:{ gmail:gmail.configured(env), outlook:outlook.configured(env), yahoo:true, gmx:true } }));
 app.get('/api/mail/providers', (req,res) => res.json({ providers:{ gmail:{ configured:gmail.configured(env), auth:'oauth' }, outlook:{ configured:outlook.configured(env), auth:'oauth' }, yahoo:{ configured:true, auth:'app-password' }, gmx:{ configured:true, auth:'app-password' } } }));
 app.get('/api/mail/accounts', (req,res) => res.json({ accounts:(session(req).accounts || []).map(sanitized) }));
 
@@ -55,8 +55,9 @@ app.get('/api/mail/connect/:provider', (req,res,next) => {
     if (!['gmail','outlook'].includes(provider)) return res.status(400).json({ error:'Use the IMAP connection endpoint.' });
     const adapter = provider === 'gmail' ? gmail : outlook;
     if (!adapter.configured(env)) return res.status(503).json({ error:`${provider} OAuth is not configured.` });
-    const state = signState({ sid:req.sumSession, provider }, SESSION_SECRET);
-    res.redirect(adapter.authUrl(env,state));
+    const loginHint = String(req.query.email || '').trim().toLowerCase();
+    const state = signState({ sid:req.sumSession, provider, loginHint }, SESSION_SECRET);
+    res.redirect(adapter.authUrl(env,state,loginHint));
   } catch(error){next(error)}
 });
 app.get('/api/mail/callback/:provider', async (req,res) => {

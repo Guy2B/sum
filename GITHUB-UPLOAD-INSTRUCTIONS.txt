@@ -1,0 +1,10 @@
+Σ V1.7 GITHUB UPGRADE FROM V1.5.1
+
+1. Keep your current working .github/workflows file. This archive does not contain .github.
+2. Upload the CONTENTS of this folder to the repository root.
+3. Allow replacement of existing files.
+4. Commit: Upgrade Sigma Life OS to V1.7 admin beta
+5. Wait for GitHub Pages Actions to turn green.
+6. Open app.html, refresh with Ctrl+F5, then use Admin QA.
+
+This is an ADMIN TEST build. Do not activate public sales yet.

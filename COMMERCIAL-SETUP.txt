@@ -1,47 +1,32 @@
-SUM by Al.G.B.r. — CONFIGURATION COMMERCIALE V1.5.1 FINAL
+Σ LIFE OS V1.7 — COMMERCIAL ADMIN BETA
 
-1. TESTER LOCALEMENT
-- Extraire le ZIP.
-- Lancer START-SUM.bat.
-- Tester les cinq éditions.
-- Activer SUM-OWNER-PREVIEW dans Compte.
-- Charger une démo pour chaque édition.
+PRICE
+- Σ Pro monthly: 8.90 EUR
+- Σ Pro annual: 69 EUR
+- One active workspace chosen by the customer. The workspace may be changed later without deleting data.
 
-2. COMPLÉTER config.js
-- appsScriptUrl
-- paymentProvider
-- paymentMode
-- monthlyCheckoutUrl
-- annualCheckoutUrl
-- supportEmail
-- legalEntity
-- legalAddress
-- legalCountry
+ADMIN TEST BUILD
+- config.js: adminQaEnabled=true
+- config.js: commercialRelease=false
+- config.js: paymentMode=test
+- The Admin QA console is visible and test scenarios may unlock Pro locally for testing.
+- DO NOT open public sales with this configuration.
 
-3. CONFIGURER LE PAIEMENT
-- Créer un produit mensuel.
-- Créer un produit annuel.
-- Activer les licences si la plateforme les gère.
-- Copier les deux liens dans config.js.
-- Tester d’abord en mode test.
+REQUIRED BEFORE PUBLIC SALES
+1. Complete support and legal identity in config.js and legal pages.
+2. Configure live monthly/annual checkout and customer portal.
+3. Replace the client-only test licence with server-verified entitlements/webhooks.
+4. Deploy Mail, Calendar and Social connectors on HTTPS with persistent encrypted storage.
+5. Configure OAuth applications and complete required provider reviews.
+6. Build/sign iOS and Android apps; complete HealthKit, Health Connect and Samsung partner integration.
+7. Disable Admin QA, checkout simulation, demo licence and owner preview.
+8. Run: npm run release:check
+9. Run: npm run release:build
+10. Complete the browser/mobile/admin test plan and external beta.
 
-4. CONFIGURER GOOGLE APPS SCRIPT
-- Créer un Google Sheet administrateur.
-- Copier backend/google-apps-script/Code.gs.
-- Déployer comme application web.
-- Copier l’URL dans config.js.
-- Tester activation, sauvegarde et restauration.
-
-5. PERSONNALISER LES TEXTES LÉGAUX
-- legal/privacy.html
-- legal/terms.html
-- legal/support.html
-
-6. PUBLIER
-- Utiliser un hébergement HTTPS.
-- Vérifier la PWA.
-- Tester les liens app.html?edition=student|solo|creator|life|nomad.
-- Effectuer une vraie transaction contrôlée avant l’ouverture publique.
-
-IMPORTANT
-Le code de mode propriétaire n’est pas une sécurité de production. Il est limité au test local. Utiliser une licence propriétaire vérifiée sur le site public.
+NEVER COMMIT
+- .env files
+- OAuth client secrets
+- session or encryption keys
+- app passwords
+- customer exports or health data

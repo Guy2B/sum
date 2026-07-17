@@ -2,9 +2,9 @@
 const { google } = require('googleapis');
 function configured(env) { return Boolean(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET && env.GOOGLE_REDIRECT_URI); }
 function client(env) { return new google.auth.OAuth2(env.GOOGLE_CLIENT_ID, env.GOOGLE_CLIENT_SECRET, env.GOOGLE_REDIRECT_URI); }
-function authUrl(env, state) {
+function authUrl(env, state, loginHint = '') {
   const oauth = client(env);
-  return oauth.generateAuthUrl({ access_type: 'offline', prompt: 'consent', state, scope: ['openid','email','profile','https://www.googleapis.com/auth/gmail.readonly'] });
+  return oauth.generateAuthUrl({ access_type: 'offline', prompt: 'consent', state, login_hint: loginHint || undefined, scope: ['openid','email','profile','https://www.googleapis.com/auth/gmail.readonly'] });
 }
 async function exchange(env, code) {
   const oauth = client(env); const { tokens } = await oauth.getToken(code); oauth.setCredentials(tokens);

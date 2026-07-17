@@ -1,10 +1,12 @@
 {
   "name": "sigma-life-os",
   "private": true,
-  "version": "1.5.1",
+  "version": "1.7.0-admin-beta",
   "description": "Sigma Life OS by Al.G.B.r. — multilingual local-first life and work command center.",
   "scripts": {
     "check": "node scripts/validate.mjs",
+    "release:check": "node scripts/release-check.mjs",
+    "release:build": "node scripts/build-commercial.mjs",
     "serve": "python3 -m http.server 8080"
   },
   "engines": {

@@ -2,8 +2,8 @@
 function configured(env) { return Boolean(env.MICROSOFT_CLIENT_ID && env.MICROSOFT_CLIENT_SECRET && env.MICROSOFT_REDIRECT_URI); }
 function tenant(env) { return env.MICROSOFT_TENANT || 'common'; }
 function scopes() { return 'openid profile offline_access User.Read Mail.Read'; }
-function authUrl(env, state) {
-  const params = new URLSearchParams({ client_id: env.MICROSOFT_CLIENT_ID, response_type: 'code', redirect_uri: env.MICROSOFT_REDIRECT_URI, response_mode: 'query', scope: scopes(), state });
+function authUrl(env, state, loginHint = '') {
+  const params = new URLSearchParams({ client_id: env.MICROSOFT_CLIENT_ID, response_type: 'code', redirect_uri: env.MICROSOFT_REDIRECT_URI, response_mode: 'query', scope: scopes(), state, ...(loginHint ? { login_hint: loginHint } : {}) });
   return `https://login.microsoftonline.com/${tenant(env)}/oauth2/v2.0/authorize?${params}`;
 }
 async function tokenRequest(env, params) {

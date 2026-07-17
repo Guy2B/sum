@@ -1,23 +1,45 @@
-# Validation — Σ Life OS V1.5.1 GitHub Ready
+# Validation report — Σ V1.7 commercial admin beta
 
-Validation effectuée le 17 juillet 2026.
+Validation date: 2026-07-17
 
-## Contrôles réussis
+## Passed
 
-- 31 fichiers JavaScript passent `node --check`.
-- 270 identifiants HTML uniques, sans doublon.
-- 209 références `getElementById` correspondent à un élément existant.
-- 909 clés de traduction sont présentes à parité en anglais, français, allemand et espagnol.
-- Les quatre cartes santé sont présentes et directement reliées à leurs gestionnaires de clic.
-- La couche IA locale facultative est chargée par l'application et incluse dans le cache hors ligne.
-- Le bandeau de signaux croisés de Σ est présent.
-- Aucun intitulé client ne révèle Google Sheets comme technologie de sauvegarde.
-- Le workflow GitHub valide le projet et un second workflow prépare le frontend pour GitHub Pages.
-- Aucun secret `.env`, OAuth ou mot de passe d'application n'est fourni dans le dépôt.
-- Aucune offre à vie n'est incluse.
+- root `npm run check` passed;
+- JavaScript syntax, duplicate HTML IDs, DOM references and four-language key parity passed;
+- Mail Connector syntax passed;
+- Social Connector syntax passed, including X, LinkedIn and TikTok adapters;
+- Calendar Connector syntax passed;
+- Local AI Gateway syntax passed;
+- mobile TypeScript configuration/contract check passed;
+- dependency lock files generated;
+- dependency audits reported no known vulnerabilities at build time;
+- Mail `/health` returned HTTP 200 in local runtime test;
+- Social `/health` returned HTTP 200 in local runtime test;
+- Calendar `/health` returned HTTP 200 in local runtime test;
+- Local AI gateway returned the expected HTTP 503 while Ollama was deliberately absent;
+- commercial release gate executed and correctly blocked the admin build on 16 missing/live-only requirements;
+- service-worker shell contains all V1.7 frontend modules.
 
-## Limites de validation
+## Intentionally blocked
 
-L'authentification réelle Gmail, Outlook, Yahoo et GMX n'a pas été exécutée, car elle exige des comptes de test et vos propres identifiants OAuth ou mots de passe d'application.
+`npm run release:check` fails in the delivered admin beta because:
 
-Le navigateur Chromium de l'environnement de construction s'est fermé pendant le test automatisé local. La recette visuelle et interactive finale doit donc être exécutée sur votre ordinateur avec `docs/RELEASE-CHECKLIST.md`. Les vérifications statiques et structurelles ont réussi.
+- Admin QA and test payment are enabled;
+- commercial release is false;
+- checkout/customer portal URLs are empty;
+- legal identity and support email are empty;
+- Mail, Calendar and Social production URLs are empty;
+- demo/owner test access remains enabled.
+
+This is the expected safe state before administrator testing.
+
+## Not completed in this build environment
+
+- visual Chromium automation was blocked by the managed browser policy for localhost and file URLs;
+- Xcode compilation/signing and HealthKit entitlement tests require macOS and an Apple developer account;
+- Android Health Connect permission/coroutine completion requires Android Studio/device testing;
+- Samsung Health requires the official proprietary AAR and registered production package/signature;
+- real OAuth provider flows require customer-owned developer applications and external test accounts;
+- App Store/Play billing and server-verified entitlement webhooks are not configured.
+
+The delivered archive is a high-completeness admin beta and source foundation, not a claim that external approvals or signed store builds have already been obtained.

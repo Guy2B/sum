@@ -21,15 +21,22 @@
   <script defer src="modules/tasks.js"></script>
   <script defer src="modules/projects.js"></script>
   <script defer src="modules/finance.js"></script>
+  <script defer src="modules/native-health-bridge.js"></script>
   <script defer src="modules/health.js"></script>
   <script defer src="modules/journal.js"></script>
   <script defer src="modules/learning.js"></script>
   <script defer src="modules/planner.js"></script>
+  <script defer src="modules/calendar-connect.js"></script>
+  <script defer src="modules/context.js"></script>
   <script defer src="modules/mail.js"></script>
+  <script defer src="modules/social.js"></script>
   <script defer src="modules/coach.js"></script>
   <script defer src="modules/local-ai.js"></script>
+  <script defer src="modules/ai-settings.js"></script>
   <script defer src="modules/coach-v121.js"></script>
   <script defer src="modules/dashboard.js"></script>
+  <script defer src="modules/intelligence-v17.js"></script>
+  <script defer src="modules/experience-v17.js"></script>
   <script defer src="app.js"></script>
 </head>
 <body>
@@ -58,6 +65,11 @@
     <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
     <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4M5 5h11l-2 4 2 4H5"/></symbol>
     <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></symbol>
+    <symbol id="i-social" viewBox="0 0 24 24"><circle cx="6" cy="12" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="18" cy="18" r="3"/><path d="m8.7 10.7 6.6-3.4M8.7 13.3l6.6 3.4"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/></symbol>
+    <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.5.5l2-2a5 5 0 0 0-7-7l-1.2 1.2"/><path d="M14 11a5 5 0 0 0-7.5-.5l-2 2a5 5 0 0 0 7 7l1.2-1.2"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 20 6v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="m9 12 2 2 4-5"/></symbol>
   </svg>
 
   <div class="app-shell">
@@ -72,20 +84,29 @@
         <small id="plan-subtitle" data-i18n="plan.freeSubtitle">Your data stays on this device.</small>
         <button class="text-button" type="button" data-upgrade data-i18n="plan.upgrade">Unlock Σ Pro</button>
       </div>
-      <nav class="side-nav" aria-label="Primary">
-        <button class="nav-item active" type="button" data-panel="dashboard"><svg><use href="#i-grid"/></svg><span data-i18n="nav.dashboard">Dashboard</span></button>
+      <nav class="side-nav v17-side-nav" aria-label="Primary">
+        <span class="nav-section-label">Σ V1.7</span>
+        <button class="nav-item active" type="button" data-panel="dashboard"><svg><use href="#i-grid"/></svg><span id="v17-nav-today">Aujourd’hui</span></button>
+        <button class="nav-item" type="button" data-panel="attention"><svg><use href="#i-bell"/></svg><span id="v17-nav-attention">Attention</span><span class="nav-count" id="v17-attention-nav-count" hidden>0</span></button>
+        <button class="nav-item" type="button" data-panel="plan"><svg><use href="#i-map"/></svg><span id="v17-nav-plan">Plan</span></button>
+        <button class="nav-item" type="button" data-panel="coach"><svg><use href="#i-spark"/></svg><span>Σ Coach</span></button>
+        <button class="nav-item" type="button" data-panel="connections"><svg><use href="#i-link"/></svg><span id="v17-nav-sources">Sources</span></button>
+        <div class="nav-divider"></div>
+        <span class="nav-section-label" id="v17-nav-tools">Outils</span>
         <button class="nav-item" type="button" data-panel="tasks"><svg><use href="#i-check"/></svg><span id="nav-label-tasks" data-i18n="nav.tasks">Tasks</span></button>
         <button class="nav-item" type="button" data-panel="planner"><svg><use href="#i-calendar"/></svg><span id="nav-label-planner" data-i18n="nav.planner">Calendar & habits</span></button>
         <button class="nav-item" type="button" data-panel="mail"><svg><use href="#i-mail"/></svg><span data-i18n="mail.nav">Mail Hub</span><span class="nav-count" id="mail-nav-count">0</span></button>
+        <button class="nav-item" type="button" data-panel="social"><svg><use href="#i-social"/></svg><span data-i18n="social.nav">Σ Social</span><span class="nav-count" id="social-nav-count">0</span></button>
         <button class="nav-item" type="button" data-panel="projects" data-premium-panel><svg><use href="#i-folder"/></svg><span id="nav-label-projects" data-i18n="nav.projects">Projects</span><svg class="nav-lock"><use href="#i-lock"/></svg></button>
         <button class="nav-item" type="button" data-panel="finance" data-premium-panel><svg><use href="#i-wallet"/></svg><span id="nav-label-finance" data-i18n="nav.finance">Finance</span><svg class="nav-lock"><use href="#i-lock"/></svg></button>
         <button class="nav-item" type="button" data-panel="health" data-premium-panel><svg><use href="#i-heart"/></svg><span id="nav-label-health" data-i18n="nav.health">Health</span><svg class="nav-lock"><use href="#i-lock"/></svg></button>
         <button class="nav-item" type="button" data-panel="journal"><svg><use href="#i-journal"/></svg><span data-i18n="nav.journal">Journal</span></button>
         <button class="nav-item" type="button" data-panel="learning"><svg><use href="#i-book"/></svg><span id="nav-label-learning" data-i18n="nav.learning">Learning</span></button>
-        <button class="nav-item" type="button" data-panel="coach"><svg><use href="#i-spark"/></svg><span data-i18n="nav.coach">Σ</span></button>
+        <button class="nav-item" type="button" data-panel="context"><svg><use href="#i-target"/></svg><span data-i18n="context.nav">My context</span></button>
         <div class="nav-divider"></div>
         <button class="nav-item" type="button" data-panel="sync"><svg><use href="#i-sync"/></svg><span data-i18n="nav.sync">Backup & sync</span></button>
         <button class="nav-item" type="button" data-panel="account"><svg><use href="#i-user"/></svg><span data-i18n="nav.account">Account</span></button>
+        <button class="nav-item" id="v17-admin-nav" type="button" data-panel="admin"><svg><use href="#i-shield"/></svg><span id="v17-nav-admin">Admin QA</span></button>
       </nav>
       <div class="sidebar-profile" id="sidebar-profile"><div class="avatar">S</div><div><strong data-i18n="common.guest">Guest</strong><span data-i18n="common.localOnly">Local workspace</span></div></div>
     </aside>
@@ -100,6 +121,7 @@
           <kbd>⌘K</kbd><div class="search-results" id="search-results" hidden></div>
         </div>
         <div class="top-actions">
+          <span class="admin-beta-badge" id="v17-admin-beta-badge" hidden>ADMIN BETA</span>
           <button class="button compact upgrade-button" type="button" data-upgrade><span data-i18n="plan.goPro">Go Pro</span></button>
           <label class="language-control" data-i18n-title="top.language"><select id="language-select" aria-label="Language"><option value="en">EN</option><option value="fr">FR</option><option value="de">DE</option><option value="es">ES</option></select></label>
           <button class="icon-button" id="theme-toggle" type="button" data-i18n-title="top.theme"><svg><use href="#i-moon"/></svg></button>
@@ -112,6 +134,16 @@
             <div><span class="eyebrow" id="today-chip">Today</span><h1 id="dashboard-greeting">Welcome to Σ</h1><p id="dashboard-edition-subtitle" data-i18n="dashboard.v12.subtitle">Your day, week and month in one command center.</p></div>
             <button class="button primary" id="dashboard-prepare-day" type="button"><span class="ask-symbol">Σ</span><span data-i18n="dashboard.v12.prepareDay">Prepare my day</span></button>
           </div>
+
+          <section class="v17-today-shell">
+            <div class="v17-today-heading"><div><span class="eyebrow" id="v17-today-eyebrow">Votre attention aujourd’hui</span><h2 id="v17-today-title">Trois décisions utiles</h2></div><button class="text-button" id="v17-full-dashboard-toggle" type="button">Voir le tableau complet</button></div>
+            <div id="v17-today-recommendations" class="v17-recommendations"></div>
+            <div class="v17-trust-strip">
+              <div><span id="v17-confidence-label">Confiance du conseil</span><strong id="v17-confidence-value">0%</strong><div class="progress-track"><span id="v17-confidence-bar"></span></div></div>
+              <div><span id="v17-sources-label">Sources prises en compte</span><strong id="v17-source-count">0 sources actives</strong><small id="v17-context-graph-summary">0 signals · 0 relations</small></div>
+              <button class="button secondary compact" type="button" data-panel="connections">Gérer les sources</button>
+            </div>
+          </section>
 
           <section class="edition-context edition-context-compact card" id="edition-context-card">
             <div class="edition-context-icon" id="edition-context-icon" aria-hidden="true">💼</div>
@@ -155,11 +187,26 @@
             </div>
           </div>
 
-          <article class="card dashboard-mail-summary" id="dashboard-mail-summary">
-            <div class="mail-summary-icon"><svg><use href="#i-mail"/></svg></div>
-            <div><span class="eyebrow" data-i18n="mail.dashboardEyebrow">Communication</span><h2 data-i18n="mail.dashboardTitle">Your mail at a glance</h2><p id="dashboard-mail-copy" data-i18n="mail.dashboardEmpty">Connect a mailbox to surface important messages and reply reminders.</p></div>
-            <div class="mail-summary-metrics"><span><strong id="dashboard-mail-unread">0</strong><small data-i18n="mail.unread">Unread</small></span><span><strong id="dashboard-mail-important">0</strong><small data-i18n="mail.important">Important</small></span><span><strong id="dashboard-mail-replies">0</strong><small data-i18n="mail.replyReminders">Reply reminders</small></span></div>
-            <button class="button secondary compact" type="button" data-panel="mail" data-i18n="mail.openHub">Open Mail Hub</button>
+          <section class="dashboard-communication-grid">
+            <article class="card dashboard-mail-summary" id="dashboard-mail-summary">
+              <div class="mail-summary-icon"><svg><use href="#i-mail"/></svg></div>
+              <div><span class="eyebrow" data-i18n="mail.dashboardEyebrow">Communication</span><h2 data-i18n="mail.dashboardTitle">Your mail at a glance</h2><p id="dashboard-mail-copy" data-i18n="mail.dashboardEmpty">Connect a mailbox to surface important messages and reply reminders.</p></div>
+              <div class="mail-summary-metrics"><span><strong id="dashboard-mail-unread">0</strong><small data-i18n="mail.unread">Unread</small></span><span><strong id="dashboard-mail-important">0</strong><small data-i18n="mail.important">Important</small></span><span><strong id="dashboard-mail-replies">0</strong><small data-i18n="mail.replyReminders">Reply reminders</small></span></div>
+              <button class="button secondary compact" type="button" data-panel="mail" data-i18n="mail.openHub">Open Mail Hub</button>
+            </article>
+            <article class="card dashboard-social-summary" id="dashboard-social-summary">
+              <div class="social-summary-icon"><svg><use href="#i-social"/></svg></div>
+              <div><span class="eyebrow" data-i18n="social.dashboardEyebrow">Social attention</span><h2 data-i18n="social.dashboardTitle">Your networks at a glance</h2><p id="dashboard-social-copy" data-i18n="social.dashboardEmpty">Connect a professional network to surface conversations, comments and follow-ups.</p></div>
+              <div class="social-summary-metrics"><span><strong id="dashboard-social-priority">0</strong><small data-i18n="social.priority">Priority</small></span><span><strong id="dashboard-social-replies">0</strong><small data-i18n="social.replyNeeded">Replies</small></span><span><strong id="dashboard-social-comments">0</strong><small data-i18n="social.comments">Comments</small></span></div>
+              <button class="button secondary compact" type="button" data-panel="social" data-i18n="social.openHub">Open Σ Social</button>
+            </article>
+          </section>
+
+          <article class="card dashboard-context-summary" id="dashboard-context-summary">
+            <div class="context-summary-icon">◎</div>
+            <div><span class="eyebrow" data-i18n="context.dashboardEyebrow">Guidance quality</span><h2 data-i18n="context.dashboardTitle">Your Σ context</h2><p id="dashboard-context-copy"></p></div>
+            <div class="context-summary-score"><strong id="dashboard-context-score">0%</strong><small data-i18n="context.complete">complete</small></div>
+            <button class="button secondary compact" id="dashboard-context-open" type="button" data-i18n="context.completeContext">Complete my context</button>
           </article>
 
           <section class="dashboard-lower-grid">
@@ -168,6 +215,7 @@
               <button type="button" data-panel="projects"><svg><use href="#i-folder"/></svg><span id="shortcut-label-projects" data-i18n="nav.projects">Projects</span></button>
               <button type="button" data-panel="finance"><svg><use href="#i-wallet"/></svg><span id="shortcut-label-finance" data-i18n="nav.finance">Finance</span></button>
               <button type="button" data-panel="planner"><svg><use href="#i-repeat"/></svg><span id="shortcut-label-planner" data-i18n="dashboard.v12.habits">Habits</span></button>
+              <button type="button" data-panel="context"><svg><use href="#i-target"/></svg><span data-i18n="context.nav">Context</span></button>
               <button type="button" data-panel="journal"><svg><use href="#i-journal"/></svg><span data-i18n="nav.journal">Journal</span></button>
               <button type="button" data-panel="learning"><svg><use href="#i-book"/></svg><span id="shortcut-label-learning" data-i18n="nav.learning">Learning</span></button>
               <button type="button" data-coming-soon="notes"><svg><use href="#i-journal"/></svg><span data-i18n="dashboard.v12.notes">Notes</span><small data-i18n="common.soon">Soon</small></button>
@@ -183,6 +231,69 @@
               <button type="button" data-coach-command="learningPlan"><span>Σ</span><strong data-i18n="dashboard.v12.commandLearning">Learning plan</strong></button>
             </div></article>
           </section>
+        </section>
+
+        <section class="panel" id="panel-attention">
+          <div class="page-heading"><div><span class="eyebrow">Σ</span><h1 id="v17-attention-title">Attention</h1><p id="v17-attention-sub"></p></div><button class="button secondary" type="button" data-panel="connections"><svg><use href="#i-link"/></svg><span id="v17-attention-sources-label">Sources</span></button></div>
+          <div class="v17-attention-tabs"><button class="active" type="button" data-v17-attention-filter="all"><span>Tous</span><b id="v17-attention-count-all">0</b></button><button type="button" data-v17-attention-filter="reply"><span>À répondre</span><b id="v17-attention-count-reply">0</b></button><button type="button" data-v17-attention-filter="opportunity"><span>Opportunités</span><b id="v17-attention-count-opportunity">0</b></button><button type="button" data-v17-attention-filter="admin"><span>Administratif</span><b id="v17-attention-count-admin">0</b></button><button type="button" data-v17-attention-filter="wellbeing"><span>Capacité</span><b id="v17-attention-count-wellbeing">0</b></button></div>
+          <section class="card v17-attention-card"><div id="v17-attention-list" class="v17-attention-list"></div></section>
+        </section>
+
+        <section class="panel" id="panel-plan">
+          <div class="page-heading"><div><span class="eyebrow">Σ</span><h1 id="v17-plan-title">Plan</h1><p id="v17-plan-sub"></p></div><button class="button primary" id="v17-plan-refresh" type="button"><span class="ask-symbol">Σ</span><span id="v17-plan-refresh-label">Actualiser</span></button></div>
+          <div class="v17-plan-grid">
+            <article class="card v17-capacity-card"><span class="eyebrow" id="v17-plan-today-label">Aujourd’hui</span><div class="v17-capacity-values"><div><span id="v17-capacity-label">Capacité du jour</span><strong id="v17-capacity-value">0 h</strong></div><div><span id="v17-planned-label">Charge planifiée</span><strong id="v17-planned-value">0 h</strong></div></div><div class="progress-track v17-capacity-track"><span id="v17-capacity-bar"></span></div><p id="v17-plan-warning"></p></article>
+            <article class="card"><div class="card-heading"><div><span class="eyebrow">1 → 3</span><h2 id="v17-outcomes-title">Trois résultats à protéger</h2></div></div><div id="v17-plan-outcomes" class="v17-plan-outcomes"></div></article>
+            <article class="card"><div class="card-heading"><div><span class="eyebrow">Σ Order</span><h2 id="v17-schedule-title">Ordre recommandé</h2></div></div><div id="v17-plan-schedule" class="v17-plan-schedule"></div></article>
+            <article class="card v17-plan-links"><button class="button secondary" type="button" data-panel="tasks" id="v17-open-tasks">Ouvrir les tâches</button><button class="button secondary" type="button" data-panel="planner" id="v17-open-calendar">Ouvrir le calendrier</button><button class="button secondary" type="button" data-panel="projects" id="v17-open-projects">Ouvrir les projets</button></article>
+          </div>
+        </section>
+
+        <section class="panel" id="panel-connections">
+          <div class="page-heading"><div><span class="eyebrow">Σ Connect</span><h1 id="v17-connections-title">Sources et connexions</h1><p id="v17-connections-sub"></p></div><span class="status-chip"><span id="v17-browser-label">Browser</span></span></div>
+          <article class="card v17-privacy-card"><svg><use href="#i-shield"/></svg><p id="v17-connections-privacy"></p></article>
+          <div class="v17-connections-grid">
+            <article class="card"><div class="card-heading"><div><span class="eyebrow">Mail</span><h2 id="v17-connection-mail-title">Communication</h2></div></div><div id="v17-connections-mail" class="v17-source-list"></div></article>
+            <article class="card"><div class="card-heading"><div><span class="eyebrow">Social</span><h2 id="v17-connection-social-title">Réseaux sociaux</h2></div></div><div id="v17-connections-social" class="v17-source-list"></div></article>
+            <article class="card"><div class="card-heading"><div><span class="eyebrow">Calendar</span><h2 id="v17-connection-calendar-title">Organisation</h2></div></div><div id="v17-connections-calendar" class="v17-source-list"></div></article>
+            <article class="card"><div class="card-heading"><div><span class="eyebrow">Health</span><h2 id="v17-connection-health-title">Santé et montres</h2></div></div><div id="v17-connections-health" class="v17-source-list"></div></article>
+            <article class="card"><div class="card-heading"><div><span class="eyebrow">AI</span><h2 id="v17-connection-ai-title">Intelligence</h2></div></div><div id="v17-connections-ai" class="v17-source-list"></div></article>
+          </div>
+        </section>
+
+        <section class="panel" id="panel-admin" data-available="false">
+          <div class="page-heading"><div><span class="eyebrow">ADMIN QA</span><h1 id="v17-admin-title">Console Admin V1.7</h1><p id="v17-admin-sub"></p></div><div class="button-row"><button class="button secondary" id="v17-admin-export" type="button">Exporter</button><button class="button primary" id="v17-admin-run" type="button">Contrôler</button></div></div>
+          <div class="v17-admin-grid">
+            <article class="card"><span class="eyebrow" id="v17-admin-readiness">Préparation</span><div class="v17-admin-score"><strong id="v17-admin-score">0%</strong><span id="v17-admin-status">Publication commerciale bloquée</span></div><div class="progress-track"><span id="v17-admin-score-bar"></span></div><p class="disclaimer" id="v17-admin-warning"></p></article>
+            <article class="card"><div class="card-heading"><div><span class="eyebrow">Personas</span><h2>Scénarios de recette</h2></div></div><div class="v17-scenario-grid"><button class="button secondary" type="button" data-v17-scenario="solo" id="v17-scenario-solo">Scénario Solo</button><button class="button secondary" type="button" data-v17-scenario="creator" id="v17-scenario-creator">Scénario Creator</button><button class="button secondary" type="button" data-v17-scenario="life" id="v17-scenario-life">Scénario Life</button></div></article>
+            <article class="card v17-admin-check-card"><div class="card-heading"><div><span class="eyebrow">Gate</span><h2>Contrôles techniques et commerciaux</h2></div></div><div id="v17-admin-checks" class="v17-admin-checks"></div></article>
+          </div>
+        </section>
+
+        <section class="panel" id="panel-context">
+          <div class="page-heading"><div><span class="eyebrow" data-i18n="context.eyebrow">Decision context</span><h1 data-i18n="context.title">My context</h1><p data-i18n="context.subtitle">Give Σ the goals, constraints and preferences that numbers alone cannot explain.</p></div><button class="button primary" id="context-ask-coach" type="button"><span class="ask-symbol">Σ</span><span data-i18n="context.askCoach">Guide me from my whole context</span></button></div>
+          <div class="context-layout">
+            <aside class="context-side-column">
+              <article class="card context-score-card"><span class="eyebrow" data-i18n="context.coverageEyebrow">Context coverage</span><div class="context-score-line"><strong id="context-coverage-score">0%</strong><span data-i18n="context.complete">complete</span></div><div class="progress-track context-progress"><span id="context-coverage-bar"></span></div><ul id="context-checklist" class="context-checklist"></ul></article>
+              <article class="card"><div class="card-heading"><div><span class="eyebrow" data-i18n="context.sourcesEyebrow">Information sources</span><h2 data-i18n="context.sourcesTitle">What Σ can currently see</h2></div></div><div class="context-source-grid" id="context-source-grid"></div></article>
+            </aside>
+            <div class="context-main-column">
+              <article class="card form-card"><div class="card-heading"><div><span class="eyebrow" data-i18n="context.directionEyebrow">Direction & boundaries</span><h2 data-i18n="context.directionTitle">What matters and what must be protected</h2></div></div>
+                <form id="context-profile-form" class="context-form">
+                  <div class="field-row"><label><span data-i18n="context.primaryGoal">Primary goal</span><input name="primaryGoal" data-i18n-placeholder="context.primaryGoalPlaceholder"></label><label><span data-i18n="context.secondaryGoal">Secondary goal</span><input name="secondaryGoal" data-i18n-placeholder="context.secondaryGoalPlaceholder"></label></div>
+                  <label><span data-i18n="context.successDefinition">What would progress look like?</span><textarea name="successDefinition" rows="2" data-i18n-placeholder="context.successPlaceholder"></textarea></label>
+                  <div class="field-row three"><label><span data-i18n="context.weeklyHours">Available hours/week</span><input name="weeklyHours" type="number" min="0" max="100"></label><label><span data-i18n="context.focusHours">Deep-focus hours/week</span><input name="focusHours" type="number" min="0" max="60"></label><label><span data-i18n="context.energyPeak">Best energy period</span><select name="energyPeak"><option value="morning" data-i18n="context.morning">Morning</option><option value="afternoon" data-i18n="context.afternoon">Afternoon</option><option value="evening" data-i18n="context.evening">Evening</option><option value="variable" data-i18n="context.variable">Variable</option></select></label></div>
+                  <fieldset class="context-days"><legend data-i18n="context.activeDays">Active days</legend><div><label><input type="checkbox" name="workDays" value="mon"><span data-i18n="context.day.mon">Mon</span></label><label><input type="checkbox" name="workDays" value="tue"><span data-i18n="context.day.tue">Tue</span></label><label><input type="checkbox" name="workDays" value="wed"><span data-i18n="context.day.wed">Wed</span></label><label><input type="checkbox" name="workDays" value="thu"><span data-i18n="context.day.thu">Thu</span></label><label><input type="checkbox" name="workDays" value="fri"><span data-i18n="context.day.fri">Fri</span></label><label><input type="checkbox" name="workDays" value="sat"><span data-i18n="context.day.sat">Sat</span></label><label><input type="checkbox" name="workDays" value="sun"><span data-i18n="context.day.sun">Sun</span></label></div></fieldset>
+                  <div class="field-row"><label><span data-i18n="context.fixedCommitments">Fixed commitments</span><textarea name="fixedCommitments" rows="3" data-i18n-placeholder="context.fixedPlaceholder"></textarea></label><label><span data-i18n="context.currentPressure">Main current pressure</span><textarea name="currentPressure" rows="3" data-i18n-placeholder="context.pressurePlaceholder"></textarea></label></div>
+                  <label><span data-i18n="context.constraints">Constraints Σ must respect</span><textarea name="constraints" rows="3" data-i18n-placeholder="context.constraintsPlaceholder"></textarea></label>
+                  <div class="field-row"><label><span data-i18n="context.coachingTone">Preferred tone</span><select name="coachingTone"><option value="gentle" data-i18n="context.toneGentle">Gentle</option><option value="balanced" data-i18n="context.toneBalanced">Balanced</option><option value="direct" data-i18n="context.toneDirect">Direct</option></select></label><label><span data-i18n="context.coachingDepth">Answer depth</span><select name="coachingDepth"><option value="brief" data-i18n="context.depthBrief">Brief</option><option value="detailed" data-i18n="context.depthDetailed">Detailed</option><option value="stepwise" data-i18n="context.depthStepwise">Step by step</option></select></label></div>
+                  <fieldset class="context-permissions"><legend data-i18n="context.permissions">Cross-analysis permissions</legend><label class="switch-label"><input name="allowCrossAnalysis" type="checkbox"><span data-i18n="context.allowCross">Allow Σ to connect signals across selected modules</span></label><div class="context-domain-grid"><label><input type="checkbox" name="domains" value="mail"><span data-i18n="mail.nav">Mail</span></label><label><input type="checkbox" name="domains" value="social"><span data-i18n="social.nav">Social</span></label><label><input type="checkbox" name="domains" value="health"><span data-i18n="nav.health">Health</span></label><label><input type="checkbox" name="domains" value="finance"><span data-i18n="nav.finance">Finance</span></label><label><input type="checkbox" name="domains" value="journal"><span data-i18n="nav.journal">Journal</span></label><label><input type="checkbox" name="domains" value="learning"><span data-i18n="nav.learning">Learning</span></label></div></fieldset>
+                  <button class="button primary" type="submit" data-i18n="context.saveContext">Save my context</button>
+                </form>
+              </article>
+              <article class="card"><div class="card-heading"><div><span class="eyebrow" data-i18n="context.checkinEyebrow">Weekly check-in</span><h2 data-i18n="context.checkinTitle">Tell Σ what the dashboards cannot know</h2></div></div><form id="context-checkin-form" class="context-checkin-form"><div class="field-row"><label><span data-i18n="context.energyToday">Energy</span><input name="energy" type="range" min="1" max="10" value="7"></label><label><span data-i18n="context.stressToday">Stress</span><input name="stress" type="range" min="1" max="10" value="4"></label></div><label><span data-i18n="context.win">Main win</span><input name="win" data-i18n-placeholder="context.winPlaceholder"></label><label><span data-i18n="context.blocker">Main blocker</span><input name="blocker" data-i18n-placeholder="context.blockerPlaceholder"></label><label><span data-i18n="context.nextFocus">Focus for the next 7 days</span><input name="focus" data-i18n-placeholder="context.focusPlaceholder"></label><button class="button secondary" type="submit" data-i18n="context.saveCheckin">Save check-in</button></form><div id="context-checkin-history" class="context-checkin-history"></div></article>
+            </div>
+          </div>
         </section>
 
         <section class="panel" id="panel-tasks">
@@ -226,11 +337,20 @@
         </section>
 
         <section class="panel" id="panel-mail">
-          <div class="page-heading"><div><span class="eyebrow" data-i18n="mail.eyebrow">Communication</span><h1 data-i18n="mail.title">Mail Hub</h1><p data-i18n="mail.subtitle">See what needs attention, create tasks and protect replies across your mailboxes.</p></div><button class="button secondary" id="mail-sync" type="button"><svg><use href="#i-sync"/></svg><span data-i18n="mail.sync">Refresh mail</span></button></div>
+          <div class="page-heading"><div><span class="eyebrow" data-i18n="mail.eyebrow">Communication</span><h1 data-i18n="mail.unifiedTitle">Σ Mail</h1><p data-i18n="mail.unifiedSubtitle">Enter an address, follow the secure sign-in, then work from one focused attention queue.</p></div><div class="page-heading-actions"><button class="button secondary" id="mail-sync" type="button"><svg><use href="#i-sync"/></svg><span data-i18n="mail.sync">Refresh mail</span></button><button class="button primary" id="mail-add-account" type="button"><span>+</span><span data-i18n="mail.addAddress">Add an address</span></button></div></div>
           <div class="mail-kpis"><article class="card"><span data-i18n="mail.accounts">Accounts</span><strong id="mail-kpi-accounts">0</strong></article><article class="card"><span data-i18n="mail.unread">Unread</span><strong id="mail-kpi-unread">0</strong></article><article class="card"><span data-i18n="mail.important">Important</span><strong id="mail-kpi-important">0</strong></article><article class="card"><span data-i18n="mail.replyReminders">Reply reminders</span><strong id="mail-kpi-replies">0</strong></article></div>
-          <article class="card mail-provider-card"><div class="card-heading"><div><span class="eyebrow" data-i18n="mail.connectEyebrow">Connections</span><h2 data-i18n="mail.connectTitle">Connect your mailboxes</h2><p data-i18n="mail.connectText">Σ requests read access only in this version. Credentials are never stored in the browser.</p></div><span class="quota-pill" id="mail-mode-label">DEMO</span></div><div class="mail-provider-grid" id="mail-provider-grid"></div><div class="mail-account-list" id="mail-account-list"></div></article>
+          <article class="card mail-unified-setup"><div class="mail-unified-copy"><span class="eyebrow" data-i18n="mail.connectEyebrow">Secure connection</span><h2 data-i18n="mail.oneAddressTitle">Start with your email address</h2><p data-i18n="mail.oneAddressText">Σ detects the provider and opens the safest available connection path. Your main password is never stored by Σ.</p></div><form id="mail-unified-form" class="mail-unified-form"><label><span data-i18n="mail.email">Email address</span><div class="mail-email-field"><input id="mail-unified-email" name="email" type="email" autocomplete="email" required placeholder="name@example.com"><button class="button primary" type="submit" data-i18n="mail.continue">Continue</button></div></label><div class="mail-detection" id="mail-detection"></div><div class="mail-provider-choice" id="mail-provider-choice" hidden></div></form><span class="quota-pill" id="mail-mode-label">DEMO</span></article>
+          <article class="card mail-connected-compact"><div class="card-heading"><div><span class="eyebrow" data-i18n="mail.accountsEyebrow">Connected addresses</span><h2 data-i18n="mail.accountsCompactTitle">Your addresses, quietly in one place</h2></div></div><div class="mail-account-list" id="mail-account-list"></div></article>
           <article class="card mail-inbox-card"><div class="mail-toolbar"><div><span class="eyebrow" data-i18n="mail.inboxEyebrow">Attention queue</span><h2 data-i18n="mail.inboxTitle">Messages to review</h2></div><div class="mail-filters"><select id="mail-account-filter" aria-label="Account"><option value="all" data-i18n="mail.allAccounts">All accounts</option></select><select id="mail-status-filter" aria-label="Filter"><option value="all" data-i18n="mail.allMessages">All messages</option><option value="unread" data-i18n="mail.unread">Unread</option><option value="important" data-i18n="mail.important">Important</option><option value="reply" data-i18n="mail.replyReminders">Reply reminders</option></select></div></div><div class="mail-message-list" id="mail-message-list"></div></article>
           <p class="disclaimer" data-i18n="mail.disclaimer">Importance and reply reminders are organisational suggestions. Σ does not send, delete or modify messages in this version.</p>
+        </section>
+
+        <section class="panel" id="panel-social">
+          <div class="page-heading"><div><span class="eyebrow" data-i18n="social.eyebrow">Professional interactions</span><h1 data-i18n="social.title">Σ Social</h1><p data-i18n="social.subtitle">Turn messages, comments and mentions into clear actions without living inside every network.</p></div><div class="page-heading-actions"><button class="button secondary" id="social-sync" type="button"><svg><use href="#i-sync"/></svg><span data-i18n="social.sync">Refresh</span></button><button class="button primary" id="social-add-account" type="button"><span>+</span><span data-i18n="social.addAccount">Connect a network</span></button></div></div>
+          <div class="social-kpis"><article class="card"><span data-i18n="social.connectedAccounts">Connected</span><strong id="social-kpi-accounts">0</strong></article><article class="card"><span data-i18n="social.priority">Priority</span><strong id="social-kpi-priority">0</strong></article><article class="card"><span data-i18n="social.replyNeeded">Replies</span><strong id="social-kpi-replies">0</strong></article><article class="card"><span data-i18n="social.comments">Comments</span><strong id="social-kpi-comments">0</strong></article></div>
+          <article class="card social-connected-card"><div class="social-connected-head"><div><span class="eyebrow" data-i18n="social.accountsEyebrow">Connections</span><h2 data-i18n="social.accountsTitle">Your connected networks</h2><p data-i18n="social.accountsText">One focused queue, with the source shown only when it helps.</p></div><span class="quota-pill" id="social-mode-label">DEMO</span></div><div class="social-account-list" id="social-account-list"></div></article>
+          <article class="card social-queue-card"><div class="social-toolbar"><div><span class="eyebrow" data-i18n="social.queueEyebrow">Attention queue</span><h2 data-i18n="social.queueTitle">What deserves a response or action</h2></div><div class="social-filters"><select id="social-account-filter" aria-label="Network"><option value="all" data-i18n="social.allAccounts">All networks</option></select><select id="social-status-filter" aria-label="Filter"><option value="priority" data-i18n="social.priority">Priority</option><option value="reply" data-i18n="social.replyNeeded">Replies</option><option value="comments" data-i18n="social.comments">Comments</option><option value="content" data-i18n="social.contentIdeas">Content ideas</option><option value="all" data-i18n="social.allInteractions">All interactions</option></select></div></div><div class="social-interaction-list" id="social-interaction-list"></div></article>
+          <p class="disclaimer" data-i18n="social.disclaimer">Σ organises authorised professional interactions. It never asks for a social-network password and does not publish or send anything without confirmation.</p>
         </section>
 
         <section class="panel" id="panel-projects">
@@ -287,18 +407,23 @@
     </div>
   </div>
 
-  <nav class="bottom-nav glass" aria-label="Mobile navigation"><button class="bottom-item active" type="button" data-panel="dashboard"><svg><use href="#i-grid"/></svg><span data-i18n="nav.dashboard">Dashboard</span></button><button class="bottom-item" type="button" data-panel="tasks"><svg><use href="#i-check"/></svg><span data-i18n="nav.tasks">Tasks</span></button><button class="bottom-item" type="button" data-panel="planner"><svg><use href="#i-calendar"/></svg><span data-i18n="nav.plannerShort">Rhythm</span></button><button class="bottom-item" type="button" data-panel="coach"><svg><use href="#i-spark"/></svg><span data-i18n="nav.coach">Σ</span></button><button class="bottom-item" type="button" id="mobile-more"><svg><use href="#i-menu"/></svg><span data-i18n="common.more">More</span></button></nav>
+  <nav class="bottom-nav glass" aria-label="Mobile navigation"><button class="bottom-item active" type="button" data-panel="dashboard"><svg><use href="#i-grid"/></svg><span id="v17-mobile-today">Aujourd’hui</span></button><button class="bottom-item" type="button" data-panel="attention"><svg><use href="#i-bell"/></svg><span id="v17-mobile-attention">Attention</span></button><button class="bottom-item" type="button" data-panel="plan"><svg><use href="#i-map"/></svg><span id="v17-mobile-plan">Plan</span></button><button class="bottom-item" type="button" data-panel="coach"><svg><use href="#i-spark"/></svg><span>Σ</span></button><button class="bottom-item" type="button" id="mobile-more"><svg><use href="#i-menu"/></svg><span data-i18n="common.more">More</span></button></nav>
   <button class="fab" id="fab" type="button" aria-label="Quick add"><svg><use href="#i-plus"/></svg></button>
 
   <dialog class="modal onboarding-modal edition-onboarding" id="onboarding-dialog"><form method="dialog" id="onboarding-form"><div class="onboarding-brand"><span class="brand-symbol">Σ</span><div><strong>Life OS</strong><small>by <span class="algbr-logo"><b>Al.</b><em>G.B.</em><i>r.</i></span></small></div></div><span class="eyebrow" data-i18n="onboarding.eyebrow">One workspace. Your way.</span><h2 data-i18n="onboarding.title">Set up Σ in under a minute</h2><p id="onboarding-edition-intro">Choose the edition that best matches your current life.</p><div class="onboarding-steps"><div class="onboarding-inline-fields"><label><span data-i18n="account.name">Display name</span><input name="name" required autocomplete="name" data-i18n-placeholder="onboarding.namePlaceholder"></label><label><span data-i18n="top.language">Language</span><select name="language"><option value="en">English</option><option value="fr">Français</option><option value="de">Deutsch</option><option value="es">Español</option></select></label><label><span data-i18n="account.currency">Currency</span><select name="currency"><option value="EUR">EUR €</option><option value="USD">USD $</option><option value="GBP">GBP £</option><option value="CHF">CHF</option><option value="CAD">CAD $</option></select></label></div><fieldset><legend id="onboarding-edition-legend">Choose your Σ edition</legend><div class="profile-choice edition-choice" id="onboarding-edition-choice"></div></fieldset></div><button class="button primary full" value="start" type="submit" data-i18n="onboarding.start">Start with Σ Free</button><small class="privacy-note" data-i18n="onboarding.privacy">No account required. Your data stays on this device unless you enable Pro backup.</small></form></dialog>
 
   <dialog class="modal" id="upgrade-dialog"><button class="modal-close icon-button" id="upgrade-close" type="button" aria-label="Close">×</button><div class="upgrade-hero"><span class="brand-symbol">Σ</span><span class="eyebrow" data-i18n="upgrade.eyebrow">Σ Pro</span><h2 data-i18n="upgrade.title">Bring every part of your system together</h2><p data-i18n="upgrade.v12Subtitle">Unlock weekly planning, Eisenhower, Kanban, projects, finance, wellbeing, all languages and encrypted backup.</p></div><div class="pricing-options"><article class="price-card" data-billing="monthly" role="button" tabindex="0"><span data-i18n="upgrade.monthly">Monthly</span><strong id="monthly-price">8,90 € / month</strong><small data-i18n="upgrade.monthlyText">Flexible access, cancel according to the checkout terms.</small></article><article class="price-card featured selected" data-billing="annual" role="button" tabindex="0"><span data-i18n="upgrade.annual">Annual</span><strong id="annual-price">69 € / year</strong><small data-i18n="upgrade.annualText">Best value for updates and encrypted backup.</small></article></div><ul class="feature-checks"><li data-i18n="upgrade.v12f1">Weekly Kanban and Eisenhower planning</li><li data-i18n="upgrade.v12f2">Projects, finance and wellbeing modules</li><li data-i18n="upgrade.v12f3">Unlimited contextual Σ Coach</li><li data-i18n="upgrade.v12f4">All languages and encrypted cloud backup</li></ul><div class="checkout-status" id="checkout-status" data-state="unconfigured"><span class="payment-state-dot" aria-hidden="true"></span><div><strong id="checkout-status-title" data-i18n="payment.checking">Checking checkout</strong><small id="checkout-status-copy" data-i18n="payment.checkingText">Σ is checking the selected payment route.</small></div></div><button class="button primary full" id="checkout-button" type="button"><span id="checkout-button-label" data-i18n="upgrade.checkout">Continue to secure checkout</span></button><button class="text-button full" id="upgrade-activate" type="button" data-i18n="upgrade.haveKey">I already have a licence key</button></dialog>
 
+
+  <dialog class="modal calendar-connect-modal" id="calendar-connect-dialog"><button class="modal-close icon-button" id="calendar-connect-close" type="button" aria-label="Close">×</button><span class="eyebrow">Σ Calendar</span><h2 id="calendar-connect-title">Calendriers connectés</h2><p class="muted" id="calendar-connect-sub"></p><div class="calendar-provider-grid"><button type="button" class="calendar-provider-option" data-calendar-provider="google"><span>G</span><div><strong>Google Calendar</strong><small>OAuth</small></div><b>→</b></button><button type="button" class="calendar-provider-option" data-calendar-provider="microsoft"><span>M</span><div><strong>Outlook / Microsoft 365</strong><small>OAuth</small></div><b>→</b></button></div><div id="calendar-account-list" class="calendar-account-list"></div><button class="button secondary full" id="calendar-sync" type="button">Synchroniser</button><small class="privacy-note" id="calendar-connect-readonly"></small></dialog>
   <dialog class="modal payment-test-modal" id="payment-test-dialog"><button class="modal-close icon-button" id="payment-test-close" type="button" aria-label="Close">×</button><span class="eyebrow" data-i18n="payment.testEyebrow">Local checkout test</span><h2 data-i18n="payment.testTitle">Simulate the subscription journey</h2><p class="muted" data-i18n="payment.testText">This local test does not charge money. It verifies the monthly or annual upgrade experience before a real checkout URL is connected.</p><div class="payment-test-summary"><div><span data-i18n="payment.selectedPlan">Selected plan</span><strong id="payment-test-plan">Σ Pro</strong></div><div><span data-i18n="payment.provider">Provider</span><strong id="payment-test-provider">Lemon Squeezy</strong></div><div><span data-i18n="payment.mode">Mode</span><strong id="payment-test-mode">TEST</strong></div></div><div class="payment-test-steps"><p><span>1</span><span data-i18n="payment.stepCheckout">Open the hosted checkout.</span></p><p><span>2</span><span data-i18n="payment.stepPayment">Complete a test subscription.</span></p><p><span>3</span><span data-i18n="payment.stepLicense">Activate the generated licence in Σ.</span></p></div><button class="button primary full" id="payment-simulate-success" type="button" data-i18n="payment.simulateSuccess">Simulate successful subscription</button><small class="privacy-note" data-i18n="payment.localOnly">Available only on localhost. Real sales require checkout URLs from your merchant account.</small></dialog>
 
 
   <dialog class="modal health-connect-modal" id="health-connect-dialog"><button class="modal-close icon-button" id="health-connect-close" type="button">×</button><span class="eyebrow" data-i18n="health.connectionEyebrow">Health connection</span><h2 id="health-connect-title">Connect a health source</h2><p class="muted" id="health-connect-copy"></p><div class="health-connect-status" id="health-connect-status"></div><div class="health-connect-actions"><button class="button primary full" id="health-connect-demo" type="button" data-i18n="health.simulateConnection">Simulate connection</button><button class="button secondary full" id="health-import-demo" type="button" data-i18n="health.importDemo">Import demo readings</button></div><small class="privacy-note" data-i18n="health.nativeNote">Real wearable data stays permission-based and requires the future iOS or Android companion.</small></dialog>
-  <dialog class="modal mail-connect-modal" id="mail-connect-dialog"><button class="modal-close icon-button" id="mail-connect-close" type="button">×</button><span class="eyebrow" data-i18n="mail.connectEyebrow">Connection</span><h2 id="mail-connect-title">Connect mailbox</h2><p class="muted" id="mail-connect-help"></p><form id="mail-connect-form" class="stack-form"><input type="hidden" name="provider"><label><span data-i18n="mail.email">Email address</span><input name="email" type="email" autocomplete="email" required></label><label><span data-i18n="mail.appPassword">App password</span><input name="appPassword" type="password" autocomplete="new-password" required></label><button class="button primary full" type="submit" data-i18n="mail.connect">Connect securely</button><p class="form-message" id="mail-connect-message"></p></form></dialog>
+  <dialog class="modal mail-connect-modal" id="mail-connect-dialog"><button class="modal-close icon-button" id="mail-connect-close" type="button">×</button><span class="eyebrow" data-i18n="mail.connectEyebrow">Connection</span><h2 id="mail-connect-title">Connect mailbox</h2><p class="muted" id="mail-connect-help"></p><div class="mail-connect-guide" id="mail-connect-guide"></div><form id="mail-connect-form" class="stack-form"><input type="hidden" name="provider"><label><span data-i18n="mail.email">Email address</span><input name="email" type="email" autocomplete="email" readonly required></label><label><span data-i18n="mail.appPassword">App password</span><input name="appPassword" type="password" autocomplete="new-password" required></label><button class="button primary full" type="submit" data-i18n="mail.connect">Connect securely</button><p class="form-message" id="mail-connect-message"></p></form></dialog>
+  <dialog class="modal ai-settings-modal" id="ai-settings-dialog"><button class="modal-close icon-button" id="ai-settings-close" type="button">×</button><span class="eyebrow" data-i18n="aiSettings.eyebrow">Local intelligence</span><h2 data-i18n="aiSettings.title">Choose how Σ analyses and speaks</h2><p class="muted" data-i18n="aiSettings.subtitle">The guided engine always works. Optional local models improve understanding or natural phrasing without API billing.</p><div class="ai-mode-list"><article><div><strong data-i18n="aiSettings.guidedTitle">Guided engine</strong><small data-i18n="aiSettings.guidedText">Rules, calculations and verified data. Always active.</small></div><span class="status-chip success" data-i18n="aiSettings.alwaysOn">Always on</span></article><article><div><strong data-i18n="aiSettings.semanticTitle">Local semantic understanding</strong><small data-i18n="aiSettings.semanticText">Downloads a multilingual model to better recognise intent and connect related requests.</small><em id="ai-semantic-status"></em></div><button class="button secondary small" id="ai-semantic-toggle" type="button"></button></article><article><div><strong data-i18n="aiSettings.generativeTitle">Local conversational rewrite</strong><small data-i18n="aiSettings.generativeText">Uses Chrome’s on-device model when the browser and computer support it.</small><em id="ai-generative-status"></em></div><button class="button secondary small" id="ai-generative-toggle" type="button"></button></article></div><div class="ai-model-progress" id="ai-model-progress" hidden><div><span></span></div><small></small></div><p class="disclaimer" data-i18n="aiSettings.privacy">Local models may require a first download and device resources. Workspace data stays on the device when these local modes are used.</p></dialog>
+  <dialog class="modal social-connect-modal" id="social-connect-dialog"><button class="modal-close icon-button" id="social-connect-close" type="button">×</button><span class="eyebrow" data-i18n="social.connectEyebrow">Connect</span><h2 data-i18n="social.connectTitle">Choose a professional network</h2><p class="muted" data-i18n="social.connectText">You will sign in on the official network page. Σ never sees your password.</p><div class="social-provider-picker" id="social-provider-picker"></div></dialog>
+  <dialog class="modal social-info-modal" id="social-info-dialog"><button class="modal-close icon-button" id="social-info-close" type="button">×</button><span class="social-provider-mark" id="social-info-icon">@</span><h2 id="social-info-title"></h2><p class="muted" id="social-info-copy"></p><div class="info-callout" id="social-info-status"></div><button class="button secondary full" id="social-info-demo" type="button" data-i18n="social.tryDemo">Try with demo data</button></dialog>
 
   <dialog class="modal edition-switcher" id="edition-dialog"><button class="modal-close icon-button" id="edition-dialog-close" type="button">×</button><span class="eyebrow">Σ Editions</span><h2>Choisissez votre cockpit</h2><p class="muted">Vous pouvez changer d’édition sans perdre vos données.</p><div class="edition-dialog-grid" id="edition-dialog-grid"></div></dialog>
 

@@ -1,9 +1,9 @@
 'use strict';
-const CACHE = 'sum-algbr-v1.5.1';
+const CACHE = 'sigma-life-os-v1.7.0-admin-beta';
 const APP_SHELL = [
   './', './index.html', './app.html', './site.css', './style.css', './site.js', './app.js', './chart-fallback.js', './config.js', './i18n.js',
   './lang-en.js', './lang-fr.js', './lang-de.js', './lang-es.js', './editions.js', './manifest.webmanifest',
-  './modules/tasks.js', './modules/projects.js', './modules/finance.js', './modules/health.js', './modules/journal.js', './modules/learning.js', './modules/planner.js', './modules/mail.js', './modules/coach.js', './modules/local-ai.js', './modules/coach-v121.js', './modules/dashboard.js',
+  './modules/tasks.js', './modules/native-health-bridge.js', './modules/projects.js', './modules/finance.js', './modules/health.js', './modules/journal.js', './modules/learning.js', './modules/planner.js', './modules/calendar-connect.js', './modules/context.js', './modules/mail.js', './modules/social.js', './modules/coach.js', './modules/local-ai.js', './modules/ai-settings.js', './modules/coach-v121.js', './modules/dashboard.js', './modules/intelligence-v17.js', './modules/experience-v17.js',
   './assets/icon.svg', './assets/icon-192.png', './assets/icon-512.png', './assets/logo.svg',
   './legal/privacy.html', './legal/terms.html', './legal/support.html'
 ];

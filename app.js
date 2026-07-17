@@ -3,7 +3,7 @@
   const { init: initI18n, t, getLanguage, setLanguage } = window.SUM_I18N;
   const {
     initTasks, initProjects, initFinance, initHealth,
-    initJournal, initLearning, initPlanner, initMail, initCoach, initDashboard
+    initJournal, initLearning, initPlanner, initCalendarConnect, initContext, initMail, initSocial, initAiSettings, initCoach, initDashboard, initExperienceV17
   } = window.SUM_MODULES;
   const CONFIG = window.SUM_CONFIG;
   const EDITIONS = window.SUM_EDITIONS;
@@ -14,13 +14,17 @@
   const DEVICE_KEY = 'sum-algbr-device-id';
 
   const defaultState = {
-    version: 3,
-    tasks: [], projects: [], finance: [], health: [], healthSources: [], journal: [], learning: [], learningResources: [],
+    version: 4,
+    tasks: [], projects: [], finance: [], health: [], healthSources: [], journal: [], learning: [], learningResources: [], calendarAccounts: [],
     mailAccounts: [], mailMessages: [], mailSettings: { lastSync: null, filter: 'all' },
+    contextProfile: { primaryGoal: '', secondaryGoal: '', successDefinition: '', weeklyHours: 20, focusHours: 4, energyPeak: 'morning', workDays: ['mon','tue','wed','thu','fri'], fixedCommitments: '', currentPressure: '', constraints: '', coachingTone: 'balanced', coachingDepth: 'detailed', allowCrossAnalysis: true, includedDomains: { mail: true, social: true, health: true, finance: true, journal: true, learning: true }, updatedAt: null },
+    contextCheckins: [],
+    intelligence: { feedback: [], preferences: {}, lastAnalysis: null },
+    socialAccounts: [], socialInteractions: [], socialSettings: { lastSync: null, filter: 'priority' },
     goals: [], habits: [], habitLogs: [], events: [],
     coachHistory: [], coachInsights: [], lastCoachRun: null,
     coachSession: { intent: 'general', pendingSlot: '', context: {} },
-    settings: { name: '', profile: 'solo', businessSize: 'solo', currency: 'EUR', freeLanguage: '', onboardingComplete: false, localAiEnabled: false },
+    settings: { name: '', profile: 'solo', businessSize: 'solo', currency: 'EUR', freeLanguage: '', onboardingComplete: false, localAiEnabled: false, semanticAiEnabled: false },
     license: null,
     ownerPreview: false,
     usage: { coachDate: '', coachCount: 0 },
@@ -37,7 +41,7 @@
 
   function normalize(raw = {}) {
     const next = { ...clone(defaultState), ...(raw && typeof raw === 'object' ? raw : {}) };
-    ['tasks', 'projects', 'finance', 'health', 'healthSources', 'journal', 'learning', 'learningResources', 'mailAccounts', 'mailMessages', 'goals', 'habits', 'habitLogs', 'events', 'coachHistory', 'coachInsights'].forEach((key) => {
+    ['tasks', 'projects', 'finance', 'health', 'healthSources', 'journal', 'learning', 'learningResources', 'calendarAccounts', 'mailAccounts', 'mailMessages', 'socialAccounts', 'socialInteractions', 'goals', 'habits', 'habitLogs', 'events', 'coachHistory', 'coachInsights', 'contextCheckins'].forEach((key) => {
       if (!Array.isArray(next[key])) next[key] = [];
     });
     next.settings = { ...clone(defaultState.settings), ...(raw.settings || {}) };
@@ -45,6 +49,11 @@
     next.usage = { ...clone(defaultState.usage), ...(raw.usage || {}) };
     next.coachSession = { ...clone(defaultState.coachSession), ...(raw.coachSession || {}) };
     next.mailSettings = { ...clone(defaultState.mailSettings), ...(raw.mailSettings || {}) };
+    next.calendarSettings = { lastSync: null, ...(raw.calendarSettings || {}) };
+    next.contextProfile = { ...clone(defaultState.contextProfile), ...(raw.contextProfile || {}), includedDomains: { ...clone(defaultState.contextProfile.includedDomains), ...(raw.contextProfile?.includedDomains || {}) } };
+    next.socialSettings = { ...clone(defaultState.socialSettings), ...(raw.socialSettings || {}) };
+    next.intelligence = { ...clone(defaultState.intelligence), ...(raw.intelligence || {}) };
+    if (!Array.isArray(next.intelligence.feedback)) next.intelligence.feedback = [];
     next.ownerPreview = Boolean(raw.ownerPreview);
     if (!next.coachHistory.length && Array.isArray(raw.aiHistory)) next.coachHistory = raw.aiHistory;
     return next;
@@ -110,6 +119,7 @@
 
   function isLocalEnvironment() { return location.protocol === 'file:' || ['localhost', '127.0.0.1'].includes(location.hostname); }
   function isOwnerPreview() {
+    if (CONFIG.adminQaEnabled && Boolean(state.ownerPreview)) return true;
     return Boolean(state.ownerPreview) && CONFIG.allowOwnerPreviewOnLocalhost && isLocalEnvironment();
   }
   function isPro() {
@@ -338,7 +348,9 @@
       ...state.learning.map((item) => ({ panel: 'learning', title: item.name, meta: item.target })),
       ...state.goals.map((item) => ({ panel: 'planner', title: item.title, meta: t(`planner.${item.period || 'week'}`) })),
       ...state.habits.map((item) => ({ panel: 'planner', title: item.name, meta: t('planner.habits') })),
-      ...state.events.map((item) => ({ panel: 'planner', title: item.title, meta: formatDate(item.date) }))
+      ...state.events.map((item) => ({ panel: 'planner', title: item.title, meta: formatDate(item.date) })),
+      ...state.socialInteractions.filter((item) => !item.handled).map((item) => ({ panel: 'social', title: item.title || item.content || 'Social interaction', meta: `${item.sender || ''} · ${item.provider || ''}` })),
+      ...(state.contextProfile.primaryGoal ? [{ panel: 'context', title: state.contextProfile.primaryGoal, meta: t('context.nav') }] : [])
     ];
   }
 
@@ -649,6 +661,19 @@
       draft.coachHistory = [];
       draft.coachInsights = [];
       draft.coachSession = clone(defaultState.coachSession);
+      draft.contextProfile = {
+        ...clone(defaultState.contextProfile),
+        primaryGoal: demo.goals[0] || edition().hero,
+        secondaryGoal: demo.skill,
+        successDefinition: demo.project[2] || edition().promise,
+        weeklyHours: state.settings.profile === 'student' ? 18 : 30,
+        focusHours: state.settings.profile === 'student' ? 8 : 12,
+        energyPeak: 'morning',
+        currentPressure: demo.tasks[0],
+        constraints: state.settings.profile === 'nomad' ? 'Travel days and changing time zones.' : 'Protect recovery and avoid more than three essential outcomes per day.',
+        updatedAt: now.toISOString()
+      };
+      draft.contextCheckins = [{ id: uid(), date: iso(0), energy: 6, stress: 5, win: demo.goals[1] || demo.project[1], blocker: demo.tasks[2] || '', focus: demo.goals[0] || '', createdAt: now.toISOString() }];
     });
     toast(`${edition().name} · ${t('admin.demoLoaded')}`);
   }
@@ -880,9 +905,14 @@
     initJournal(ctx);
     initLearning(ctx);
     initPlanner(ctx);
+    initCalendarConnect?.(ctx);
+    initContext(ctx);
     initMail(ctx);
+    initSocial(ctx);
+    initAiSettings(ctx);
     initCoach(ctx);
     initDashboard(ctx);
+    initExperienceV17?.(ctx);
     subscribe(updateSidebarProfile);
     document.addEventListener('languagechange', updateSidebarProfile);
     updateSidebarProfile();

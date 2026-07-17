@@ -7,10 +7,10 @@
     selector.addEventListener('change', () => setLanguage(selector.value));
 
     const editionCopy = {
-      en: { title: 'One engine, five dedicated editions', text: 'Choose the workspace that matches your current context. Σ Pro unlocks every edition.', open: 'Start this edition' },
-      fr: { title: 'Un seul moteur, cinq éditions dédiées', text: 'Choisissez l’espace qui correspond à votre contexte actuel. Σ Pro débloque toutes les éditions.', open: 'Commencer cette édition' },
-      de: { title: 'Ein System, fünf spezialisierte Editionen', text: 'Wählen Sie den Arbeitsbereich, der zu Ihrem aktuellen Kontext passt. Σ Pro schaltet alle Editionen frei.', open: 'Diese Edition starten' },
-      es: { title: 'Un solo sistema, cinco ediciones dedicadas', text: 'Elige el espacio que corresponde a tu contexto actual. Σ Pro desbloquea todas las ediciones.', open: 'Empezar esta edición' }
+      en: { title: 'One engine, five dedicated editions', text: 'Choose one active workspace. You can change it later without losing your data.', open: 'Start this edition' },
+      fr: { title: 'Un seul moteur, cinq éditions dédiées', text: 'Choisissez un espace actif. Vous pourrez le changer plus tard sans perdre vos données.', open: 'Commencer cette édition' },
+      de: { title: 'Ein System, fünf spezialisierte Editionen', text: 'Wählen Sie einen aktiven Arbeitsbereich. Sie können ihn später wechseln, ohne Daten zu verlieren.', open: 'Diese Edition starten' },
+      es: { title: 'Un solo sistema, cinco ediciones dedicadas', text: 'Elige un espacio activo. Podrás cambiarlo más adelante sin perder tus datos.', open: 'Empezar esta edición' }
     };
 
     function escapeHTML(value = '') { return String(value).replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[character])); }

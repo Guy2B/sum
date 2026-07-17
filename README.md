@@ -1,37 +1,64 @@
-# Σ Life OS by Al.G.B.r. — V1.5.1 GitHub Ready
+# Σ Life OS V1.7 — Core Intelligence Commercial Admin Beta
 
-A multilingual, local-first **Life & Work OS** with five dedicated editions: Student, Solo & Micro, Creator, Life and Nomad.
+Σ Life OS by Al.G.B.r. turns authorised signals from work and life into a small number of explainable next actions.
 
-## What is included
+## Product promise
 
-- polished Σ-first branding and contextual edition colors;
-- day, week and month command center;
-- priorities, calendar, projects, finance, health, journal and learning;
-- Mail Hub for Gmail, Outlook, Yahoo Mail and GMX;
-- interactive health-source test journey for Apple Health, Health Connect, Samsung Health and Huawei Health;
-- cross-workspace Σ guidance using tasks, projects, mail, finance, health, habits, learning and journal signals;
-- optional on-device language-model enhancement in compatible Chrome environments;
-- deterministic fallback that works without an AI API key;
-- Free/Pro boundaries, owner preview, monthly/annual checkout configuration and encrypted backup UI;
-- PWA manifest, service worker and GitHub validation workflow.
+- one active workspace: Student, Solo, Creator, Life or Nomad;
+- a calm **Today** screen with up to three recommendations;
+- one **Attention** queue for mail, social interactions, deadlines, opportunities and capacity signals;
+- a realistic **Plan** based on time, load and energy;
+- a **Sources** centre showing consent, connection state and last synchronisation;
+- deterministic guidance first, optional local semantic and generative models second;
+- browser-first PWA plus generated Capacitor iOS and Android projects.
 
-## Local test
+## Administrative beta
+
+This repository is intentionally configured as an admin test build:
+
+```js
+adminQaEnabled: true
+commercialRelease: false
+paymentMode: 'test'
+```
+
+The Admin QA console can seed Solo, Creator and Life scenarios, run browser/configuration checks and export a JSON report. Do not open public sales with this configuration.
+
+## Run locally
 
 ```bash
 npm run check
 npm run serve
 ```
 
-Open `http://localhost:8080/app.html`. The local owner-preview code is `SUM-OWNER-PREVIEW`.
+Open `http://localhost:8080/app.html`.
 
-## Real mail connections
+## Optional backends
 
-The optional backend is in `backend/mail-connector`. Real Gmail and Outlook connections require your own OAuth application credentials. Yahoo Mail and GMX use provider-generated app passwords. No real provider secret is committed to this repository.
+- `backend/mail-connector` — Gmail, Outlook, Yahoo and GMX.
+- `backend/social-connector` — Meta, YouTube, X, LinkedIn and TikTok adapters, subject to provider permissions and product approval.
+- `backend/calendar-connector` — read-only Google Calendar and Microsoft Calendar OAuth import.
+- `backend/local-ai-gateway` — optional self-hosted Ollama rewriting gateway.
 
-## GitHub
+Each backend has its own `.env.example`, `package-lock.json` and `npm run check` command.
 
-See `docs/GITHUB-DEPLOYMENT.md` for repository creation and deployment.
+## Mobile
 
-## Product boundary
+`mobile/` contains generated Capacitor iOS and Android projects plus native health bridge sources. HealthKit is implemented as a Swift plugin source. Android Health Connect and Samsung Health include integration sources and explicit completion gates documented in `docs/MOBILE-HEALTH-V1.7.md`.
 
-Σ organises and supports decisions. It is not accounting, payroll, medical diagnosis, legal advice or a full ERP.
+## Commercial gate
+
+```bash
+npm run release:check
+npm run release:build
+```
+
+The release check deliberately fails until live payment, legal identity, support and secure backend URLs are configured and admin/demo access is disabled.
+
+See:
+
+- `docs/V1.7-PRODUCT-SPEC.md`
+- `docs/ADMIN-TEST-PLAN-V1.7.md`
+- `docs/COMMERCIAL-GO-LIVE-V1.7.md`
+- `docs/GITHUB-UPGRADE-V1.7.md`
+- `VALIDATION.md`
