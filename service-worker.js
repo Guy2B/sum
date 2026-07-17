@@ -1,5 +1,5 @@
 'use strict';
-const CACHE = 'sigma-life-os-v1.7.0-admin-beta';
+const CACHE = 'sigma-life-os-v1.7.1-rc1';
 const APP_SHELL = [
   './', './index.html', './app.html', './site.css', './style.css', './site.js', './app.js', './chart-fallback.js', './config.js', './i18n.js',
   './lang-en.js', './lang-fr.js', './lang-de.js', './lang-es.js', './editions.js', './manifest.webmanifest',

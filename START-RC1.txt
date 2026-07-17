@@ -1,0 +1,16 @@
+SIGMA LIFE OS V1.7.1 RC1
+
+1. Installer Node.js 20 ou plus récent.
+2. Dans ce dossier :
+   npm run check
+   npm run rc:check
+   npm run serve
+3. Ouvrir : http://localhost:8080/app.html
+
+Apple Watch / Apple Health :
+- la version web seule ne peut pas lire HealthKit ;
+- ouvrir le projet iOS dans mobile/ios sur macOS ;
+- activer HealthKit, renseigner les messages d’autorisation Info.plist ;
+- signer avec un compte Apple Developer et tester sur un iPhone réel associé à l’Apple Watch.
+
+Consulter RC1-REPORT.md avant le lancement de la bêta.
