@@ -237,6 +237,7 @@
       pressure: 'The current pressure points are:', actions: 'The three most useful next moves are:', question: 'Which constraint should I protect first: time, energy, cash flow or a client commitment?',
       noPressure: 'No critical warning dominates the workspace. The best gain now is to preserve focus rather than add more work.',
       mailTitle: 'Mail and response briefing', mailObserved: '{unread} unread messages, {important} marked important and {replies} possible replies waiting.', mailQuestion: 'Should I turn the most important message into a task or prepare a response reminder?',
+      socialTitle: 'Social interaction briefing', socialObserved: '{priority} priority interactions, {replies} possible replies and {comments} comments are waiting across connected networks.', socialQuestion: 'Should I protect the strongest lead, answer a customer question or turn a recurring comment into a content task?', socialRisk: '{count} social interaction(s) deserve a response or action', doSocial: 'Review “{title}” and choose: reply, create a task, schedule a reminder or capture a content idea.',
       healthTitle: 'Workload and recovery briefing', healthObserved: 'Recent averages: {sleep} h sleep, {energy}/10 energy, {stress}/10 stress, {steps} steps and about {minutes} minutes of open task load.', healthQuestion: 'Would you rather reduce today’s workload or protect a recovery block first?',
       learningTitle: 'Learning strategy briefing', learningObserved: '{skills} goals, {resources} resources and an average progress of {progress}%.', learningQuestion: 'What result should the next learning session produce: understanding, recall or practice?',
       sources: 'Signals used', confidence: 'Confidence', high: 'high', medium: 'medium', low: 'limited',
@@ -248,6 +249,7 @@
       pressure: 'Les points de pression actuels sont :', actions: 'Les trois prochaines actions les plus utiles sont :', question: 'Quelle contrainte faut-il protéger d’abord : le temps, l’énergie, la trésorerie ou un engagement client ?',
       noPressure: 'Aucune alerte critique ne domine votre espace. Le meilleur gain consiste maintenant à protéger le focus plutôt qu’à ajouter du travail.',
       mailTitle: 'Briefing messagerie et réponses', mailObserved: '{unread} messages non lus, {important} importants et {replies} réponses potentiellement en attente.', mailQuestion: 'Souhaitez-vous transformer le message le plus important en tâche ou créer un rappel de réponse ?',
+      socialTitle: 'Briefing interactions sociales', socialObserved: '{priority} interactions prioritaires, {replies} réponses possibles et {comments} commentaires attendent sur les réseaux connectés.', socialQuestion: 'Faut-il protéger le prospect le plus fort, répondre à une question client ou transformer un commentaire récurrent en contenu ?', socialRisk: '{count} interaction(s) sociale(s) nécessitent une réponse ou une action', doSocial: 'Examinez « {title} » puis choisissez : répondre, créer une tâche, programmer un rappel ou conserver une idée de contenu.',
       healthTitle: 'Briefing charge et récupération', healthObserved: 'Moyennes récentes : {sleep} h de sommeil, énergie {energy}/10, stress {stress}/10, {steps} pas et environ {minutes} minutes de charge ouverte.', healthQuestion: 'Préférez-vous réduire la charge du jour ou protéger d’abord un bloc de récupération ?',
       learningTitle: 'Briefing stratégie d’apprentissage', learningObserved: '{skills} objectifs, {resources} ressources et une progression moyenne de {progress} %.', learningQuestion: 'Quel résultat doit produire la prochaine séance : comprendre, mémoriser ou pratiquer ?',
       sources: 'Signaux utilisés', confidence: 'Confiance', high: 'élevée', medium: 'moyenne', low: 'limitée',
@@ -259,6 +261,7 @@
       pressure: 'Aktuelle Druckpunkte:', actions: 'Die drei nützlichsten nächsten Schritte:', question: 'Welche Grenze soll zuerst geschützt werden: Zeit, Energie, Cashflow oder eine Kundenzusage?',
       noPressure: 'Keine kritische Warnung dominiert. Der größte Gewinn liegt jetzt darin, Fokus zu schützen statt mehr Arbeit hinzuzufügen.',
       mailTitle: 'Mail- und Antwortbriefing', mailObserved: '{unread} ungelesene Nachrichten, {important} wichtige und {replies} mögliche ausstehende Antworten.', mailQuestion: 'Soll die wichtigste Nachricht als Aufgabe oder Antworterinnerung erfasst werden?',
+      socialTitle: 'Briefing zu sozialen Interaktionen', socialObserved: '{priority} prioritäre Interaktionen, {replies} mögliche Antworten und {comments} Kommentare warten in verbundenen Netzwerken.', socialQuestion: 'Soll zuerst der stärkste Lead geschützt, eine Kundenfrage beantwortet oder ein wiederkehrender Kommentar in eine Content-Aufgabe verwandelt werden?', socialRisk: '{count} soziale Interaktion(en) brauchen Antwort oder Aktion', doSocial: 'Prüfen Sie „{title}“ und wählen Sie: antworten, Aufgabe erstellen, Erinnerung planen oder Content-Idee sichern.',
       healthTitle: 'Arbeitslast- und Erholungsbriefing', healthObserved: 'Jüngste Mittelwerte: {sleep} h Schlaf, Energie {energy}/10, Stress {stress}/10, {steps} Schritte und etwa {minutes} Minuten offene Aufgabenlast.', healthQuestion: 'Möchten Sie zuerst die heutige Last reduzieren oder einen Erholungsblock schützen?',
       learningTitle: 'Lernstrategie-Briefing', learningObserved: '{skills} Ziele, {resources} Ressourcen und durchschnittlich {progress}% Fortschritt.', learningQuestion: 'Soll die nächste Sitzung Verstehen, Abruf oder Praxis erzeugen?',
       sources: 'Verwendete Signale', confidence: 'Vertrauen', high: 'hoch', medium: 'mittel', low: 'begrenzt',
@@ -270,6 +273,7 @@
       pressure: 'Los puntos de presión actuales son:', actions: 'Los tres siguientes pasos más útiles son:', question: '¿Qué límite debemos proteger primero: tiempo, energía, caja o un compromiso con un cliente?',
       noPressure: 'No domina ninguna alerta crítica. La mayor ganancia ahora es proteger el foco en lugar de añadir más trabajo.',
       mailTitle: 'Resumen de correo y respuestas', mailObserved: '{unread} mensajes sin leer, {important} importantes y {replies} posibles respuestas pendientes.', mailQuestion: '¿Convierto el mensaje más importante en tarea o preparo un recordatorio de respuesta?',
+      socialTitle: 'Resumen de interacciones sociales', socialObserved: '{priority} interacciones prioritarias, {replies} posibles respuestas y {comments} comentarios esperan en las redes conectadas.', socialQuestion: '¿Protegemos primero el mejor posible cliente, respondemos una pregunta o convertimos un comentario recurrente en contenido?', socialRisk: '{count} interacción(es) social(es) requieren respuesta o acción', doSocial: 'Revisa «{title}» y elige: responder, crear tarea, programar recordatorio o guardar una idea de contenido.',
       healthTitle: 'Resumen de carga y recuperación', healthObserved: 'Promedios recientes: {sleep} h de sueño, energía {energy}/10, estrés {stress}/10, {steps} pasos y unas {minutes} minutos de carga abierta.', healthQuestion: '¿Prefieres reducir la carga de hoy o proteger primero un bloque de recuperación?',
       learningTitle: 'Resumen de estrategia de aprendizaje', learningObserved: '{skills} objetivos, {resources} recursos y un progreso medio del {progress}%.', learningQuestion: '¿Qué resultado debe producir la próxima sesión: comprensión, recuerdo o práctica?',
       sources: 'Señales utilizadas', confidence: 'Confianza', high: 'alta', medium: 'media', low: 'limitada',
@@ -286,6 +290,8 @@
 
   function crossSnapshot(state, ctx) {
     const today = ctx.today();
+    const context = state.contextProfile || {};
+    const included = context.allowCrossAnalysis === false ? {} : (context.includedDomains || {});
     const tasks = openTasks(state);
     const overdue = tasks.filter((task) => task.dueDate && task.dueDate < today);
     const minutes = tasks.reduce((sum, task) => sum + Number(task.estimate || 30), 0);
@@ -294,22 +300,27 @@
       const steps = project.steps || [];
       return steps.length && !steps.some((step) => step.done) && (!project.updatedAt || Date.now() - new Date(project.updatedAt || project.createdAt || Date.now()).getTime() > 3 * 86400000);
     });
-    const mail = (state.mailMessages || []).filter((item) => !item.archived);
+    const mail = included.mail === false ? [] : (state.mailMessages || []).filter((item) => !item.archived);
     const unread = mail.filter((item) => item.unread || item.read === false);
     const important = mail.filter((item) => item.important || item.priority === 'high' || item.importance === 'high');
     const replies = mail.filter((item) => item.needsReply || item.replyDue || item.followUp);
-    const finance = monthlyFinance(state, ctx);
+    const social = included.social === false ? [] : (state.socialInteractions || []).filter((item) => !item.handled);
+    const socialPriority = social.filter((item) => Number(item.priority || 0) >= 70);
+    const socialReplies = social.filter((item) => item.requiresReply);
+    const socialComments = social.filter((item) => item.type === 'comment');
+    const finance = included.finance === false ? { items: [], income: 0, expense: 0, balance: 0 } : monthlyFinance(state, ctx);
     const missingReceipts = finance.items.filter((item) => item.professional && item.type === 'expense' && !item.receipt);
-    const health = [...(state.health || [])].sort((a, b) => String(b.date).localeCompare(String(a.date))).slice(0, 7);
+    const health = included.health === false ? [] : [...(state.health || [])].sort((a, b) => String(b.date).localeCompare(String(a.date))).slice(0, 7);
     const avg = (key, fallback = 0) => health.length ? health.reduce((sum, item) => sum + Number(item[key] || fallback), 0) / health.length : fallback;
     const energy = Math.round(Number(state.settings.todayEnergy || avg('energy', 7)));
     const habits = state.habits || [];
     const habitsDone = habits.filter((habit) => state.habitLogs.some((log) => log.habitId === habit.id && log.date === today && log.done)).length;
-    const learning = state.learning || [];
-    const resources = state.learningResources || [];
+    const learning = included.learning === false ? [] : (state.learning || []);
+    const resources = included.learning === false ? [] : (state.learningResources || []);
     const learningProgress = learning.length ? Math.round(learning.reduce((sum, item) => sum + Number(item.progress || 0), 0) / learning.length) : 0;
-    const journal = [...(state.journal || [])].sort((a, b) => String(b.date).localeCompare(String(a.date))).slice(0, 10);
-    return { tasks, overdue, minutes, projects, stalled, unread, important, replies, finance, missingReceipts, health, sleep: avg('sleep'), energy, stress: avg('stress'), steps: Math.round(avg('steps')), habits, habitsDone, learning, resources, learningProgress, journal };
+    const journal = included.journal === false ? [] : [...(state.journal || [])].sort((a, b) => String(b.date).localeCompare(String(a.date))).slice(0, 10);
+    const checkin = (state.contextCheckins || [])[0] || null;
+    return { tasks, overdue, minutes, projects, stalled, unread, important, replies, social, socialPriority, socialReplies, socialComments, finance, missingReceipts, health, sleep: avg('sleep'), energy, stress: avg('stress'), steps: Math.round(avg('steps')), habits, habitsDone, learning, resources, learningProgress, journal, context, checkin };
   }
 
   function contextSummary(state, ctx) {
@@ -319,20 +330,29 @@
       openTasks: snap.tasks.length, overdueTasks: snap.overdue.length, taskMinutes: snap.minutes,
       activeProjects: snap.projects.length, stalledProjects: snap.stalled.length,
       unreadMail: snap.unread.length, importantMail: snap.important.length, replyReminders: snap.replies.length,
+      prioritySocial: snap.socialPriority.length, socialReplies: snap.socialReplies.length, socialComments: snap.socialComments.length,
       monthIncome: snap.finance.income, monthExpenses: snap.finance.expense, monthBalance: snap.finance.balance, missingReceipts: snap.missingReceipts.length,
       sleepAverage: Number(snap.sleep.toFixed(1)), energy: snap.energy, stressAverage: Number(snap.stress.toFixed(1)), stepsAverage: snap.steps,
       habitsDoneToday: snap.habitsDone, habitsTracked: snap.habits.length,
       learningGoals: snap.learning.length, learningResources: snap.resources.length, learningProgress: snap.learningProgress,
-      journalEntriesReviewed: snap.journal.length
+      journalEntriesReviewed: snap.journal.length,
+      primaryGoal: snap.context.primaryGoal || '', secondaryGoal: snap.context.secondaryGoal || '',
+      successDefinition: snap.context.successDefinition || '', weeklyHours: Number(snap.context.weeklyHours || 0),
+      focusHours: Number(snap.context.focusHours || 0), energyPeak: snap.context.energyPeak || '',
+      currentPressure: snap.context.currentPressure || '', constraints: snap.context.constraints || '',
+      coachingTone: snap.context.coachingTone || 'balanced', coachingDepth: snap.context.coachingDepth || 'detailed',
+      latestCheckin: snap.checkin ? { energy: snap.checkin.energy, stress: snap.checkin.stress, blocker: snap.checkin.blocker, focus: snap.checkin.focus } : null
     });
   }
 
   function deepIntent(prompt) {
     const value = normalize(prompt);
-    const score = { overview: 0, mail: 0, health: 0, learning: 0 };
+    const score = { overview: 0, context: 0, mail: 0, social: 0, health: 0, learning: 0 };
     const add = (key, words, weight = 1) => words.forEach((word) => { if (value.includes(word)) score[key] += weight; });
+    add('context', ['mon contexte','mes contraintes','mes objectifs','disponibilite','availability','my context','my constraints','meine ziele','mein kontext','mis objetivos','mi contexto'], 4);
     add('overview', ['guide moi','accompagne','situation','ensemble','global','briefing','quoi faire','priorite aujourd','overview','whole picture','what should i do','guide me','gesamt','uberblick','que hago','panorama'], 2);
     add('mail', ['mail','email','e-mail','courriel','message','repond','reply','inbox','postfach','correo','respuesta'], 3);
+    add('social', ['instagram','facebook','youtube','reseau','réseau','social','commentaire','comment','mention','dm','audience','follower','page','netzwerk','kommentar','red social'], 3);
     add('health', ['fatigue','energie','sommeil','stress','charge','recovery','sleep','energy','workload','erholung','schlaf','carga','recuperacion'], 2);
     add('learning', ['apprendre','apprentissage','strategie','livre','manuel','cours','resource','learn','study','book','manual','lernen','buch','aprender','libro'], 2);
     return Object.entries(score).sort((a,b) => b[1]-a[1])[0][1] ? Object.entries(score).sort((a,b) => b[1]-a[1])[0][0] : '';
@@ -340,6 +360,15 @@
 
   function deepResponse(kind, state, ctx) {
     const snap = crossSnapshot(state, ctx);
+    if (kind === 'context') {
+      const facts = [];
+      if (snap.context.primaryGoal) facts.push(`${ctx.t('context.primaryGoal')}: ${snap.context.primaryGoal}`);
+      if (snap.context.currentPressure) facts.push(`${ctx.t('context.currentPressure')}: ${snap.context.currentPressure}`);
+      if (snap.context.constraints) facts.push(`${ctx.t('context.constraints')}: ${snap.context.constraints}`);
+      if (snap.context.weeklyHours) facts.push(`${ctx.t('context.weeklyHours')}: ${snap.context.weeklyHours}`);
+      const base = deepResponse('overview', state, ctx);
+      return { ...base, intent: 'context', text: `**${ctx.t('context.coachContextTitle')}**\n\n${facts.length ? bullets(facts) : ctx.t('context.coachContextEmpty')}\n\n${base.text}` };
+    }
     if (kind === 'mail') {
       const top = snap.important[0] || snap.replies[0] || snap.unread[0];
       const actions = top ? [deepSay(ctx, 'doMail', { subject: top.subject || top.title || 'message' })] : [];
@@ -353,6 +382,20 @@ ${actions.length ? bullets(actions) : deepSay(ctx,'noPressure')}
 ${deepSay(ctx,'mailQuestion')}
 
 _${deepSay(ctx,'sources')}: mail, tasks · ${deepSay(ctx,'confidence')}: ${top ? deepSay(ctx,'high') : deepSay(ctx,'low')}_` };
+    }
+    if (kind === 'social') {
+      const top = snap.socialPriority[0] || snap.socialReplies[0] || snap.social[0];
+      const actions = top ? [deepSay(ctx, 'doSocial', { title: top.title || top.content || 'interaction' })] : [];
+      if (snap.tasks[0] && actions.length < 2) actions.push(deepSay(ctx, 'doTask', { task: snap.tasks[0].title }));
+      return { intent: 'social', pendingSlot: '', suggestions: ['tasksPrioritise', 'generalDay'], text: `**${deepSay(ctx,'socialTitle')}**
+
+${deepSay(ctx,'socialObserved',{priority:snap.socialPriority.length,replies:snap.socialReplies.length,comments:snap.socialComments.length})}
+
+${actions.length ? bullets(actions) : deepSay(ctx,'noPressure')}
+
+${deepSay(ctx,'socialQuestion')}
+
+_${deepSay(ctx,'sources')}: social, tasks, projects · ${deepSay(ctx,'confidence')}: ${top ? deepSay(ctx,'high') : deepSay(ctx,'low')}_` };
     }
     if (kind === 'health') {
       const actions = [];
@@ -386,6 +429,7 @@ _${deepSay(ctx,'sources')}: learning, resources, calendar, workload · ${deepSay
     const risks = [];
     if (snap.overdue.length) risks.push(deepSay(ctx,'overdue',{count:snap.overdue.length}));
     if (snap.replies.length) risks.push(deepSay(ctx,'replyRisk',{count:snap.replies.length}));
+    if (snap.socialPriority.length || snap.socialReplies.length) risks.push(deepSay(ctx,'socialRisk',{count:new Set([...snap.socialPriority,...snap.socialReplies].map((item)=>item.id)).size}));
     if (snap.energy <= 4 && snap.minutes > 120) risks.push(deepSay(ctx,'lowEnergy'));
     if (snap.finance.items.length && snap.finance.balance < 0) risks.push(deepSay(ctx,'negativeCash'));
     if (snap.missingReceipts.length) risks.push(deepSay(ctx,'receipts',{count:snap.missingReceipts.length}));
@@ -394,6 +438,8 @@ _${deepSay(ctx,'sources')}: learning, resources, calendar, workload · ${deepSay
     if (snap.tasks[0]) actions.push(deepSay(ctx,'doTask',{task:snap.tasks[0].title}));
     const mail = snap.important[0] || snap.replies[0];
     if (mail) actions.push(deepSay(ctx,'doMail',{subject:mail.subject || mail.title || 'message'}));
+    const social = snap.socialPriority[0] || snap.socialReplies[0];
+    if (social && actions.length < 3) actions.push(deepSay(ctx,'doSocial',{title:social.title || social.content || 'interaction'}));
     const project = snap.projects.find((item)=>(item.steps||[]).some((step)=>!step.done));
     const step = project?.steps?.find((item)=>!item.done);
     if (project && step) actions.push(deepSay(ctx,'doProject',{project:project.name,step:step.title || step.text}));
@@ -412,10 +458,10 @@ ${bullets(actions.slice(0,3))}
 
 ${deepSay(ctx,'question')}
 
-_${deepSay(ctx,'sources')}: tasks, projects, mail, finance, health, habits, learning · ${deepSay(ctx,'confidence')}: ${[snap.tasks.length,snap.projects.length,snap.finance.items.length,snap.health.length,snap.unread.length].filter(Boolean).length >= 3 ? deepSay(ctx,'high') : deepSay(ctx,'medium')}_` };
+_${deepSay(ctx,'sources')}: tasks, projects, mail, social, finance, health, habits, learning · ${deepSay(ctx,'confidence')}: ${[snap.tasks.length,snap.projects.length,snap.finance.items.length,snap.health.length,snap.unread.length,snap.social.length].filter(Boolean).length >= 3 ? deepSay(ctx,'high') : deepSay(ctx,'medium')}_` };
   }
 
-  function enhancedResponse(prompt, state, ctx) {
+  function enhancedResponse(prompt, state, ctx, semanticIntent = '') {
     if (state.coachSession?.pendingSlot) return BASE.buildResponse(prompt, state, ctx);
 
     const social = detectSocial(prompt);
@@ -429,8 +475,10 @@ ${ctx.edition().coachWelcome}` : '';
 
     const deep = deepIntent(prompt);
     if (deep) return deepResponse(deep, state, ctx);
+    if (semanticIntent === 'context') return deepResponse('context', state, ctx);
+    if (['mail','social','health','learning'].includes(semanticIntent)) return deepResponse(semanticIntent, state, ctx);
 
-    const intent = BASE.detectIntent(prompt);
+    const intent = semanticIntent || BASE.detectIntent(prompt);
     const command = detectCommand(prompt, intent);
     const tasks = openTasks(state);
     const top = tasks.slice(0, 3);
@@ -545,19 +593,23 @@ ${ctx.edition().coachWelcome}` : '';
       const signals = [
         ['✓', ctx.t('nav.tasks'), snap.tasks.length],
         ['✉', ctx.t('mail.nav'), snap.unread.length],
+        ['◎', ctx.t('social.nav'), snap.socialPriority.length || snap.socialReplies.length],
         ['€', ctx.t('nav.finance'), snap.finance.items.length],
         ['♡', ctx.t('nav.health'), snap.health.length],
-        ['↗', ctx.t('nav.learning'), snap.resources.length || snap.learning.length]
+        ['↗', ctx.t('nav.learning'), snap.resources.length || snap.learning.length],
+        ['◎', ctx.t('context.nav'), snap.context.primaryGoal || snap.checkin ? 1 : 0]
       ];
       signalStrip.innerHTML = signals.map(([icon, label, value]) => `<span class="coach-signal ${Number(value) ? 'active' : ''}"><b>${icon}</b><small>${ctx.escape(label)}</small><strong>${Number(value) || 0}</strong></span>`).join('');
     }
 
     async function renderAiStatus() {
       if (!aiToggle || !aiStatus) return;
-      const enabled = Boolean(ctx.getState().settings.localAiEnabled);
-      const status = await window.SUM_LOCAL_AI?.availability(ctx.language());
-      aiToggle.dataset.state = enabled && status !== 'unavailable' && status !== 'disabled' ? 'active' : status || 'unavailable';
-      aiStatus.textContent = enabled ? (status === 'available' ? ctx.t('coach.localAiReady') : status === 'downloadable' || status === 'downloading' ? ctx.t('coach.localAiPreparing') : ctx.t('coach.guidedEngine')) : ctx.t('coach.guidedEngine');
+      const settings = ctx.getState().settings;
+      aiToggle.dataset.state = settings.localAiEnabled || settings.semanticAiEnabled ? 'active' : 'guided';
+      if (settings.localAiEnabled && settings.semanticAiEnabled) aiStatus.textContent = ctx.t('aiSettings.combined');
+      else if (settings.localAiEnabled) aiStatus.textContent = ctx.t('aiSettings.generativeActive');
+      else if (settings.semanticAiEnabled) aiStatus.textContent = ctx.t('aiSettings.semanticActive');
+      else aiStatus.textContent = ctx.t('coach.guidedEngine');
     }
 
     function renderInsights() {
@@ -574,7 +626,7 @@ ${ctx.edition().coachWelcome}` : '';
 
     function renderHistory() {
       const entries = ctx.getState().coachHistory || [];
-      const panelForIntent = { general: 'dashboard', tasks: 'tasks', projects: 'projects', finance: 'finance', health: 'health', learning: 'learning', journal: 'journal', mail: 'mail' };
+      const panelForIntent = { general: 'dashboard', tasks: 'tasks', projects: 'projects', finance: 'finance', health: 'health', learning: 'learning', journal: 'journal', mail: 'mail', social: 'social' };
       const messages = entries.map((entry) => {
         const panel = entry.role === 'assistant' ? panelForIntent[entry.intent] : '';
         const action = panel ? `<div class="message-actions"><button type="button" data-message-panel="${panel}">${ctx.escape(ctx.t('coach.openModule'))}</button></div>` : '';
@@ -627,7 +679,9 @@ ${ctx.edition().coachWelcome}` : '';
       renderHistory();
       const delay = Math.min(1050, Math.max(420, 360 + clean.length * 7));
       await new Promise((resolve) => window.setTimeout(resolve, delay));
-      const result = enhancedResponse(clean, ctx.getState(), ctx);
+      let semantic = { intent: '', confidence: 0 };
+      if (ctx.getState().settings.semanticAiEnabled && window.SUM_LOCAL_AI?.classifyIntent) semantic = await window.SUM_LOCAL_AI.classifyIntent(clean, ctx.language());
+      const result = enhancedResponse(clean, ctx.getState(), ctx, semantic.confidence >= 0.38 ? semantic.intent : '');
       if (ctx.getState().settings.localAiEnabled && window.SUM_LOCAL_AI) {
         result.text = await window.SUM_LOCAL_AI.enhance({ prompt: clean, deterministicText: result.text, contextSummary: contextSummary(ctx.getState(), ctx), language: ctx.language() });
       }
@@ -643,27 +697,7 @@ ${ctx.edition().coachWelcome}` : '';
       input.focus();
     }
 
-    aiToggle?.addEventListener('click', async () => {
-      const currentlyEnabled = Boolean(ctx.getState().settings.localAiEnabled);
-      if (currentlyEnabled) {
-        window.SUM_LOCAL_AI?.destroy();
-        ctx.updateState((state) => { state.settings.localAiEnabled = false; });
-        ctx.toast(ctx.t('coach.localAiDisabled'));
-        renderAiStatus();
-        return;
-      }
-      aiToggle.disabled = true;
-      aiStatus.textContent = ctx.t('coach.localAiPreparing');
-      const prepared = await window.SUM_LOCAL_AI?.prepare(ctx.language(), (progress) => { aiStatus.textContent = `${ctx.t('coach.localAiPreparing')} ${progress}%`; });
-      aiToggle.disabled = false;
-      if (prepared?.ok) {
-        ctx.updateState((state) => { state.settings.localAiEnabled = true; });
-        ctx.toast(ctx.t('coach.localAiEnabled'));
-      } else {
-        ctx.toast(ctx.t('coach.localAiUnavailable'), 'error');
-      }
-      renderAiStatus();
-    });
+    // AI settings are handled by modules/ai-settings.js.
 
     runButton.addEventListener('click', () => runAnalysis());
     document.addEventListener('sum:coach-run', () => {

@@ -141,7 +141,8 @@
         return;
       }
       const bridge = window.SUM_NATIVE_HEALTH;
-      if (bridge?.connect) {
+      const availability = bridge?.available ? await bridge.available(selectedProvider) : { available: false };
+      if (availability?.available && bridge?.connect) {
         try {
           await bridge.connect(selectedProvider);
           ctx.updateState((state) => { state.healthSources.push({ provider: selectedProvider, status: 'connected', mode: 'native', lastSync: new Date().toISOString() }); });
@@ -158,14 +159,22 @@
       openProvider(selectedProvider);
     }
 
-    function importDemo() {
-      const entries = demoEntries(selectedProvider);
+    async function importDemo() {
+      const existingSource = sourceFor(selectedProvider);
+      let entries = [];
+      let mode = existingSource?.mode || 'demo';
+      if (mode === 'native' && window.SUM_NATIVE_HEALTH?.sync) {
+        try {
+          entries = (await window.SUM_NATIVE_HEALTH.sync(selectedProvider, 14)).map((item) => ({ id: item.id || ctx.uid(), source: selectedProvider, ...item }));
+        } catch { return ctx.toast(ctx.t('health.connectionFailed'), 'error'); }
+      }
+      if (!entries.length) { entries = demoEntries(selectedProvider); mode = 'demo'; }
       ctx.updateState((state) => {
         const existingDates = new Set(state.health.filter((item) => item.source === selectedProvider).map((item) => item.date));
-        state.health.unshift(...entries.filter((item) => !existingDates.has(item.date)));
+        state.health.unshift(...entries.filter((item) => item.date && !existingDates.has(item.date)));
         const source = state.healthSources.find((item) => item.provider === selectedProvider);
-        if (source) source.lastSync = new Date().toISOString();
-        else state.healthSources.push({ provider: selectedProvider, status: 'connected', mode: 'demo', lastSync: new Date().toISOString() });
+        if (source) { source.lastSync = new Date().toISOString(); source.mode = mode; }
+        else state.healthSources.push({ provider: selectedProvider, status: 'connected', mode, lastSync: new Date().toISOString() });
       });
       ctx.toast(ctx.t('health.demoImported'));
       openProvider(selectedProvider);
