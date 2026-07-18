@@ -103,12 +103,28 @@
         try {
           const messages = await window.SigmaGoogle.importGmail();
           ctx.updateState((state) => {
-            state.mailAccounts = (state.mailAccounts || []).filter((a) => a.provider !== 'gmail');
-            state.mailAccounts.push({ id:'google-gmail', provider:'gmail', email, label:'Gmail', demo:false, status:'connected', createdAt:new Date().toISOString() });
-            state.mailMessages = (state.mailMessages || []).filter((m) => m.provider !== 'gmail').concat(messages);
+            state.mailAccounts = (state.mailAccounts || []).filter((account) => account.provider !== 'gmail');
+            state.mailAccounts.push({
+              id: 'google-gmail',
+              provider: 'gmail',
+              email,
+              label: 'Gmail',
+              demo: false,
+              status: 'connected',
+              createdAt: new Date().toISOString()
+            });
+
+            const importedMessages = (messages || []).map(heuristics);
+            state.mailMessages = (state.mailMessages || [])
+              .filter((message) => message.provider !== 'gmail')
+              .concat(importedMessages)
+              .sort((a, b) => String(b.receivedAt || '').localeCompare(String(a.receivedAt || '')));
+
             state.mailSettings.lastSync = new Date().toISOString();
           });
-          ctx.toast(ctx.t('mail.connected')); return;
+          render();
+          ctx.toast(ctx.t('mail.connected'));
+          return;
         } catch (error) { ctx.toast(error.message, 'error'); return; }
       }
       if (!API) return connectDemo(provider, email);
@@ -203,7 +219,34 @@
     });
     accountFilter.addEventListener('change', renderMessages);
     statusFilter.addEventListener('change', renderMessages);
-    document.getElementById('mail-sync').addEventListener('click', async () => { if (API) await refreshRemote(); else if (window.SigmaGoogle?.configured?.() && ctx.getState().mailAccounts.some(a=>a.provider==='gmail'&&!a.demo)) { try { const messages=await window.SigmaGoogle.importGmail(); ctx.updateState(state=>{state.mailMessages=state.mailMessages.filter(m=>m.provider!=='gmail').concat(messages);state.mailSettings.lastSync=new Date().toISOString();}); } catch(error){ return ctx.toast(error.message,'error'); } } else ctx.updateState((state) => { state.mailSettings.lastSync = new Date().toISOString(); }); ctx.toast(ctx.t('mail.synced')); });
+    document.getElementById('mail-sync').addEventListener('click', async () => {
+      if (API) {
+        await refreshRemote();
+      } else if (
+        window.SigmaGoogle?.configured?.() &&
+        ctx.getState().mailAccounts.some((account) => account.provider === 'gmail' && !account.demo)
+      ) {
+        try {
+          const messages = await window.SigmaGoogle.importGmail();
+          ctx.updateState((state) => {
+            const importedMessages = (messages || []).map(heuristics);
+            state.mailMessages = (state.mailMessages || [])
+              .filter((message) => message.provider !== 'gmail')
+              .concat(importedMessages)
+              .sort((a, b) => String(b.receivedAt || '').localeCompare(String(a.receivedAt || '')));
+            state.mailSettings.lastSync = new Date().toISOString();
+          });
+          render();
+        } catch (error) {
+          return ctx.toast(error.message, 'error');
+        }
+      } else {
+        ctx.updateState((state) => {
+          state.mailSettings.lastSync = new Date().toISOString();
+        });
+      }
+      ctx.toast(ctx.t('mail.synced'));
+    });
 
     ctx.subscribe(render);
     document.addEventListener('languagechange', render);
