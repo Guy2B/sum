@@ -1,3 +1,9 @@
+# V3.0 Connected Providers
+- Unified Google account and Gmail activation
+- Microsoft, Yahoo, Apple/iCloud, Proton and universal IMAP provider hub
+- Removed mixed demo/real mail behavior
+- Updated PWA cache
+
 # Changelog
 
 ## 1.7.0-admin-beta
