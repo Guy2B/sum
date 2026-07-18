@@ -2076,3 +2076,8 @@ body::before { content:""; position:fixed; inset:0; z-index:-2; pointer-events:n
   .modal { padding: 28px 20px 22px; }
   .modal-close { top: 12px; right: 12px; }
 }
+
+/* V2.0 Google Cloud Edition — global title breathing room */
+.card > h1,.card > h2,.card > h3,.panel > h1,.panel > h2,.panel > h3,.modal-card > h1,.modal-card > h2,.modal-card > h3,.section-head,.card-head{margin-top:0;padding-top:.35rem;line-height:1.25}
+.card,.panel,.modal-card,.settings-card,.module-card{padding-top:clamp(1rem,2vw,1.5rem)}
+@media(max-width:720px){.card,.panel,.modal-card,.settings-card,.module-card{padding:1rem}.card h1,.card h2,.card h3,.panel h1,.panel h2,.panel h3{overflow-wrap:anywhere}}

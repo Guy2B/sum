@@ -1,0 +1,7 @@
+const {onCall,HttpsError}=require('firebase-functions/v2/https');
+const {setGlobalOptions}=require('firebase-functions/v2');
+const admin=require('firebase-admin');
+admin.initializeApp(); setGlobalOptions({region:'europe-west1',maxInstances:10});
+exports.healthImport=onCall(async req=>{if(!req.auth) throw new HttpsError('unauthenticated','Authentication required'); const rows=Array.isArray(req.data?.metrics)?req.data.metrics:[]; if(rows.length>500) throw new HttpsError('invalid-argument','Maximum 500 metrics'); const batch=admin.firestore().batch(); rows.forEach(row=>{const ref=admin.firestore().collection('healthMetrics').doc(); batch.set(ref,{...row,userId:req.auth.uid,createdAt:admin.firestore.FieldValue.serverTimestamp()});}); await batch.commit(); return {imported:rows.length};});
+exports.setBetaPremium=onCall(async req=>{if(!req.auth) throw new HttpsError('unauthenticated','Authentication required'); await admin.firestore().doc(`premiumEntitlements/${req.auth.uid}`).set({userId:req.auth.uid,plan:'beta-premium',active:true,updatedAt:admin.firestore.FieldValue.serverTimestamp()},{merge:true}); return {active:true,plan:'beta-premium'};});
+exports.betaFeedback=onCall(async req=>{if(!req.auth) throw new HttpsError('unauthenticated','Authentication required'); const text=String(req.data?.text||'').trim(); if(!text) throw new HttpsError('invalid-argument','Feedback is empty'); await admin.firestore().collection('betaFeedback').add({userId:req.auth.uid,text,createdAt:admin.firestore.FieldValue.serverTimestamp()}); return {saved:true};});
