@@ -75,6 +75,7 @@
 
   function persist() {
     localStorage.setItem(CONFIG.storageKey, JSON.stringify(state));
+    window.dispatchEvent(new CustomEvent('sigma:state-changed', { detail: { state: clone(state) } }));
   }
 
   function getState() { return state; }
@@ -883,6 +884,9 @@
   }
 
   function initApp() {
+    window.addEventListener('sigma:cloud-state', (event) => { if (event.detail?.state) replaceState(event.detail.state, { preserveLicense: true }); });
+    window.addEventListener('sigma:drive-state', (event) => { if (event.detail?.state) replaceState(event.detail.state, { preserveLicense: true }); });
+    window.addEventListener('sigma:google-toast', (event) => toast(event.detail || 'Google', event.error ? 'error' : 'success'));
     initI18n();
     initTheme();
     initNavigation();

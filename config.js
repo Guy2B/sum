@@ -3,7 +3,7 @@ const ONLINE = window.SIGMA_ONLINE_CONFIG || {};
 window.SUM_CONFIG = Object.freeze({
   appName: 'Σ Life OS',
   brandName: 'Al.G.B.r.',
-  version: '1.7.2-rc2-online',
+  version: '2.1.0-beta-google-connected',
   mailApiBaseUrl: String(ONLINE.mailApiBaseUrl || ''), // e.g. 'http://localhost:8787'; empty keeps Mail Hub in explicit demo mode
   socialApiBaseUrl: String(ONLINE.socialApiBaseUrl || ''), // e.g. 'http://localhost:8888'; empty keeps Σ Social in explicit demo mode
   localAiMode: 'auto', // guided + semantic everywhere; generative is optional

@@ -5,20 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#eef5ff">
   <meta name="description" content="Σ Life OS by Al.G.B.r. — a multilingual, local-first command center for life and work.">
-  <title>Σ Life OS V2.0 Beta — Google Cloud Edition</title>
+  <title>Σ Life OS V2.5 Beta — Connected Platforms Edition</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
-  <script src="./firebase-config.js"></script>
-<script defer src="./online-config.js"></script>
-<script defer src="./config.js"></script>
-<script defer src="./lang-en.js"></script>
-<script defer src="./lang-fr.js"></script>
-<script defer src="./lang-de.js"></script>
-<script defer src="./lang-es.js"></script>
-<script defer src="./i18n.js"></script>
-<script defer src="./editions.js"></script>
-<script type="module" src="./modules/firebase-cloud.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <script defer src="chart-fallback.js"></script>
+  <script defer src="firebase-config.js"></script>
+  <script defer src="google-cloud-config.js"></script>
+  <script defer src="platform-config.js"></script>
+  <script defer src="online-config.js"></script>
+  <script defer src="config.js"></script>
+  <script defer src="lang-en.js"></script>
+  <script defer src="lang-fr.js"></script>
+  <script defer src="lang-de.js"></script>
+  <script defer src="lang-es.js"></script>
+  <script defer src="i18n.js"></script>
+  <script defer src="editions.js"></script>
+  <script type="module" src="modules/firebase-cloud.js"></script>
+  <script defer src="modules/google-workspace.js"></script>
+  <script defer src="modules/platform-integrations.js"></script>
   <script defer src="modules/tasks.js"></script>
   <script defer src="modules/projects.js"></script>
   <script defer src="modules/finance.js"></script>
@@ -86,7 +92,7 @@
         <button class="text-button" type="button" data-upgrade data-i18n="plan.upgrade">Unlock Σ Pro</button>
       </div>
       <nav class="side-nav v17-side-nav" aria-label="Primary">
-        <span class="nav-section-label">Σ V1.7</span>
+        <span class="nav-section-label">Σ V2.5</span>
         <button class="nav-item active" type="button" data-panel="dashboard"><svg><use href="#i-grid"/></svg><span id="v17-nav-today">Aujourd’hui</span></button>
         <button class="nav-item" type="button" data-panel="attention"><svg><use href="#i-bell"/></svg><span id="v17-nav-attention">Attention</span><span class="nav-count" id="v17-attention-nav-count" hidden>0</span></button>
         <button class="nav-item" type="button" data-panel="plan"><svg><use href="#i-map"/></svg><span id="v17-nav-plan">Plan</span></button>
