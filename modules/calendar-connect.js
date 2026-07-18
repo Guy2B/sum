@@ -43,15 +43,30 @@
       render();
     }
     async function sync() {
-      if(!base()) { const provider=(ctx.getState().calendarAccounts||[])[0]?.provider || 'google'; demo(provider); return; }
+      if(!base()) {
+        if(window.SigmaGoogle?.configured?.() && (ctx.getState().calendarAccounts||[]).some(a=>a.provider==='google'&&!a.demo)) {
+          try { const rows=await window.SigmaGoogle.importCalendar(); ctx.updateState(state=>{state.events=(state.events||[]).filter(e=>e.externalProvider!=='google').concat(rows);state.calendarSettings={...(state.calendarSettings||{}),lastSync:new Date().toISOString()};});ctx.toast(copy().imported); }
+          catch(error){ctx.toast(error.message,'error');} return;
+        }
+        const provider=(ctx.getState().calendarAccounts||[])[0]?.provider || 'google'; demo(provider); return;
+      }
       try { const payload=await request('/api/calendar/events'); ctx.updateState((state)=>{const providers=new Set((payload.events||[]).map((e)=>e.provider)); state.events=(state.events||[]).filter((e)=>!providers.has(e.externalProvider)); state.events.push(...(payload.events||[]).map((e)=>({...e,externalProvider:e.provider,source:'calendar-connector'}))); state.calendarSettings={...(state.calendarSettings||{}),lastSync:new Date().toISOString()};}); ctx.toast(copy().imported); }
       catch { ctx.toast(copy().failed,'error'); }
       render();
     }
-    document.addEventListener('click',(event)=>{
+    document.addEventListener('click',async (event)=>{
       if(event.target.closest('[data-calendar-open]')) { dialog.showModal(); refreshAccounts(); }
       const provider=event.target.closest('[data-calendar-provider]')?.dataset.calendarProvider;
-      if(provider) { if(base()) location.href=`${base()}/api/calendar/connect/${encodeURIComponent(provider)}`; else demo(provider); }
+      if(provider) {
+        if(base()) location.href=`${base()}/api/calendar/connect/${encodeURIComponent(provider)}`;
+        else if(provider==='google' && window.SigmaGoogle?.configured?.()) {
+          try {
+            const rows=await window.SigmaGoogle.importCalendar();
+            ctx.updateState(state=>{state.calendarAccounts=(state.calendarAccounts||[]).filter(a=>a.provider!=='google');state.calendarAccounts.push({id:'google-calendar',provider:'google',email:window.SigmaCloud?.user?.email||'',label:'Google Calendar',demo:false,status:'connected',createdAt:new Date().toISOString()});state.events=(state.events||[]).filter(e=>e.externalProvider!=='google').concat(rows);state.calendarSettings={...(state.calendarSettings||{}),lastSync:new Date().toISOString()};});
+            ctx.toast(copy().imported); render();
+          } catch(error){ctx.toast(error.message,'error');}
+        } else demo(provider);
+      }
       const id=event.target.closest('[data-calendar-disconnect]')?.dataset.calendarDisconnect;
       if(id) { const account=(ctx.getState().calendarAccounts||[]).find((a)=>a.id===id); if(base()&&!account?.demo) request(`/api/calendar/accounts/${encodeURIComponent(id)}`,{method:'DELETE'}).catch(()=>{}); ctx.updateState((state)=>{state.calendarAccounts=(state.calendarAccounts||[]).filter((a)=>a.id!==id);state.events=(state.events||[]).filter((e)=>e.accountId!==id && e.externalProvider!==account?.provider);}); render(); }
     });

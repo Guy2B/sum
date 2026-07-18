@@ -122,7 +122,9 @@
       catch { /* use the cross-browser gateway below */ }
     }
     const gateway = await gatewayEnhance({ prompt, deterministicText, contextSummary, language: lang });
-    return gateway || deterministicText;
+    if (gateway) return gateway;
+    const gemini = await window.SigmaGoogle?.geminiRewrite?.({ prompt, deterministicText, contextSummary, language: lang });
+    return gemini || deterministicText;
   }
 
   function destroyChrome() { chromeSession?.destroy?.(); chromeSession = null; chromeLanguage = ''; }
