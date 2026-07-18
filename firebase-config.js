@@ -1,6 +1,6 @@
 'use strict';
 window.SIGMA_FIREBASE_CONFIG = Object.freeze({
-  apiKey: 'REPLACE_WITH_FIREBASE_WEB_API_KEY',
+  apiKey: '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',
   authDomain: 'project-sum-b961a.firebaseapp.com',
   projectId: 'project-sum-b961a',
   storageBucket: 'project-sum-b961a.firebasestorage.app',
