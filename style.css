@@ -2022,3 +2022,57 @@ body::before { content:""; position:fixed; inset:0; z-index:-2; pointer-events:n
   .button-row { align-items: stretch; flex-direction: column; }
   .button-row .button { width: 100%; }
 }
+
+
+/* V1.7.2 RC2 ONLINE — logo officiel et respiration typographique */
+.brand-symbol-image {
+  display: block;
+  object-fit: cover;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.brand-copy { min-width: 0; }
+.brand-copy > strong { letter-spacing: .02em !important; }
+
+/* Évite les titres collés aux cadres, y compris sur mobile et dans les modales. */
+.card > h1:first-child,
+.card > h2:first-child,
+.card > h3:first-child,
+.form-card > h2:first-child,
+.chart-card > h2:first-child,
+.modal > h2,
+.modal > h3,
+.section-title,
+.card-heading {
+  margin-top: 0;
+}
+.card > .eyebrow + h1,
+.card > .eyebrow + h2,
+.card > .eyebrow + h3,
+.modal > .eyebrow + h2,
+.modal > .eyebrow + h3 {
+  margin-top: 8px;
+}
+.card h1, .card h2, .card h3,
+.modal h1, .modal h2, .modal h3 {
+  line-height: 1.22;
+  overflow-wrap: anywhere;
+}
+.plan-card { padding: 18px 16px 17px; }
+.plan-card strong { margin-top: 12px; line-height: 1.35; }
+.page-heading { padding-top: 4px; }
+.page-heading h1 { margin-top: 7px; }
+.section-title { padding: 4px 2px 10px; }
+
+@media (max-width: 720px) {
+  .dashboard-grid > .card,
+  .form-card,
+  .list-card,
+  .chart-card,
+  .sync-grid > .card,
+  .account-grid > .card { padding: 20px 17px; }
+  .card-heading { margin-bottom: 18px; }
+  .modal { padding: 28px 20px 22px; }
+  .modal-close { top: 12px; right: 12px; }
+}

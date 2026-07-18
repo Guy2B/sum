@@ -182,8 +182,8 @@ if (!intelligenceCode.includes('window.SUM_INTELLIGENCE_V17') || !experienceCode
   console.error('V1.7 intelligence or experience module is not registered.');
   process.exit(1);
 }
-if (!configCode.includes("version: '1.7.1-rc1'") || !configCode.includes('adminQaEnabled: false')) {
-  console.error('V1.7.1 RC1 configuration is missing.');
+if (!configCode.includes("version: '1.7.2-rc2-online'") || !configCode.includes('adminQaEnabled: false')) {
+  console.error('V1.7.2 RC2 Online configuration is missing.');
   process.exit(1);
 }
 if (!files.includes(path.join(root, 'backend/calendar-connector/server.js'))) { console.error('Calendar connector backend is missing.'); process.exit(1); }

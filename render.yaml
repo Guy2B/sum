@@ -1,0 +1,63 @@
+services:
+  - type: web
+    name: sigma-mail-connector
+    runtime: node
+    rootDir: backend/mail-connector
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: APP_ORIGINS
+        value: https://guy2b.github.io
+      - key: APP_RETURN_URL
+        value: https://guy2b.github.io/sum/app.html#mail
+      - key: COOKIE_SAME_SITE
+        value: none
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: TOKEN_ENCRYPTION_KEY
+        generateValue: true
+
+  - type: web
+    name: sigma-social-connector
+    runtime: node
+    rootDir: backend/social-connector
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: APP_ORIGINS
+        value: https://guy2b.github.io
+      - key: APP_RETURN_URL
+        value: https://guy2b.github.io/sum/app.html#social
+      - key: COOKIE_SAME_SITE
+        value: none
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: TOKEN_ENCRYPTION_KEY
+        generateValue: true
+
+  - type: web
+    name: sigma-calendar-connector
+    runtime: node
+    rootDir: backend/calendar-connector
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: APP_ORIGINS
+        value: https://guy2b.github.io
+      - key: APP_RETURN_URL
+        value: https://guy2b.github.io/sum/app.html#connections
+      - key: COOKIE_SAME_SITE
+        value: none
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: TOKEN_ENCRYPTION_KEY
+        generateValue: true

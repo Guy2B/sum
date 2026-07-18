@@ -1,15 +1,16 @@
 'use strict';
+const ONLINE = window.SIGMA_ONLINE_CONFIG || {};
 window.SUM_CONFIG = Object.freeze({
   appName: 'Σ Life OS',
   brandName: 'Al.G.B.r.',
-  version: '1.7.1-rc1',
-  mailApiBaseUrl: '', // e.g. 'http://localhost:8787'; empty keeps Mail Hub in explicit demo mode
-  socialApiBaseUrl: '', // e.g. 'http://localhost:8888'; empty keeps Σ Social in explicit demo mode
+  version: '1.7.2-rc2-online',
+  mailApiBaseUrl: String(ONLINE.mailApiBaseUrl || ''), // e.g. 'http://localhost:8787'; empty keeps Mail Hub in explicit demo mode
+  socialApiBaseUrl: String(ONLINE.socialApiBaseUrl || ''), // e.g. 'http://localhost:8888'; empty keeps Σ Social in explicit demo mode
   localAiMode: 'auto', // guided + semantic everywhere; generative is optional
   allowLocalAiOnDevice: true,
   allowSemanticAiOnDevice: true,
-  localAiGatewayUrl: '', // optional self-hosted Ollama gateway, usable from Chrome, Edge, Safari and Firefox
-  calendarApiBaseUrl: '',
+  localAiGatewayUrl: String(ONLINE.localAiGatewayUrl || ''), // optional self-hosted Ollama gateway, usable from Chrome, Edge, Safari and Firefox
+  calendarApiBaseUrl: String(ONLINE.calendarApiBaseUrl || ''),
   adminQaEnabled: false, // MUST be false in a public commercial build
   commercialRelease: false,
   storageKey: 'sum-algbr-state-v1',
@@ -17,7 +18,7 @@ window.SUM_CONFIG = Object.freeze({
   languageKey: 'sum-algbr-language',
 
   // Public endpoints — complete these before going live.
-  appsScriptUrl: '',
+  appsScriptUrl: String(ONLINE.appsScriptUrl || ''),
 
   // Hosted checkout. The URLs can come from Lemon Squeezy, PayPal or another provider.
   paymentProvider: 'lemon-squeezy',
