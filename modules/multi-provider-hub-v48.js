@@ -38,28 +38,6 @@
     window.open(url, "sigma-mail-connector", "width=620,height=760");
   }
   document.addEventListener("click", e => { const button=e.target.closest("[data-v48-provider]"); if (!button) return; const id=button.dataset.v48Provider; id === "microsoft" ? microsoft() : connector(id); });
-  let renderScheduled = false;
-
-function scheduleRender() {
-  if (renderScheduled) return;
-
-  renderScheduled = true;
-
-  requestAnimationFrame(() => {
-    renderScheduled = false;
-
-    if (!document.getElementById("v48-other-accounts")) {
-      render();
-    }
-  });
-}
-
-const observer = new MutationObserver(scheduleRender);
-
-observer.observe(document.documentElement, {
-  subtree: true,
-  childList: true
-});
-
-document.addEventListener("DOMContentLoaded", render);
+  const observer = new MutationObserver(render); observer.observe(document.documentElement,{subtree:true,childList:true});
+  document.addEventListener("DOMContentLoaded",render);
 })();

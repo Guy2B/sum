@@ -93,6 +93,9 @@
   }
   function subscribe(callback) { subscribers.add(callback); return () => subscribers.delete(callback); }
 
+  // Public, minimal integration bridge for trusted Sigma modules.
+  window.SigmaApp = Object.freeze({ getState, updateState, replaceState, subscribe });
+
   function uid() {
     const random = globalThis.crypto?.getRandomValues ? globalThis.crypto.getRandomValues(new Uint32Array(1))[0] : Math.floor(Math.random() * 0xffffffff);
     return `${Date.now().toString(36)}-${random.toString(36)}`;
