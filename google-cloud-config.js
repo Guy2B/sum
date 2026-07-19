@@ -6,5 +6,9 @@ window.SIGMA_GOOGLE_CLOUD_CONFIG = Object.freeze({
   appsScriptAiProxyUrl: '',
   gmailMaxMessages: 30,
   calendarDaysAhead: 90,
-  driveBackupFileName: 'sigma-life-os-backup-v25.json'
+  driveBackupFileName: 'sigma-life-os-backup-v47.json',
+  // Public browser key restricted to https://guy2b.github.io/sum/* and Maps APIs only.
+  mapsApiKey: 'AIzaSyDN2I3We8eDMI5WvqMH5Piu_7GrftPZpdY',
+  mapsDefaultCenter: { lat: 50.8503, lng: 4.3517 },
+  mapsDefaultZoom: 11
 });
