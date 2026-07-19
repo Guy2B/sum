@@ -123,6 +123,18 @@
     if (CONFIG.adminQaEnabled && Boolean(state.ownerPreview)) return true;
     return Boolean(state.ownerPreview) && CONFIG.allowOwnerPreviewOnLocalhost && isLocalEnvironment();
   }
+
+  function isConfiguredOwner(user) {
+    const email = String(user?.email || '').trim().toLowerCase();
+    return Boolean(email && Array.isArray(CONFIG.ownerEmails) && CONFIG.ownerEmails.map(value => String(value).toLowerCase()).includes(email));
+  }
+
+  window.addEventListener('sigma:auth-changed', (event) => {
+    const shouldOwn = isConfiguredOwner(event.detail?.user);
+    if (Boolean(state.ownerPreview) === shouldOwn) return;
+    updateState((draft) => { draft.ownerPreview = shouldOwn; });
+    if (shouldOwn) toast('Mode administrateur activé pour ce compte.');
+  });
   function isPro() {
     if (isOwnerPreview()) return true;
     const license = state.license;

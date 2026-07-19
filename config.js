@@ -3,7 +3,7 @@ const ONLINE = window.SIGMA_ONLINE_CONFIG || {};
 window.SUM_CONFIG = Object.freeze({
   appName: 'Σ Life OS',
   brandName: 'Al.G.B.r.',
-  version: '2.1.0-beta-google-connected',
+  version: '4.6.0-admin-ux-google-services',
   mailApiBaseUrl: String(ONLINE.mailApiBaseUrl || ''), // e.g. 'http://localhost:8787'; empty keeps Mail Hub in explicit demo mode
   socialApiBaseUrl: String(ONLINE.socialApiBaseUrl || ''), // e.g. 'http://localhost:8888'; empty keeps Σ Social in explicit demo mode
   localAiMode: 'auto', // guided + semantic everywhere; generative is optional
@@ -11,7 +11,7 @@ window.SUM_CONFIG = Object.freeze({
   allowSemanticAiOnDevice: true,
   localAiGatewayUrl: String(ONLINE.localAiGatewayUrl || ''), // optional self-hosted Ollama gateway, usable from Chrome, Edge, Safari and Firefox
   calendarApiBaseUrl: String(ONLINE.calendarApiBaseUrl || ''),
-  adminQaEnabled: false, // MUST be false in a public commercial build
+  adminQaEnabled: true, // Owner accounts listed below receive QA access on the public test build
   commercialRelease: false,
   storageKey: 'sum-algbr-state-v1',
   themeKey: 'sum-algbr-theme',
@@ -43,6 +43,7 @@ window.SUM_CONFIG = Object.freeze({
   demoLicense: 'SUM-DEMO-2026',
   allowOwnerPreviewOnLocalhost: true,
   ownerPreviewCode: 'SUM-OWNER-PREVIEW',
+  ownerEmails: ['guybeaho@gmail.com'],
 
   prices: {
     monthly: '8,90 € / mois',
