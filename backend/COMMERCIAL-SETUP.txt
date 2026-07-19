@@ -1,0 +1,32 @@
+Σ LIFE OS V1.7 — COMMERCIAL ADMIN BETA
+
+PRICE
+- Σ Pro monthly: 8.90 EUR
+- Σ Pro annual: 69 EUR
+- One active workspace chosen by the customer. The workspace may be changed later without deleting data.
+
+ADMIN TEST BUILD
+- config.js: adminQaEnabled=true
+- config.js: commercialRelease=false
+- config.js: paymentMode=test
+- The Admin QA console is visible and test scenarios may unlock Pro locally for testing.
+- DO NOT open public sales with this configuration.
+
+REQUIRED BEFORE PUBLIC SALES
+1. Complete support and legal identity in config.js and legal pages.
+2. Configure live monthly/annual checkout and customer portal.
+3. Replace the client-only test licence with server-verified entitlements/webhooks.
+4. Deploy Mail, Calendar and Social connectors on HTTPS with persistent encrypted storage.
+5. Configure OAuth applications and complete required provider reviews.
+6. Build/sign iOS and Android apps; complete HealthKit, Health Connect and Samsung partner integration.
+7. Disable Admin QA, checkout simulation, demo licence and owner preview.
+8. Run: npm run release:check
+9. Run: npm run release:build
+10. Complete the browser/mobile/admin test plan and external beta.
+
+NEVER COMMIT
+- .env files
+- OAuth client secrets
+- session or encryption keys
+- app passwords
+- customer exports or health data

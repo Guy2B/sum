@@ -1,0 +1,19 @@
+{
+  "name": "sigma-life-os",
+  "private": true,
+  "version": "2.0.0-beta.1",
+  "description": "Sigma Life OS V2.0 Beta — Google Cloud Edition with Firebase Auth, Firestore, Storage and Cloud Functions.",
+  "scripts": {
+    "check": "node scripts/validate.mjs",
+    "rc:check": "node scripts/rc-check.mjs",
+    "release:check": "node scripts/release-check.mjs",
+    "release:build": "node scripts/build-commercial.mjs",
+    "serve": "python3 -m http.server 8080",
+    "firebase:emulators": "firebase emulators:start",
+    "firebase:deploy": "firebase deploy",
+    "firebase:deploy:rules": "firebase deploy --only firestore:rules,firestore:indexes,storage"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

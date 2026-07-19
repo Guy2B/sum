@@ -1,0 +1,13 @@
+FICHIERS MINIMAUX À AJOUTER/REMPLACER
+
+app.html
+style.css
+v4-system.css
+v4-system.js
+social-config.js
+modules/social-core-v490.js
+modules/social-hub-v490.js
+modules/social.js
+V4.9.0-SOCIAL-HUB.md
+
+Pour une installation fiable, téléverser tout le contenu du dossier sum-main.
