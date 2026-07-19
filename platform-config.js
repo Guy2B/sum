@@ -8,5 +8,8 @@ window.SIGMA_PLATFORM_CONFIG = Object.freeze({
   linkedinClientId: '',
   tiktokClientKey: '',
   xApiBaseUrl: '',
-  mailConnectorBaseUrl: ''
+  mailConnectorBaseUrl: '',
+  imapConnectorApiKey: '',
+  // Optional allow-list for a deployed Firebase/Cloud Run connector.
+  allowedMailProviders: ['yahoo', 'gmx', 'icloud', 'imap']
 });
