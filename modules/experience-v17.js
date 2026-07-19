@@ -178,6 +178,18 @@
         sourceRow({ icon: 'Σ', name: copy().localAiCore, detail: 'Règles + Transformers.js · WASM/WebGPU', status: copy().connected, state: 'connected', panel: 'coach' }),
         sourceRow({ icon: 'AI', name: copy().localAiOptional, detail: gateway ? 'Σ Local AI Gateway / Ollama' : 'Chrome/Edge natif ou passerelle locale', status: gateway ? copy().connected : copy().notConnected, state: gateway ? 'connected' : 'off', panel: 'coach' })
       ].join('');
+
+      const googleConfigured = Boolean(window.SigmaGoogle?.configured?.());
+      const youtubeConnected = social.some((row) => row.provider === 'youtube' && !row.demo);
+      const driveConnected = Boolean(state.googleServices?.drive?.connected);
+      const googleTarget = document.getElementById('v46-google-services');
+      if (googleTarget) googleTarget.innerHTML = [
+        sourceRow({ icon: 'G', name: 'Gmail', detail: 'Lecture et envoi depuis la Messagerie', status: mail.some((row) => row.provider === 'gmail' && !row.demo) ? copy().connected : copy().notConnected, state: mail.some((row) => row.provider === 'gmail' && !row.demo) ? 'connected' : 'off', panel: 'mail' }),
+        sourceRow({ icon: 'C', name: 'Google Calendar', detail: 'Lecture et création de rendez-vous', status: (state.calendarAccounts || []).some((row) => row.provider === 'google' && !row.demo) ? copy().connected : copy().notConnected, state: (state.calendarAccounts || []).some((row) => row.provider === 'google' && !row.demo) ? 'connected' : 'off', action: 'google-calendar' }),
+        sourceRow({ icon: 'D', name: 'Google Drive', detail: 'Sauvegarde privée dans appDataFolder', status: driveConnected ? copy().connected : (googleConfigured ? 'Disponible' : copy().notConnected), state: driveConnected ? 'connected' : (googleConfigured ? 'partial' : 'off'), action: 'google-drive' }),
+        sourceRow({ icon: '▶', name: 'YouTube', detail: 'Import de vos abonnements', status: youtubeConnected ? copy().connected : (googleConfigured ? 'Disponible' : copy().notConnected), state: youtubeConnected ? 'connected' : (googleConfigured ? 'partial' : 'off'), action: 'google-youtube' }),
+        sourceRow({ icon: 'M', name: 'Google Maps', detail: 'Ouvrir Maps; intégration Places prévue séparément', status: 'Disponible', state: 'partial', action: 'google-maps' })
+      ].join('');
       const browser = document.getElementById('v17-browser-label');
       if (browser) browser.textContent = browserName();
     }
@@ -327,7 +339,50 @@
       const scenario = event.target.closest('[data-v17-scenario]'); if (scenario) seedScenario(scenario.dataset.v17Scenario);
       if (event.target.closest('#v17-admin-run')) runAdminTests();
       if (event.target.closest('#v17-admin-export')) exportReport();
-      const source = event.target.closest('[data-v17-source]'); if (source) ctx.toast(`${source.dataset.v17Source}: ${copy().configure}`);
+      const source = event.target.closest('[data-v17-source]');
+      if (source) {
+        const action = source.dataset.v17Source;
+        if (action === 'google-maps') {
+          window.open('https://www.google.com/maps', '_blank', 'noopener,noreferrer');
+          return;
+        }
+        if (action === 'google-calendar') {
+          ctx.navigate('planner');
+          return;
+        }
+        if (action === 'google-drive') {
+          event.preventDefault();
+          (async () => {
+            try {
+              if (!window.SigmaGoogle?.configured?.()) throw new Error('Client OAuth Google non configuré');
+              await window.SigmaGoogle.pushDrive(ctx.getState());
+              ctx.updateState((state) => {
+                state.googleServices = state.googleServices || {};
+                state.googleServices.drive = { connected: true, lastSync: new Date().toISOString() };
+              });
+              ctx.toast('Sauvegarde Google Drive terminée.');
+            } catch (error) { ctx.toast(`Google Drive : ${error.message}`, 'error'); }
+          })();
+          return;
+        }
+        if (action === 'google-youtube') {
+          event.preventDefault();
+          (async () => {
+            try {
+              if (!window.SigmaGoogle?.configured?.()) throw new Error('Client OAuth Google non configuré');
+              const subscriptions = await window.SigmaGoogle.importYouTube();
+              ctx.updateState((state) => {
+                state.socialAccounts = (state.socialAccounts || []).filter((row) => row.provider !== 'youtube' || !row.demo);
+                if (!state.socialAccounts.some((row) => row.provider === 'youtube' && !row.demo)) state.socialAccounts.push({ id: 'google-youtube', provider: 'youtube', label: 'YouTube', status: 'connected', demo: false });
+                state.youtubeSubscriptions = subscriptions;
+              });
+              ctx.toast(`${subscriptions.length} abonnement(s) YouTube importé(s).`);
+            } catch (error) { ctx.toast(`YouTube : ${error.message}`, 'error'); }
+          })();
+          return;
+        }
+        ctx.toast(`${action}: ${copy().configure}`);
+      }
     });
 
     const adminNav = document.getElementById('v17-admin-nav');
