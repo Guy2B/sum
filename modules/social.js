@@ -94,8 +94,19 @@
         location.href = `${API}/api/social/connect/${provider}`;
         return;
       }
+      if ((provider === 'facebook' || provider === 'instagram') && window.SigmaMeta) {
+        window.SigmaMeta.connect().catch((error) => {
+          console.error('[SigmaMeta] connection failed', error);
+          ctx.toast(error.message || ctx.t('common.error'), 'error');
+        });
+        return;
+      }
       if (item.live && !API) {
-        connectDemo(provider);
+        document.getElementById('social-info-icon').textContent = item.icon;
+        document.getElementById('social-info-title').textContent = item.name;
+        document.getElementById('social-info-copy').textContent = ctx.t(`social.${item.copy}`);
+        document.getElementById('social-info-status').textContent = ctx.t(`social.${item.status}`);
+        infoDialog.showModal();
         return;
       }
       document.getElementById('social-info-icon').textContent = item.icon;
@@ -212,7 +223,11 @@
     statusFilter.addEventListener('change', renderInteractions);
     document.getElementById('social-sync').addEventListener('click', async () => {
       if (API) await refreshRemote();
-      else ctx.updateState((state) => { state.socialSettings.lastSync = new Date().toISOString(); });
+      else if (window.SigmaMeta) {
+        try { await window.SigmaMeta.sync(); }
+        catch (error) { console.warn('[SigmaMeta] sync skipped', error.message); }
+        ctx.updateState((state) => { state.socialSettings.lastSync = new Date().toISOString(); });
+      } else ctx.updateState((state) => { state.socialSettings.lastSync = new Date().toISOString(); });
       ctx.toast(ctx.t('social.synced'));
     });
 

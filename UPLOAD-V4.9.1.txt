@@ -1,0 +1,10 @@
+SIGMA V4.9.1 META
+
+1. Replace the repository with the complete project contents.
+2. Keep your real firebase-config.js and Google settings.
+3. Set the public Meta App ID in social-config.js and configured:true.
+4. Deploy Firebase Functions and Firestore rules before testing Meta OAuth.
+5. Commit and Push origin with GitHub Desktop.
+6. Wait for GitHub Pages, then Ctrl+Shift+R.
+
+Do not put META_APP_SECRET in GitHub.

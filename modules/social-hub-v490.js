@@ -1,7 +1,7 @@
 'use strict';
 (() => {
   const providerMeta = {
-    meta: { icon:'◎', name:'Facebook + Instagram', phase:'V4.9.1' },
+    meta: { icon:'◎', name:'Facebook + Instagram', phase:'V4.9.1 · OAuth sécurisé' },
     linkedin: { icon:'in', name:'LinkedIn', phase:'V4.9.2' },
     youtube: { icon:'▶', name:'YouTube', phase:'V4.9.3' },
     tiktok: { icon:'♪', name:'TikTok', phase:'V4.9.3' },
@@ -28,7 +28,8 @@
     anchor.insertAdjacentElement('afterend',section);
     section.querySelector('#social-v490-diagnostics').addEventListener('click',()=>{
       const core=Boolean(window.SigmaSocialCore), cfg=Boolean(window.SIGMA_SOCIAL_CONFIG), api=String(window.SIGMA_SOCIAL_CONFIG?.connectorBaseUrl||'');
-      alert(`Sigma Social V4.9.0\n\nModèle unifié: ${core?'OK':'ERREUR'}\nConfiguration: ${cfg?'OK':'ERREUR'}\nBackend social: ${api?'configuré':'non configuré'}\n\nAucune publication automatique n'est activée.`);
+      alert(`Sigma Social V4.9.1\n\nModèle unifié: ${core?'OK':'ERREUR'}\nConfiguration: ${cfg?'OK':'ERREUR'}\nBackend social: ${api?'configuré':'non configuré'}\n\nMeta: connexion, comptes, publications et commentaires.
+La publication automatique reste désactivée jusqu'à V4.9.4.`);
     });
   }
   document.readyState==='loading' ? document.addEventListener('DOMContentLoaded',render,{once:true}) : render();
