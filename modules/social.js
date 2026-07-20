@@ -95,8 +95,33 @@
         return;
       }
       if ((provider === 'facebook' || provider === 'instagram') && window.SigmaMeta) {
+        connectDialog.close();
         window.SigmaMeta.connect().catch((error) => {
           console.error('[SigmaMeta] connection failed', error);
+          ctx.toast(error.message || ctx.t('common.error'), 'error');
+        });
+        return;
+      }
+      if (provider === 'linkedin' && window.SigmaLinkedIn) {
+        connectDialog.close();
+        window.SigmaLinkedIn.connect().catch((error) => {
+          console.error('[SigmaLinkedIn] connection failed', error);
+          ctx.toast(error.message || ctx.t('common.error'), 'error');
+        });
+        return;
+      }
+      if (provider === 'x' && window.SigmaX) {
+        connectDialog.close();
+        window.SigmaX.connect().catch((error) => {
+          console.error('[SigmaX] connection failed', error);
+          ctx.toast(error.message || ctx.t('common.error'), 'error');
+        });
+        return;
+      }
+      if (provider === 'tiktok' && window.SigmaTikTok) {
+        connectDialog.close();
+        window.SigmaTikTok.connect().catch((error) => {
+          console.error('[SigmaTikTok] connection failed', error);
           ctx.toast(error.message || ctx.t('common.error'), 'error');
         });
         return;
