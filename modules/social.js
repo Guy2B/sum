@@ -50,6 +50,76 @@
       return { ...item, priority, requiresReply: Boolean(item.requiresReply || (priority >= 70 && /\?/.test(`${item.content || ''}`))) };
     }
 
+    function engineAccountToLegacy(account) {
+      const profileUrl = account.provider === 'linkedin'
+        ? 'https://www.linkedin.com/in/me/'
+        : (account.url || '');
+      return {
+        id: account.id,
+        provider: account.provider,
+        label: account.displayName || account.title || providerName(account.provider),
+        displayName: account.displayName || account.title || '',
+        avatar: account.avatar || '',
+        username: account.username || '',
+        status: account.connected === false ? 'disconnected' : 'connected',
+        connected: account.connected !== false,
+        demo: false,
+        sourceUrl: profileUrl,
+        createdAt: account.createdAt || new Date().toISOString()
+      };
+    }
+
+    function engineItemToLegacy(item, type) {
+      return normalise({
+        id: item.id,
+        accountId: item.accountId || '',
+        provider: item.provider,
+        type,
+        title: item.title || (type === 'message' ? 'Message LinkedIn' : type === 'comment' ? 'Commentaire LinkedIn' : 'Notification LinkedIn'),
+        content: item.text || item.content || '',
+        sender: item.author || item.sender || providerName(item.provider),
+        receivedAt: item.createdAt || item.updatedAt || new Date().toISOString(),
+        unread: item.status !== 'read',
+        requiresReply: Boolean(item.requiresReply),
+        priority: item.priority || 35,
+        contentIdea: false,
+        handled: ['done','handled','resolved'].includes(item.status),
+        sourceUrl: item.url || item.sourceUrl || ''
+      });
+    }
+
+    function hydrateFromSocialEngine() {
+      const snapshot = window.SigmaSocialEngine?.snapshot?.() || window.SigmaSocialStorage?.load?.();
+      if (!snapshot) return;
+      const accounts = (snapshot.accounts || [])
+        .filter((account) => account.connected !== false && !account.demo)
+        .map(engineAccountToLegacy);
+      const interactions = [
+        ...(snapshot.messages || []).map((item) => engineItemToLegacy(item, 'message')),
+        ...(snapshot.comments || []).map((item) => engineItemToLegacy(item, 'comment')),
+        ...(snapshot.notifications || []).map((item) => engineItemToLegacy(item, 'mention'))
+      ];
+      ctx.updateState((state) => {
+        const otherAccounts = state.socialAccounts.filter((account) => !accounts.some((fresh) => fresh.provider === account.provider));
+        state.socialAccounts = [...accounts, ...otherAccounts.filter((account) => !account.demo)];
+        const providerSet = new Set(accounts.map((account) => account.provider));
+        const otherInteractions = state.socialInteractions.filter((item) => !providerSet.has(item.provider) && !item.demo);
+        state.socialInteractions = [...interactions, ...otherInteractions];
+        state.socialSettings.lastSync = snapshot.lastSyncAt || state.socialSettings.lastSync;
+      });
+    }
+
+    async function refreshLinkedInState() {
+      if (!window.SigmaLinkedIn?.isConfigured?.()) return;
+      try {
+        const status = await window.SigmaLinkedIn.status();
+        if (status?.connected) await window.SigmaLinkedIn.sync();
+        hydrateFromSocialEngine();
+      } catch (error) {
+        console.warn('[SigmaLinkedIn] state refresh skipped', error);
+      }
+    }
+
     async function api(path, options = {}) {
       const response = await fetch(`${API}${path}`, { credentials: 'include', headers: { 'Content-Type': 'application/json', ...(options.headers || {}) }, ...options });
       if (!response.ok) throw new Error(`SOCIAL_${response.status}`);
@@ -171,7 +241,7 @@
 
     function renderAccounts() {
       const accounts = ctx.getState().socialAccounts;
-      accountList.innerHTML = accounts.length ? accounts.map((account) => `<div class="social-account-chip ${providerClass(account.provider)}"><span>${PROVIDERS[account.provider]?.icon || '@'}</span><div><strong>${ctx.escape(account.label || providerName(account.provider))}</strong><small>${providerName(account.provider)} · ${account.demo ? ctx.t('social.demoMode') : ctx.t('social.connected')}</small></div><button class="icon-button danger" type="button" data-social-disconnect="${account.id}" aria-label="Disconnect">×</button></div>`).join('') : `<div class="social-empty-connection"><p>${ctx.t('social.noAccounts')}</p><button class="button secondary small" type="button" data-social-open-connect>${ctx.t('social.addAccount')}</button></div>`;
+      accountList.innerHTML = accounts.length ? accounts.map((account) => `<div class="social-account-chip ${providerClass(account.provider)}"><span>${account.avatar ? `<img src="${ctx.escape(account.avatar)}" alt="" referrerpolicy="no-referrer">` : (PROVIDERS[account.provider]?.icon || '@')}</span><div><strong>${ctx.escape(account.label || providerName(account.provider))}</strong><small>${providerName(account.provider)} · ${account.demo ? ctx.t('social.demoMode') : ctx.t('social.connected')}</small></div>${account.provider === 'linkedin' ? `<a class="icon-button" href="https://www.linkedin.com/messaging/" target="_blank" rel="noopener" title="Ouvrir la messagerie LinkedIn">↗</a>` : ''}<button class="icon-button danger" type="button" data-social-disconnect="${account.id}" aria-label="Disconnect">×</button></div>`).join('') : `<div class="social-empty-connection"><p>${ctx.t('social.noAccounts')}</p><button class="button secondary small" type="button" data-social-open-connect>${ctx.t('social.addAccount')}</button></div>`;
       const current = accountFilter.value;
       accountFilter.innerHTML = `<option value="all">${ctx.t('social.allAccounts')}</option>` + accounts.map((account) => `<option value="${account.id}">${ctx.escape(account.label || providerName(account.provider))}</option>`).join('');
       if ([...accountFilter.options].some((option) => option.value === current)) accountFilter.value = current;
@@ -215,7 +285,10 @@
       const button = event.target.closest('[data-social-disconnect]');
       if (!button) return;
       const account = ctx.getState().socialAccounts.find((item) => item.id === button.dataset.socialDisconnect);
-      if (API && account && !account.demo) {
+      if (account?.provider === 'linkedin' && window.SigmaLinkedIn) {
+        try { await window.SigmaLinkedIn.disconnect(); }
+        catch { return ctx.toast(ctx.t('common.error'), 'error'); }
+      } else if (API && account && !account.demo) {
         try { await api(`/api/social/accounts/${encodeURIComponent(account.id)}`, { method: 'DELETE' }); }
         catch { return ctx.toast(ctx.t('common.error'), 'error'); }
       }
@@ -248,19 +321,36 @@
     statusFilter.addEventListener('change', renderInteractions);
     document.getElementById('social-sync').addEventListener('click', async () => {
       if (API) await refreshRemote();
-      else if (window.SigmaMeta) {
-        try { await window.SigmaMeta.sync(); }
-        catch (error) { console.warn('[SigmaMeta] sync skipped', error.message); }
+      else {
+        if (window.SigmaLinkedIn?.isConfigured?.()) {
+          try {
+            const status = await window.SigmaLinkedIn.status();
+            if (status?.connected) await window.SigmaLinkedIn.sync();
+          } catch (error) { console.warn('[SigmaLinkedIn] sync skipped', error.message); }
+        }
+        if (window.SigmaMeta) {
+          try { await window.SigmaMeta.sync(); }
+          catch (error) { console.warn('[SigmaMeta] sync skipped', error.message); }
+        }
+        hydrateFromSocialEngine();
         ctx.updateState((state) => { state.socialSettings.lastSync = new Date().toISOString(); });
-      } else ctx.updateState((state) => { state.socialSettings.lastSync = new Date().toISOString(); });
+      }
       ctx.toast(ctx.t('social.synced'));
     });
 
     ctx.subscribe(render);
     document.addEventListener('languagechange', render);
+    window.addEventListener('sigma:social-engine-updated', hydrateFromSocialEngine);
+    window.addEventListener('sigma:linkedin-connected', hydrateFromSocialEngine);
+    window.addEventListener('sigma:linkedin-synced', hydrateFromSocialEngine);
+    window.addEventListener('hashchange', () => {
+      if (location.hash === '#social') refreshLinkedInState();
+    });
     render();
+    hydrateFromSocialEngine();
+    refreshLinkedInState();
     if (API) refreshRemote();
-    return { render, refreshRemote };
+    return { render, refreshRemote, refreshLinkedInState };
   }
 
   window.SUM_MODULES = window.SUM_MODULES || {};

@@ -2133,3 +2133,12 @@ body[data-owner-preview="true"] [data-pro-lock],body[data-owner-preview="true"] 
 /* Sigma V4.9.1 — Meta connector */
 .social-v490-provider[data-provider="meta"] { position: relative; }
 .social-v490-provider[data-provider="meta"]::after { content: "V4.9.1"; font-size: 10px; font-weight: 800; letter-spacing: .08em; opacity: .6; }
+
+/* Sigma V4.9.9 — connected social profiles */
+.social-account-chip > span img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+  display: block;
+}
