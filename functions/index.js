@@ -112,12 +112,246 @@ exports.xOAuthCallback=onRequest({secrets:[X_CLIENT_SECRET]},async(req,res)=>{co
 exports.xSync=onCall({secrets:[X_CLIENT_SECRET]},async req=>{const uid=requireAuth(req),snap=await db.doc(`socialPrivateTokens/${uid}/providers/x`).get();if(!snap.exists)throw new HttpsError('failed-precondition','X is not connected');const token=snap.data().access_token;const me=await fetch('https://api.x.com/2/users/me?user.fields=id,name,username,profile_image_url,public_metrics',{headers:{authorization:`Bearer ${token}`}});const body=await me.json();if(!me.ok)throw new HttpsError('internal',body.detail||body.title||'X profile request failed');const user=body.data||{};return{accounts:[{id:user.id,externalId:user.id,provider:'x',displayName:user.name,title:user.name,username:user.username,avatar:user.profile_image_url,connected:true}],metrics:Object.entries(user.public_metrics||{}).map(([name,value])=>({id:`x_${user.id}_${name}`,externalId:`${user.id}_${name}`,provider:'x',name,title:name,value,period:'current'})),posts:[],messages:[],comments:[],notifications:[],syncedAt:new Date().toISOString()};});
 exports.xDisconnect=onCall(async req=>{const uid=requireAuth(req);await Promise.all([db.doc(`socialPrivateTokens/${uid}/providers/x`).delete(),db.doc(`users/${uid}/socialProviders/x`).delete()]);return{disconnected:true};});
 
-// Sigma V4.9.4 — TikTok Login Kit.
+// Sigma V4.10.2 — TikTok Login Kit + connected-state return fix.
 const TIKTOK_CLIENT_SECRET=defineSecret('TIKTOK_CLIENT_SECRET');
 const TIKTOK_CLIENT_KEY=defineString('TIKTOK_CLIENT_KEY',{default:''});
 const TIKTOK_REDIRECT_URI=defineString('TIKTOK_REDIRECT_URI',{default:''});
-function tiktokConfig(){const clientKey=TIKTOK_CLIENT_KEY.value(),redirectUri=TIKTOK_REDIRECT_URI.value();if(!clientKey||!redirectUri)throw new HttpsError('failed-precondition','TikTok OAuth environment is incomplete');return{clientKey,redirectUri};}
-exports.tiktokCreateOAuthSession=onCall(async req=>{const uid=requireAuth(req),{clientKey,redirectUri}=tiktokConfig(),state=crypto.randomBytes(32).toString('hex');await db.doc(`socialOAuthStates/${state}`).set({uid,provider:'tiktok',returnUrl:safeReturnUrl(req.data?.returnUrl),expiresAt:admin.firestore.Timestamp.fromMillis(Date.now()+10*60*1000)});const q=new URLSearchParams({client_key:clientKey,response_type:'code',scope:'user.info.basic',redirect_uri:redirectUri,state});return{authUrl:`https://www.tiktok.com/v2/auth/authorize/?${q}`};});
-exports.tiktokOAuthCallback=onRequest({secrets:[TIKTOK_CLIENT_SECRET]},async(req,res)=>{const back=(base,status,message='')=>{const u=new URL(base||META_PUBLIC_APP_URL.value());u.searchParams.set('sigmaTikTok',status);if(message)u.searchParams.set('message',message.slice(0,180));res.redirect(u.toString());};try{const state=String(req.query.state||''),code=String(req.query.code||''),ref=db.doc(`socialOAuthStates/${state}`),snap=await ref.get();if(!snap.exists||!code)throw new Error('OAuth session expired');const session=snap.data(),{clientKey,redirectUri}=tiktokConfig();const r=await fetch('https://open.tiktokapis.com/v2/oauth/token/',{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},body:new URLSearchParams({client_key:clientKey,client_secret:TIKTOK_CLIENT_SECRET.value(),code,grant_type:'authorization_code',redirect_uri:redirectUri})});const body=await r.json();if(!r.ok||!body.access_token)throw new Error(body.error_description||'TikTok token exchange failed');await db.doc(`socialPrivateTokens/${session.uid}/providers/tiktok`).set({provider:'tiktok',...body,updatedAt:admin.firestore.FieldValue.serverTimestamp()});await db.doc(`users/${session.uid}/socialProviders/tiktok`).set({provider:'tiktok',connected:true,updatedAt:admin.firestore.FieldValue.serverTimestamp()},{merge:true});await ref.delete();back(session.returnUrl,'connected');}catch(e){console.error('tiktokOAuthCallback',e);back(META_PUBLIC_APP_URL.value(),'error',e.message);}});
-exports.tiktokSync=onCall({secrets:[TIKTOK_CLIENT_SECRET]},async req=>{const uid=requireAuth(req),snap=await db.doc(`socialPrivateTokens/${uid}/providers/tiktok`).get();if(!snap.exists)throw new HttpsError('failed-precondition','TikTok is not connected');const token=snap.data().access_token;const r=await fetch('https://open.tiktokapis.com/v2/user/info/?fields=open_id,union_id,avatar_url,display_name,username,follower_count,following_count,likes_count,video_count',{headers:{authorization:`Bearer ${token}`}});const body=await r.json();if(!r.ok||body.error?.code)throw new HttpsError('internal',body.error?.message||'TikTok profile request failed');const user=body.data?.user||{};return{accounts:[{id:user.open_id,externalId:user.open_id,provider:'tiktok',displayName:user.display_name,title:user.display_name,username:user.username,avatar:user.avatar_url,connected:true}],metrics:['follower_count','following_count','likes_count','video_count'].map(name=>({id:`tiktok_${user.open_id}_${name}`,externalId:`${user.open_id}_${name}`,provider:'tiktok',name,title:name,value:Number(user[name]||0),period:'current'})),posts:[],messages:[],comments:[],notifications:[],syncedAt:new Date().toISOString()};});
-exports.tiktokDisconnect=onCall(async req=>{const uid=requireAuth(req);await Promise.all([db.doc(`socialPrivateTokens/${uid}/providers/tiktok`).delete(),db.doc(`users/${uid}/socialProviders/tiktok`).delete()]);return{disconnected:true};});
+const TIKTOK_PUBLIC_APP_URL=defineString('TIKTOK_PUBLIC_APP_URL',{default:'https://guy2b.github.io/sum/app.html'});
+
+function tiktokConfig(){
+  const clientKey=TIKTOK_CLIENT_KEY.value();
+  const redirectUri=TIKTOK_REDIRECT_URI.value();
+  if(!clientKey||!redirectUri){
+    throw new HttpsError('failed-precondition','TikTok OAuth environment is incomplete');
+  }
+  return{clientKey,redirectUri};
+}
+
+function tiktokAppReturnUrl(value){
+  const fallback=TIKTOK_PUBLIC_APP_URL.value()||'https://guy2b.github.io/sum/app.html';
+  try{
+    const url=new URL(String(value||fallback));
+
+    // The public landing page does not restore the Social Hub.
+    // Redirect OAuth returns to the authenticated application page instead.
+    if(
+      url.origin==='https://guy2b.github.io' &&
+      (url.pathname==='/sum/'||url.pathname==='/sum'||url.pathname==='/')
+    ){
+      url.pathname='/sum/app.html';
+    }
+
+    url.hash='social';
+    return url.toString();
+  }catch{
+    return `${fallback}#social`;
+  }
+}
+
+async function fetchTikTokBasicProfile(accessToken){
+  const fields='open_id,union_id,avatar_url,display_name';
+  const response=await fetch(
+    `https://open.tiktokapis.com/v2/user/info/?fields=${encodeURIComponent(fields)}`,
+    {headers:{authorization:`Bearer ${accessToken}`}}
+  );
+  const body=await response.json().catch(()=>({}));
+
+  if(!response.ok||body.error?.code){
+    throw new Error(body.error?.message||'TikTok profile request failed');
+  }
+
+  const user=body.data?.user||{};
+  if(!user.open_id){
+    throw new Error('TikTok profile response is incomplete');
+  }
+
+  return{
+    id:user.open_id,
+    externalId:user.open_id,
+    unionId:user.union_id||'',
+    provider:'tiktok',
+    displayName:user.display_name||'TikTok',
+    title:user.display_name||'TikTok',
+    avatar:user.avatar_url||'',
+    connected:true,
+    permissions:['user.info.basic']
+  };
+}
+
+exports.tiktokCreateOAuthSession=onCall(async req=>{
+  const uid=requireAuth(req);
+  const {clientKey,redirectUri}=tiktokConfig();
+  const state=crypto.randomBytes(32).toString('hex');
+
+  await db.doc(`socialOAuthStates/${state}`).set({
+    uid,
+    provider:'tiktok',
+    returnUrl:tiktokAppReturnUrl(req.data?.returnUrl),
+    createdAt:admin.firestore.FieldValue.serverTimestamp(),
+    expiresAt:admin.firestore.Timestamp.fromMillis(Date.now()+10*60*1000)
+  });
+
+  const q=new URLSearchParams({
+    client_key:clientKey,
+    response_type:'code',
+    scope:'user.info.basic',
+    redirect_uri:redirectUri,
+    state
+  });
+
+  return{authUrl:`https://www.tiktok.com/v2/auth/authorize/?${q}`};
+});
+
+exports.tiktokOAuthCallback=onRequest({secrets:[TIKTOK_CLIENT_SECRET]},async(req,res)=>{
+  let returnUrl=tiktokAppReturnUrl();
+
+  const back=(status,message='')=>{
+    const url=new URL(returnUrl);
+    url.searchParams.set('sigmaTikTok',status);
+    url.searchParams.set('provider','tiktok');
+
+    if(status==='connected'){
+      url.searchParams.set('connected','1');
+    }
+    if(message){
+      url.searchParams.set('message',String(message).slice(0,180));
+    }
+
+    url.hash='social';
+    return res.redirect(url.toString());
+  };
+
+  try{
+    const state=String(req.query.state||'');
+    const code=String(req.query.code||'');
+    const oauthError=String(req.query.error_description||req.query.error||'');
+
+    if(oauthError){
+      throw new Error(oauthError);
+    }
+    if(!state||!code){
+      throw new Error('Missing OAuth state or code');
+    }
+
+    const ref=db.doc(`socialOAuthStates/${state}`);
+    const snap=await ref.get();
+
+    if(!snap.exists){
+      throw new Error('OAuth session expired');
+    }
+
+    const session=snap.data();
+    returnUrl=tiktokAppReturnUrl(session.returnUrl);
+
+    if(session.provider!=='tiktok'){
+      throw new Error('Invalid OAuth provider');
+    }
+    if(session.expiresAt?.toMillis&&session.expiresAt.toMillis()<Date.now()){
+      await ref.delete();
+      throw new Error('OAuth session expired');
+    }
+
+    const {clientKey,redirectUri}=tiktokConfig();
+    const tokenResponse=await fetch('https://open.tiktokapis.com/v2/oauth/token/',{
+      method:'POST',
+      headers:{'content-type':'application/x-www-form-urlencoded'},
+      body:new URLSearchParams({
+        client_key:clientKey,
+        client_secret:TIKTOK_CLIENT_SECRET.value(),
+        code,
+        grant_type:'authorization_code',
+        redirect_uri:redirectUri
+      })
+    });
+
+    const tokenBody=await tokenResponse.json().catch(()=>({}));
+    if(!tokenResponse.ok||!tokenBody.access_token){
+      throw new Error(
+        tokenBody.error_description||
+        tokenBody.error?.message||
+        'TikTok token exchange failed'
+      );
+    }
+
+    // Synchronise the basic profile during the callback. The connected state
+    // no longer depends on the frontend calling tiktokSync after Firebase Auth restores.
+    const account=await fetchTikTokBasicProfile(tokenBody.access_token);
+
+    await db.doc(`socialPrivateTokens/${session.uid}/providers/tiktok`).set({
+      provider:'tiktok',
+      ...tokenBody,
+      updatedAt:admin.firestore.FieldValue.serverTimestamp()
+    });
+
+    await db.doc(`users/${session.uid}/socialProviders/tiktok`).set({
+      provider:'tiktok',
+      connected:true,
+      accounts:[account],
+      displayName:account.displayName,
+      avatar:account.avatar,
+      permissions:['user.info.basic'],
+      updatedAt:admin.firestore.FieldValue.serverTimestamp()
+    },{merge:true});
+
+    await ref.delete();
+    return back('connected');
+  }catch(error){
+    console.error('tiktokOAuthCallback',error);
+    return back('error',error.message);
+  }
+});
+
+exports.tiktokStatus=onCall(async req=>{
+  const uid=requireAuth(req);
+  const snap=await db.doc(`users/${uid}/socialProviders/tiktok`).get();
+  return snap.exists
+    ? snap.data()
+    : {provider:'tiktok',connected:false,accounts:[]};
+});
+
+exports.tiktokSync=onCall({secrets:[TIKTOK_CLIENT_SECRET]},async req=>{
+  const uid=requireAuth(req);
+  const tokenSnap=await db.doc(`socialPrivateTokens/${uid}/providers/tiktok`).get();
+
+  if(!tokenSnap.exists){
+    throw new HttpsError('failed-precondition','TikTok is not connected');
+  }
+
+  try{
+    const account=await fetchTikTokBasicProfile(tokenSnap.data().access_token);
+
+    await db.doc(`users/${uid}/socialProviders/tiktok`).set({
+      provider:'tiktok',
+      connected:true,
+      accounts:[account],
+      displayName:account.displayName,
+      avatar:account.avatar,
+      permissions:['user.info.basic'],
+      updatedAt:admin.firestore.FieldValue.serverTimestamp()
+    },{merge:true});
+
+    return{
+      accounts:[account],
+      metrics:[],
+      posts:[],
+      messages:[],
+      comments:[],
+      notifications:[],
+      syncedAt:new Date().toISOString()
+    };
+  }catch(error){
+    console.error('tiktokSync',error);
+    throw new HttpsError('internal',error.message||'TikTok profile request failed');
+  }
+});
+
+exports.tiktokDisconnect=onCall(async req=>{
+  const uid=requireAuth(req);
+  await Promise.all([
+    db.doc(`socialPrivateTokens/${uid}/providers/tiktok`).delete(),
+    db.doc(`users/${uid}/socialProviders/tiktok`).delete(),
+    db.doc(`users/${uid}/socialSync/tiktok`).delete()
+  ]);
+  return{disconnected:true};
+});
+
