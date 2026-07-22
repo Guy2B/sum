@@ -109,6 +109,16 @@
       });
     }
 
+    async function refreshTikTokState() {
+      if (!window.SigmaTikTok?.isConfigured?.()) return;
+      try {
+        await window.SigmaTikTok.restoreConnectedState?.();
+        hydrateFromSocialEngine();
+      } catch (error) {
+        console.warn('[SigmaTikTok] state refresh skipped', error);
+      }
+    }
+
     async function refreshLinkedInState() {
       if (!window.SigmaLinkedIn?.isConfigured?.()) return;
       try {
@@ -285,7 +295,10 @@
       const button = event.target.closest('[data-social-disconnect]');
       if (!button) return;
       const account = ctx.getState().socialAccounts.find((item) => item.id === button.dataset.socialDisconnect);
-      if (account?.provider === 'linkedin' && window.SigmaLinkedIn) {
+      if (account?.provider === 'tiktok' && window.SigmaTikTok) {
+        try { await window.SigmaTikTok.disconnect(); }
+        catch { return ctx.toast(ctx.t('common.error'), 'error'); }
+      } else if (account?.provider === 'linkedin' && window.SigmaLinkedIn) {
         try { await window.SigmaLinkedIn.disconnect(); }
         catch { return ctx.toast(ctx.t('common.error'), 'error'); }
       } else if (API && account && !account.demo) {
@@ -328,6 +341,10 @@
             if (status?.connected) await window.SigmaLinkedIn.sync();
           } catch (error) { console.warn('[SigmaLinkedIn] sync skipped', error.message); }
         }
+        if (window.SigmaTikTok?.isConfigured?.()) {
+          try { await window.SigmaTikTok.restoreConnectedState?.(); }
+          catch (error) { console.warn('[SigmaTikTok] sync skipped', error.message); }
+        }
         if (window.SigmaMeta) {
           try { await window.SigmaMeta.sync(); }
           catch (error) { console.warn('[SigmaMeta] sync skipped', error.message); }
@@ -343,14 +360,21 @@
     window.addEventListener('sigma:social-engine-updated', hydrateFromSocialEngine);
     window.addEventListener('sigma:linkedin-connected', hydrateFromSocialEngine);
     window.addEventListener('sigma:linkedin-synced', hydrateFromSocialEngine);
+    window.addEventListener('sigma:tiktok-connected', hydrateFromSocialEngine);
+    window.addEventListener('sigma:tiktok-synced', hydrateFromSocialEngine);
+    window.addEventListener('sigma:tiktok-disconnected', hydrateFromSocialEngine);
     window.addEventListener('hashchange', () => {
-      if (location.hash === '#social') refreshLinkedInState();
+      if (location.hash === '#social') {
+        refreshLinkedInState();
+        refreshTikTokState();
+      }
     });
     render();
     hydrateFromSocialEngine();
     refreshLinkedInState();
+    refreshTikTokState();
     if (API) refreshRemote();
-    return { render, refreshRemote, refreshLinkedInState };
+    return { render, refreshRemote, refreshLinkedInState, refreshTikTokState };
   }
 
   window.SUM_MODULES = window.SUM_MODULES || {};
