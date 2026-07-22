@@ -225,10 +225,26 @@
       picker.innerHTML = Object.entries(PROVIDERS).map(([key, item]) => `<button class="social-provider-option ${providerClass(key)}" type="button" data-social-provider="${key}"><span>${item.icon}</span><div><strong>${item.name}</strong><small>${ctx.t(`social.${item.copy}`)}</small></div><b>${item.live ? '→' : 'i'}</b></button>`).join('');
     }
 
+    function connectedAccounts() {
+      const byKey = new Map();
+      for (const account of ctx.getState().socialAccounts || []) {
+        if (!account || account.connected === false || account.status === 'disconnected') continue;
+        const key = `${account.provider || 'unknown'}:${account.id || account.externalId || account.username || account.label || 'default'}`;
+        byKey.set(key, account);
+      }
+      return [...byKey.values()];
+    }
+
+    function accountInitials(account) {
+      const value = String(account.displayName || account.label || providerName(account.provider) || '?').trim();
+      const words = value.split(/\s+/).filter(Boolean);
+      return (words.length > 1 ? `${words[0][0]}${words[1][0]}` : value.slice(0, 2)).toUpperCase();
+    }
+
     function counts() {
       const rows = ctx.getState().socialInteractions.map(normalise).filter((item) => !item.handled);
       return {
-        accounts: ctx.getState().socialAccounts.length,
+        accounts: connectedAccounts().length,
         priority: rows.filter((item) => item.priority >= 70).length,
         replies: rows.filter((item) => item.requiresReply).length,
         comments: rows.filter((item) => item.type === 'comment').length
@@ -250,8 +266,8 @@
     }
 
     function renderAccounts() {
-      const accounts = ctx.getState().socialAccounts;
-      accountList.innerHTML = accounts.length ? accounts.map((account) => `<div class="social-account-chip ${providerClass(account.provider)}"><span>${account.avatar ? `<img src="${ctx.escape(account.avatar)}" alt="" referrerpolicy="no-referrer">` : (PROVIDERS[account.provider]?.icon || '@')}</span><div><strong>${ctx.escape(account.label || providerName(account.provider))}</strong><small>${providerName(account.provider)} · ${account.demo ? ctx.t('social.demoMode') : ctx.t('social.connected')}</small></div>${account.provider === 'linkedin' ? `<a class="icon-button" href="https://www.linkedin.com/messaging/" target="_blank" rel="noopener" title="Ouvrir la messagerie LinkedIn">↗</a>` : ''}<button class="icon-button danger" type="button" data-social-disconnect="${account.id}" aria-label="Disconnect">×</button></div>`).join('') : `<div class="social-empty-connection"><p>${ctx.t('social.noAccounts')}</p><button class="button secondary small" type="button" data-social-open-connect>${ctx.t('social.addAccount')}</button></div>`;
+      const accounts = connectedAccounts();
+      accountList.innerHTML = accounts.length ? accounts.map((account) => `<div class="social-account-chip ${providerClass(account.provider)}"><span>${account.avatar ? `<img src="${ctx.escape(account.avatar)}" alt="" referrerpolicy="no-referrer" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><b hidden>${ctx.escape(accountInitials(account))}</b>` : `<b>${ctx.escape(accountInitials(account))}</b>`}</span><div><strong>${ctx.escape(account.label || providerName(account.provider))}</strong><small>${providerName(account.provider)} · ${account.demo ? ctx.t('social.demoMode') : ctx.t('social.connected')}</small></div>${account.provider === 'linkedin' ? `<a class="icon-button" href="https://www.linkedin.com/messaging/" target="_blank" rel="noopener" title="Ouvrir la messagerie LinkedIn">↗</a>` : ''}<button class="icon-button danger" type="button" data-social-disconnect="${account.id}" aria-label="Disconnect">×</button></div>`).join('') : `<div class="social-empty-connection"><p>${ctx.t('social.noAccounts')}</p><button class="button secondary small" type="button" data-social-open-connect>${ctx.t('social.addAccount')}</button></div>`;
       const current = accountFilter.value;
       accountFilter.innerHTML = `<option value="all">${ctx.t('social.allAccounts')}</option>` + accounts.map((account) => `<option value="${account.id}">${ctx.escape(account.label || providerName(account.provider))}</option>`).join('');
       if ([...accountFilter.options].some((option) => option.value === current)) accountFilter.value = current;

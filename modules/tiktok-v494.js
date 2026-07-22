@@ -93,7 +93,7 @@
         status:'connected',
         connected:true,
         demo:false,
-        avatar:account.avatar||'',
+        avatar:account.avatar||(index>=0?state.socialAccounts[index].avatar:'')||'',
         sourceUrl:profileUrl(account),
         createdAt:index>=0?(state.socialAccounts[index].createdAt||new Date().toISOString()):new Date().toISOString(),
         updatedAt:new Date().toISOString()
@@ -203,7 +203,7 @@
   }
 
   const adapter={
-    version:'4.10.5',
+    version:'4.10.6',
     capabilities:['profile'],
     isConfigured,
     sync
@@ -227,7 +227,7 @@
   }
 
   window.SigmaTikTok=Object.freeze({
-    version:'4.10.5',
+    version:'4.10.6',
     connect,sync,status,disconnect,isConfigured,
     restoreConnectedState,
     openProfile:()=>window.open(TIKTOK_HOME,'_blank','noopener')
