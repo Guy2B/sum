@@ -118,6 +118,16 @@
     location.assign(result.authUrl);
   }
 
+
+  async function status(){
+    try{
+      await waitForSigmaAuth();
+      return await call('xStatus');
+    }catch(error){
+      return{connected:false,error:String(error?.message||error)};
+    }
+  }
+
   async function sync(){
     if(!isConfigured())throw new Error('X n’est pas configuré.');
     await waitForSigmaAuth();
@@ -139,11 +149,15 @@
     booting=true;
     try{
       await waitForSigmaAuth();
-      await sync();
+      const current=await status();
+      if(!current?.connected){
+        removeMirroredAccount();
+        return;
+      }
+      try{ await sync(); }
+      catch(error){ console.warn('[SigmaX] profile refresh deferred',error?.message||error); }
     }catch(error){
-      const message=String(error?.message||'');
-      if(/not connected|failed-precondition/i.test(message))removeMirroredAccount();
-      else console.warn('[SigmaX] restore skipped',error);
+      console.warn('[SigmaX] restore skipped',error?.message||error);
     }finally{
       booting=false;
     }
@@ -171,7 +185,7 @@
   }
 
   const adapter={
-    version:'4.10.4',
+    version:'4.10.5',
     capabilities:['profile','metrics','posts-ready'],
     isConfigured,
     sync
@@ -195,8 +209,8 @@
   }
 
   window.SigmaX=Object.freeze({
-    version:'4.10.4',
-    connect,sync,disconnect,isConfigured,
+    version:'4.10.5',
+    connect,sync,status,disconnect,isConfigured,
     restoreConnectedState,
     openProfile:()=>window.open(X_HOME,'_blank','noopener')
   });
@@ -206,5 +220,5 @@
     :boot();
 
   window.addEventListener('sigma:auth-changed',event=>{if(event.detail?.user)restoreConnectedState();});
-  window.addEventListener('focus',()=>{ if(location.hash==='#social')restoreConnectedState(); });
+  // Manual Refresh or auth restoration retries X; focus no longer floods a revoked token.
 })();

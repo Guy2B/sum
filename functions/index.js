@@ -109,6 +109,7 @@ function xConfig(){const clientId=X_CLIENT_ID.value(),redirectUri=X_REDIRECT_URI
 function base64url(buffer){return Buffer.from(buffer).toString('base64').replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');}
 exports.xCreateOAuthSession=onCall(async req=>{const uid=requireAuth(req),{clientId,redirectUri}=xConfig(),state=crypto.randomBytes(32).toString('hex'),verifier=base64url(crypto.randomBytes(48)),challenge=base64url(crypto.createHash('sha256').update(verifier).digest());await db.doc(`socialOAuthStates/${state}`).set({uid,provider:'x',verifier,returnUrl:safeReturnUrl(req.data?.returnUrl),expiresAt:admin.firestore.Timestamp.fromMillis(Date.now()+10*60*1000)});const q=new URLSearchParams({response_type:'code',client_id:clientId,redirect_uri:redirectUri,scope:'tweet.read users.read offline.access',state,code_challenge:challenge,code_challenge_method:'S256'});return{authUrl:`https://x.com/i/oauth2/authorize?${q}`};});
 exports.xOAuthCallback=onRequest({secrets:[X_CLIENT_SECRET]},async(req,res)=>{const back=(base,status,message='')=>{const u=new URL(base||META_PUBLIC_APP_URL.value());u.searchParams.set('sigmaX',status);if(message)u.searchParams.set('message',message.slice(0,180));res.redirect(u.toString());};try{const state=String(req.query.state||''),code=String(req.query.code||''),ref=db.doc(`socialOAuthStates/${state}`),snap=await ref.get();if(!snap.exists||!code)throw new Error('OAuth session expired');const session=snap.data(),{clientId,redirectUri}=xConfig();const auth=Buffer.from(`${clientId}:${X_CLIENT_SECRET.value()}`).toString('base64');const r=await fetch('https://api.x.com/2/oauth2/token',{method:'POST',headers:{authorization:`Basic ${auth}`,'content-type':'application/x-www-form-urlencoded'},body:new URLSearchParams({code,grant_type:'authorization_code',redirect_uri:redirectUri,code_verifier:session.verifier})});const body=await r.json();if(!r.ok||!body.access_token)throw new Error(body.error_description||'X token exchange failed');await db.doc(`socialPrivateTokens/${session.uid}/providers/x`).set({provider:'x',...body,updatedAt:admin.firestore.FieldValue.serverTimestamp()});await db.doc(`users/${session.uid}/socialProviders/x`).set({provider:'x',connected:true,updatedAt:admin.firestore.FieldValue.serverTimestamp()},{merge:true});await ref.delete();back(session.returnUrl,'connected');}catch(e){console.error('xOAuthCallback',e);back(META_PUBLIC_APP_URL.value(),'error',e.message);}});
+exports.xStatus=onCall(async req=>{const uid=requireAuth(req),snap=await db.doc(`users/${uid}/socialProviders/x`).get();return snap.exists?snap.data():{provider:'x',connected:false};});
 exports.xSync=onCall({secrets:[X_CLIENT_SECRET]},async req=>{const uid=requireAuth(req),snap=await db.doc(`socialPrivateTokens/${uid}/providers/x`).get();if(!snap.exists)throw new HttpsError('failed-precondition','X is not connected');const token=snap.data().access_token;const me=await fetch('https://api.x.com/2/users/me?user.fields=id,name,username,profile_image_url,public_metrics',{headers:{authorization:`Bearer ${token}`}});const body=await me.json();if(!me.ok)throw new HttpsError('internal',body.detail||body.title||'X profile request failed');const user=body.data||{};return{accounts:[{id:user.id,externalId:user.id,provider:'x',displayName:user.name,title:user.name,username:user.username,avatar:user.profile_image_url,connected:true}],metrics:Object.entries(user.public_metrics||{}).map(([name,value])=>({id:`x_${user.id}_${name}`,externalId:`${user.id}_${name}`,provider:'x',name,title:name,value,period:'current'})),posts:[],messages:[],comments:[],notifications:[],syncedAt:new Date().toISOString()};});
 exports.xDisconnect=onCall(async req=>{const uid=requireAuth(req);await Promise.all([db.doc(`socialPrivateTokens/${uid}/providers/x`).delete(),db.doc(`users/${uid}/socialProviders/x`).delete()]);return{disconnected:true};});
 
@@ -156,7 +157,9 @@ async function fetchTikTokBasicProfile(accessToken){
   );
   const body=await response.json().catch(()=>({}));
 
-  if(!response.ok||body.error?.code){
+  const apiCode=String(body.error?.code||'').toLowerCase();
+  if(!response.ok||(apiCode&&apiCode!=='ok')){
+    console.error('TikTok user info error',JSON.stringify(body));
     throw new Error(body.error?.message||'TikTok profile request failed');
   }
 
@@ -273,15 +276,29 @@ exports.tiktokOAuthCallback=onRequest({secrets:[TIKTOK_CLIENT_SECRET]},async(req
       );
     }
 
-    // Synchronise the basic profile during the callback. The connected state
-    // no longer depends on the frontend calling tiktokSync after Firebase Auth restores.
-    const account=await fetchTikTokBasicProfile(tokenBody.access_token);
-
+    // Save the token first. A temporary profile API failure must not cancel a
+    // successful OAuth connection.
     await db.doc(`socialPrivateTokens/${session.uid}/providers/tiktok`).set({
       provider:'tiktok',
       ...tokenBody,
       updatedAt:admin.firestore.FieldValue.serverTimestamp()
     });
+
+    let account={
+      id:tokenBody.open_id||'tiktok',
+      externalId:tokenBody.open_id||'tiktok',
+      provider:'tiktok',
+      displayName:'TikTok',
+      title:'TikTok',
+      avatar:'',
+      connected:true,
+      permissions:['user.info.basic']
+    };
+    try{
+      account=await fetchTikTokBasicProfile(tokenBody.access_token);
+    }catch(profileError){
+      console.warn('TikTok profile fetch deferred',profileError.message);
+    }
 
     await db.doc(`users/${session.uid}/socialProviders/tiktok`).set({
       provider:'tiktok',

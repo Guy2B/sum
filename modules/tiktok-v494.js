@@ -158,7 +158,7 @@
       const current=await status();
       if(current?.connected){
         if(Array.isArray(current.accounts)&&current.accounts[0])mirrorAccount(current.accounts[0]);
-        await sync();
+        try{ await sync(); }catch(error){ console.warn('[SigmaTikTok] profile sync deferred',error?.message||error); }
       }else{
         removeMirroredAccount();
       }
@@ -188,7 +188,9 @@
     if(!state&&connected&&connected!=='1')throw new Error(message||'La connexion TikTok a échoué.');
 
     await waitForSigmaAuth();
-    await sync();
+    const current=await status();
+    if(current?.connected&&Array.isArray(current.accounts)&&current.accounts[0])mirrorAccount(current.accounts[0]);
+    try{ await sync(); }catch(error){ console.warn('[SigmaTikTok] profile sync deferred',error?.message||error); }
 
     url.searchParams.delete('sigmaTikTok');
     url.searchParams.delete('provider');
@@ -201,7 +203,7 @@
   }
 
   const adapter={
-    version:'4.10.4',
+    version:'4.10.5',
     capabilities:['profile'],
     isConfigured,
     sync
@@ -225,7 +227,7 @@
   }
 
   window.SigmaTikTok=Object.freeze({
-    version:'4.10.4',
+    version:'4.10.5',
     connect,sync,status,disconnect,isConfigured,
     restoreConnectedState,
     openProfile:()=>window.open(TIKTOK_HOME,'_blank','noopener')
