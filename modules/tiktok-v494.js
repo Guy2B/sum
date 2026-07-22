@@ -5,17 +5,43 @@
   const TIKTOK_HOME='https://www.tiktok.com/';
   let api,instance,booting=false;
 
-  const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+  function currentSigmaUser(){
+    return window.SigmaCloud?.auth?.currentUser||window.SigmaCloud?.user||null;
+  }
 
-  async function waitForSigmaAuth(timeoutMs=15000){
-    const started=Date.now();
-    while(Date.now()-started<timeoutMs){
-      if(window.SigmaCloud?.configured&&window.SigmaCloud?.auth?.currentUser){
-        return window.SigmaCloud.auth.currentUser;
-      }
-      await sleep(250);
-    }
-    throw new Error('La session Sigma n’est pas encore prête. Rechargez la page puis réessayez.');
+  async function waitForSigmaAuth(timeoutMs=60000){
+    const existing=currentSigmaUser();
+    if(existing)return existing;
+
+    return new Promise((resolve,reject)=>{
+      let settled=false;
+      const finish=(error,user)=>{
+        if(settled)return;
+        settled=true;
+        clearTimeout(timer);
+        window.removeEventListener('sigma:auth-changed',onAuthChanged);
+        if(error)reject(error);
+        else resolve(user);
+      };
+      const onAuthChanged=event=>{
+        const user=event.detail?.user||currentSigmaUser();
+        if(user)finish(null,user);
+      };
+      const timer=setTimeout(()=>{
+        const user=currentSigmaUser();
+        if(user)finish(null,user);
+        else finish(new Error('La session Firebase Sigma n’est pas active. Déconnectez-vous puis reconnectez-vous à Sigma.'));
+      },timeoutMs);
+
+      window.addEventListener('sigma:auth-changed',onAuthChanged);
+
+      // firebase-cloud.js may already have completed between the first check
+      // and the event listener registration.
+      queueMicrotask(()=>{
+        const user=currentSigmaUser();
+        if(user)finish(null,user);
+      });
+    });
   }
 
   async function functions(){
@@ -175,7 +201,7 @@
   }
 
   const adapter={
-    version:'4.10.3',
+    version:'4.10.4',
     capabilities:['profile'],
     isConfigured,
     sync
@@ -199,7 +225,7 @@
   }
 
   window.SigmaTikTok=Object.freeze({
-    version:'4.10.3',
+    version:'4.10.4',
     connect,sync,status,disconnect,isConfigured,
     restoreConnectedState,
     openProfile:()=>window.open(TIKTOK_HOME,'_blank','noopener')
@@ -209,6 +235,6 @@
     ?document.addEventListener('DOMContentLoaded',boot,{once:true})
     :boot();
 
-  window.addEventListener('sigma:auth-ready',restoreConnectedState);
+  window.addEventListener('sigma:auth-changed',event=>{if(event.detail?.user)restoreConnectedState();});
   window.addEventListener('focus',()=>{if(location.hash===SOCIAL_HASH)restoreConnectedState();});
 })();
