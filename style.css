@@ -2207,3 +2207,319 @@ body[data-owner-preview="true"] [data-pro-lock],body[data-owner-preview="true"] 
   .social-filters { grid-template-columns: 1fr; }
 }
 
+/* Sigma V4.11.1 — Social Inbox UX redesign */
+.social-inbox-card {
+  padding: 22px;
+  border-radius: 18px;
+  overflow: visible;
+}
+.social-inbox-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
+  align-items: start;
+  gap: 28px;
+  margin-bottom: 14px;
+}
+.social-inbox-heading h2 {
+  margin: 5px 0 0;
+  font-size: clamp(17px, 2vw, 21px);
+  line-height: 1.2;
+}
+.social-inbox-summary {
+  margin: 7px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.45;
+}
+.social-inbox-tools {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 150px;
+  gap: 8px;
+  align-items: center;
+}
+.social-search {
+  min-height: 42px;
+  padding: 0 13px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: none;
+}
+.social-search:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+.social-search input { min-width: 0; font-size: 13px; }
+.social-network-filter {
+  width: 100%;
+  min-height: 42px;
+  padding: 0 31px 0 11px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  background: var(--surface);
+  font: inherit;
+  font-size: 12px;
+}
+.social-hidden-filter {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+.social-inbox-strip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 14px;
+  padding: 0;
+  overflow-x: auto;
+}
+.social-inbox-pill,
+button.social-inbox-pill {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 7px;
+  min-height: 34px;
+  padding: 6px 11px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  background: transparent;
+  box-shadow: none;
+  font: inherit;
+  cursor: pointer;
+}
+.social-inbox-pill span { font-size: 11px; font-weight: 650; }
+.social-inbox-pill strong {
+  display: grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  color: var(--text);
+  background: var(--surface-2);
+  font-size: 10px;
+  line-height: 1;
+}
+.social-inbox-pill:hover { border-color: var(--border-strong); color: var(--text); }
+.social-inbox-pill.active {
+  border-color: color-mix(in srgb, var(--primary) 28%, var(--border));
+  color: var(--primary);
+  background: var(--primary-soft);
+}
+.social-inbox-pill.active strong {
+  color: #fff;
+  background: var(--primary);
+}
+.social-interaction-list { display: grid; gap: 9px; }
+.social-interaction {
+  position: relative;
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  gap: 12px;
+  padding: 14px 15px;
+  border: 1px solid var(--border);
+  border-left-width: 1px;
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: none;
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+}
+.social-interaction:hover {
+  transform: none;
+  border-color: var(--border-strong);
+  box-shadow: 0 5px 18px rgba(30, 41, 59, .06);
+}
+.social-interaction.is-unread {
+  border-left: 3px solid var(--primary);
+  background: color-mix(in srgb, var(--primary) 2.5%, var(--surface));
+}
+.social-source-mark {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  font-size: 11px;
+}
+.social-interaction-main { min-width: 0; }
+.social-interaction-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+.social-interaction-identity { min-width: 0; }
+.social-interaction-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-height: 18px;
+}
+.social-provider-name {
+  color: var(--text);
+  font-size: 10px;
+  font-weight: 800;
+}
+.social-type {
+  padding-left: 7px;
+  border-left: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: .06em;
+}
+.social-unread-label {
+  padding: 3px 7px;
+  border-radius: 999px;
+  color: var(--primary);
+  background: var(--primary-soft);
+  font-size: 9px;
+  font-weight: 750;
+}
+.social-interaction-top strong {
+  display: block;
+  margin-top: 4px;
+  overflow: hidden;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.social-interaction.is-unread .social-interaction-top strong::after { display: none; }
+.social-sender {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 10px;
+}
+.social-interaction-top time {
+  flex: 0 0 auto;
+  padding-top: 2px;
+  color: var(--muted);
+  font-size: 9px;
+  white-space: nowrap;
+}
+.social-message-copy {
+  display: -webkit-box;
+  margin: 9px 0 0 !important;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5 !important;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.social-interaction.is-expanded .social-message-copy {
+  display: block;
+  overflow: visible;
+}
+.social-expand-button {
+  appearance: none;
+  margin: 5px 0 0;
+  padding: 0;
+  border: 0;
+  color: var(--primary);
+  background: transparent;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 750;
+  cursor: pointer;
+}
+.social-interaction-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 11px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.social-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 0;
+}
+.social-tags span {
+  padding: 4px 7px;
+  border-radius: 999px;
+  color: var(--muted);
+  background: var(--surface-2);
+  font-size: 9px;
+  font-weight: 700;
+}
+.social-tags .priority-high { color: var(--danger); background: var(--danger-soft); }
+.social-tags .priority-medium { color: var(--warning); background: var(--warning-soft); }
+.social-tags .priority-low { color: var(--success); background: var(--success-soft); }
+.social-interaction-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  max-width: none;
+  flex-wrap: nowrap;
+}
+.social-action,
+button.social-action {
+  appearance: none;
+  min-height: 32px;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  color: var(--text);
+  background: var(--surface);
+  font: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.social-action:hover { border-color: var(--primary); color: var(--primary); }
+.social-action.subtle { border-color: transparent; color: var(--primary); background: transparent; }
+.social-icon-action,
+button.social-icon-action,
+a.social-icon-action {
+  appearance: none;
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  color: var(--text);
+  background: var(--surface);
+  font: inherit;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.social-icon-action:hover { border-color: var(--primary); color: var(--primary); }
+.social-icon-action.success:hover { border-color: var(--success); color: var(--success); }
+
+@media (max-width: 820px) {
+  .social-inbox-header { grid-template-columns: 1fr; gap: 15px; }
+  .social-inbox-tools { grid-template-columns: minmax(0, 1fr) 145px; }
+  .social-interaction-footer { align-items: flex-end; }
+}
+@media (max-width: 620px) {
+  .social-inbox-card { padding: 16px; }
+  .social-inbox-tools { grid-template-columns: 1fr; }
+  .social-interaction { grid-template-columns: 34px minmax(0, 1fr); padding: 12px; }
+  .social-source-mark { width: 34px; height: 34px; }
+  .social-interaction-top { gap: 8px; }
+  .social-interaction-footer { align-items: stretch; flex-direction: column; }
+  .social-interaction-actions { justify-content: flex-start; overflow-x: auto; padding-bottom: 2px; }
+  .social-action { flex: 0 0 auto; }
+}
+

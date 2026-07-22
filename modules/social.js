@@ -1,5 +1,5 @@
 'use strict';
-// Sigma V4.11.0 — Social Inbox foundation.
+// Sigma V4.11.1 — Social Inbox UX redesign.
 (() => {
   const PROVIDERS = {
     instagram: { name: 'Instagram', icon: 'IG', live: true, auth: 'meta', copy: 'instagramCopy', status: 'requiresApproval' },
@@ -303,14 +303,52 @@
           ['À répondre', replies, 'reply'],
           ['Total', active.length, 'all']
         ].map(([label, value, filter]) =>
-          `<button type="button" class="social-inbox-pill ${statusFilter.value === filter ? 'active' : ''}" data-inbox-filter="${filter}"><strong>${value}</strong><span>${label}</span></button>`
+          `<button type="button" class="social-inbox-pill ${statusFilter.value === filter ? 'active' : ''}" data-inbox-filter="${filter}" aria-pressed="${statusFilter.value === filter}"><span>${label}</span><strong>${value}</strong></button>`
         ).join('');
       }
     }
 
     function renderInteractions() {
       const rows = filtered();
-      list.innerHTML = rows.length ? rows.map((item) => `<article class="social-interaction ${providerClass(item.provider)} ${item.unread !== false ? 'is-unread' : ''}"><div class="social-source-mark">${PROVIDERS[item.provider]?.icon || '@'}</div><div class="social-interaction-main"><div class="social-interaction-top"><div><span class="social-type">${typeLabel(item.type)}</span><strong>${ctx.escape(item.title || '')}</strong></div><time>${ctx.formatDateTime(item.receivedAt)}</time></div><span class="social-sender">${ctx.escape(item.sender || providerName(item.provider))}</span><p>${ctx.escape(item.content || '')}</p><div class="social-tags"><span class="priority-${item.priority >= 85 ? 'high' : item.priority >= 65 ? 'medium' : 'low'}">${ctx.t('social.priority')} ${item.priority}</span>${item.requiresReply ? `<span>${ctx.t('social.replySuggested')}</span>` : ''}${item.contentIdea ? `<span>${ctx.t('social.contentIdea')}</span>` : ''}</div></div><div class="social-interaction-actions">${item.unread !== false ? `<button class="text-button" type="button" data-social-read="${item.id}">Marquer lu</button>` : ''}<button class="button secondary small" type="button" data-social-task="${item.id}">${ctx.t('social.createTask')}</button><button class="text-button" type="button" data-social-remind="${item.id}">${ctx.t('social.remind')}</button><button class="icon-button" type="button" data-social-resolve="${item.id}" title="${ctx.t('social.markHandled')}">✓</button>${item.sourceUrl ? `<a class="icon-button" href="${ctx.escape(item.sourceUrl)}" target="_blank" rel="noopener" title="${ctx.t('social.openSource')}">↗</a>` : ''}</div></article>`).join('') : `<div class="empty-state">${ctx.t('social.noInteractions')}</div>`;
+      list.innerHTML = rows.length ? rows.map((item) => {
+        const provider = providerName(item.provider);
+        const content = ctx.escape(item.content || '');
+        const canExpand = String(item.content || '').length > 190;
+        const priorityClass = item.priority >= 85 ? 'high' : item.priority >= 65 ? 'medium' : 'low';
+        return `<article class="social-interaction ${providerClass(item.provider)} ${item.unread !== false ? 'is-unread' : ''}" data-social-item="${item.id}">
+          <div class="social-source-mark" aria-hidden="true">${PROVIDERS[item.provider]?.icon || '@'}</div>
+          <div class="social-interaction-main">
+            <div class="social-interaction-top">
+              <div class="social-interaction-identity">
+                <div class="social-interaction-meta">
+                  <span class="social-provider-name">${ctx.escape(provider)}</span>
+                  <span class="social-type">${typeLabel(item.type)}</span>
+                  ${item.unread !== false ? '<span class="social-unread-label">Non lu</span>' : ''}
+                </div>
+                <strong>${ctx.escape(item.title || item.sender || provider)}</strong>
+                <span class="social-sender">${ctx.escape(item.sender || provider)}</span>
+              </div>
+              <time>${ctx.formatDateTime(item.receivedAt)}</time>
+            </div>
+            <p class="social-message-copy">${content}</p>
+            ${canExpand ? `<button class="social-expand-button" type="button" data-social-expand="${item.id}" aria-expanded="false">Afficher plus</button>` : ''}
+            <footer class="social-interaction-footer">
+              <div class="social-tags">
+                <span class="priority-${priorityClass}">${item.priority >= 85 ? 'Urgent' : item.priority >= 65 ? 'Important' : 'Normal'}</span>
+                ${item.requiresReply ? '<span>Réponse attendue</span>' : ''}
+                ${item.contentIdea ? '<span>Idée de contenu</span>' : ''}
+              </div>
+              <div class="social-interaction-actions">
+                ${item.unread !== false ? `<button class="social-action subtle" type="button" data-social-read="${item.id}">Marquer lu</button>` : ''}
+                <button class="social-action" type="button" data-social-task="${item.id}">Créer une tâche</button>
+                <button class="social-icon-action" type="button" data-social-remind="${item.id}" title="${ctx.t('social.remind')}" aria-label="${ctx.t('social.remind')}">◷</button>
+                <button class="social-icon-action success" type="button" data-social-resolve="${item.id}" title="${ctx.t('social.markHandled')}" aria-label="${ctx.t('social.markHandled')}">✓</button>
+                ${item.sourceUrl ? `<a class="social-icon-action" href="${ctx.escape(item.sourceUrl)}" target="_blank" rel="noopener" title="${ctx.t('social.openSource')}" aria-label="${ctx.t('social.openSource')}">↗</a>` : ''}
+              </div>
+            </footer>
+          </div>
+        </article>`;
+      }).join('') : `<div class="empty-state">${ctx.t('social.noInteractions')}</div>`;
     }
 
     function renderDashboard() {
@@ -361,6 +399,14 @@
       });
     });
     list.addEventListener('click', (event) => {
+      const expand = event.target.closest('[data-social-expand]');
+      if (expand) {
+        const card = expand.closest('.social-interaction');
+        const expanded = card?.classList.toggle('is-expanded');
+        expand.setAttribute('aria-expanded', String(Boolean(expanded)));
+        expand.textContent = expanded ? 'Réduire' : 'Afficher plus';
+        return;
+      }
       const read = event.target.closest('[data-social-read]');
       if (read) {
         ctx.updateState((state) => {
