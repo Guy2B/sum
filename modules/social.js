@@ -1,5 +1,5 @@
 'use strict';
-// Sigma V4.11.1 — Social Inbox UX redesign.
+// Sigma V4.12.0 — Social Career Command Center.
 (() => {
   const PROVIDERS = {
     instagram: { name: 'Instagram', icon: 'IG', live: true, auth: 'meta', copy: 'instagramCopy', status: 'requiresApproval' },
@@ -19,6 +19,14 @@
     const searchInput = document.getElementById('social-search-input');
     const inboxSummary = document.getElementById('social-inbox-summary');
     const inboxStrip = document.getElementById('social-inbox-strip');
+    const commandTabs = [...document.querySelectorAll('[data-social-view]')];
+    const commandPanels = [...document.querySelectorAll('[data-social-view-panel]')];
+    const careerForm = document.getElementById('career-profile-form');
+    const careerRefresh = document.getElementById('career-refresh');
+    const careerJobList = document.getElementById('career-job-list');
+    const careerFeedSummary = document.getElementById('career-feed-summary');
+    const careerLinkedInState = document.getElementById('career-linkedin-state');
+    const careerStatusRow = document.getElementById('career-status-row');
     const connectDialog = document.getElementById('social-connect-dialog');
     const infoDialog = document.getElementById('social-info-dialog');
     const picker = document.getElementById('social-provider-picker');
@@ -29,6 +37,170 @@
     function tomorrow() { const date = new Date(); date.setDate(date.getDate() + 1); return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 10); }
     function providerName(key) { return PROVIDERS[key]?.name || key; }
     function providerClass(key) { return `provider-${String(key).replace(/[^a-z0-9-]/gi, '')}`; }
+
+
+    const CAREER_STORAGE_KEY = 'sigma-career-profile-v1';
+    const CAREER_CACHE_KEY = 'sigma-career-jobs-v1';
+    const CAREER_API = 'https://www.arbeitnow.com/api/job-board-api';
+
+    function readCareerProfile() {
+      try {
+        return { role: '', skills: '', location: '', remoteOnly: false, ...JSON.parse(localStorage.getItem(CAREER_STORAGE_KEY) || '{}') };
+      } catch {
+        return { role: '', skills: '', location: '', remoteOnly: false };
+      }
+    }
+
+    function saveCareerProfile(profile) {
+      localStorage.setItem(CAREER_STORAGE_KEY, JSON.stringify(profile));
+    }
+
+    function careerTerms(profile) {
+      return `${profile.role || ''} ${profile.skills || ''}`
+        .toLowerCase()
+        .split(/[,;/\n|]+|\s{2,}/)
+        .map((term) => term.trim())
+        .filter((term) => term.length > 1);
+    }
+
+    function stripHtml(value) {
+      const node = document.createElement('div');
+      node.innerHTML = String(value || '');
+      return node.textContent || '';
+    }
+
+    function scoreCareerJob(job, profile) {
+      const terms = careerTerms(profile);
+      const haystack = `${job.title || ''} ${job.company_name || ''} ${(job.tags || []).join(' ')} ${stripHtml(job.description || '')}`.toLowerCase();
+      let score = 18;
+      terms.forEach((term, index) => {
+        if (haystack.includes(term)) score += index === 0 ? 24 : 11;
+      });
+      const location = String(profile.location || '').trim().toLowerCase();
+      if (location && String(job.location || '').toLowerCase().includes(location)) score += 15;
+      if (profile.remoteOnly && job.remote) score += 18;
+      if (profile.remoteOnly && !job.remote) score -= 12;
+      const created = Number(job.created_at || 0) * 1000;
+      const ageDays = created ? Math.max(0, (Date.now() - created) / 86400000) : 30;
+      score += Math.max(0, 12 - Math.round(ageDays / 2));
+      return Math.max(0, Math.min(100, score));
+    }
+
+    function careerMatchLabel(score) {
+      if (score >= 75) return ['Très pertinent', 'excellent'];
+      if (score >= 55) return ['Bon match', 'good'];
+      return ['À explorer', 'possible'];
+    }
+
+    function formatCareerDate(timestamp) {
+      const value = Number(timestamp || 0) * 1000;
+      return value ? ctx.formatDateTime(new Date(value).toISOString()) : '';
+    }
+
+    function renderLinkedInCareerState() {
+      if (!careerLinkedInState) return;
+      const account = connectedAccounts().find((item) => item.provider === 'linkedin');
+      if (!account) {
+        careerLinkedInState.innerHTML = `<div class="career-provider-icon provider-linkedin">in</div><div><strong>LinkedIn non connecté</strong><span>Connectez le profil pour afficher votre identité professionnelle.</span></div>`;
+        return;
+      }
+      careerLinkedInState.innerHTML = `<div class="career-provider-avatar">${account.avatar ? `<img src="${ctx.escape(account.avatar)}" alt="">` : accountInitials(account)}</div><div><strong>${ctx.escape(account.displayName || account.label || 'LinkedIn')}</strong><span><b>Profil connecté</b> · Feed LinkedIn non autorisé par les permissions actuelles</span></div>`;
+    }
+
+    function loadCareerForm() {
+      if (!careerForm) return;
+      const profile = readCareerProfile();
+      careerForm.elements.role.value = profile.role || '';
+      careerForm.elements.skills.value = profile.skills || '';
+      careerForm.elements.location.value = profile.location || '';
+      careerForm.elements.remoteOnly.checked = Boolean(profile.remoteOnly);
+    }
+
+    function renderCareerJobs(jobs, profile, fromCache = false) {
+      if (!careerJobList) return;
+      const ranked = (jobs || [])
+        .map((job) => ({ ...job, sigmaScore: scoreCareerJob(job, profile) }))
+        .filter((job) => job.sigmaScore >= 28)
+        .sort((a, b) => b.sigmaScore - a.sigmaScore || Number(b.created_at || 0) - Number(a.created_at || 0))
+        .slice(0, 18);
+
+      if (careerFeedSummary) {
+        careerFeedSummary.textContent = ranked.length
+          ? `${ranked.length} opportunité${ranked.length > 1 ? 's' : ''} classée${ranked.length > 1 ? 's' : ''} selon votre profil${fromCache ? ' · données en cache' : ''}.`
+          : 'Aucune offre suffisamment proche. Élargissez le poste ou les compétences.';
+      }
+
+      const excellent = ranked.filter((job) => job.sigmaScore >= 75).length;
+      const remote = ranked.filter((job) => job.remote).length;
+      if (careerStatusRow) {
+        careerStatusRow.innerHTML = `<span><strong>${ranked.length}</strong> résultats</span><span><strong>${excellent}</strong> très pertinents</span><span><strong>${remote}</strong> remote</span>`;
+      }
+
+      careerJobList.innerHTML = ranked.length ? ranked.map((job) => {
+        const [label, level] = careerMatchLabel(job.sigmaScore);
+        const tags = (job.tags || []).slice(0, 4);
+        const description = stripHtml(job.description || '').replace(/\s+/g, ' ').trim();
+        return `<article class="career-job-card">
+          <div class="career-job-score ${level}"><strong>${job.sigmaScore}%</strong><span>${label}</span></div>
+          <div class="career-job-main">
+            <div class="career-job-top">
+              <div>
+                <h4>${ctx.escape(job.title || 'Poste')}</h4>
+                <p>${ctx.escape(job.company_name || 'Entreprise')} · ${ctx.escape(job.location || (job.remote ? 'Remote' : 'Localisation non précisée'))}</p>
+              </div>
+              <time>${formatCareerDate(job.created_at)}</time>
+            </div>
+            <p class="career-job-description">${ctx.escape(description.slice(0, 280))}${description.length > 280 ? '…' : ''}</p>
+            <div class="career-job-footer">
+              <div class="career-job-tags">${job.remote ? '<span>Remote</span>' : ''}${tags.map((tag) => `<span>${ctx.escape(tag)}</span>`).join('')}</div>
+              <div class="career-job-actions">
+                <button type="button" data-career-task="${ctx.escape(job.slug || job.url || job.title)}" data-career-title="${ctx.escape(job.title || 'Offre')}" data-career-company="${ctx.escape(job.company_name || '')}" data-career-url="${ctx.escape(job.url || '')}">Ajouter au plan</button>
+                <a href="${ctx.escape(job.url || '#')}" target="_blank" rel="noopener">Voir l’offre ↗</a>
+              </div>
+            </div>
+          </div>
+        </article>`;
+      }).join('') : '<div class="empty-state">Aucune opportunité correspondant aux critères actuels.</div>';
+    }
+
+    async function refreshCareerJobs(force = false) {
+      if (!careerJobList) return;
+      const profile = readCareerProfile();
+      if (!profile.role && !profile.skills) {
+        careerFeedSummary.textContent = 'Indiquez au moins un poste ou quelques compétences.';
+        careerJobList.innerHTML = '<div class="career-empty-guide"><strong>Commencez par votre objectif professionnel</strong><p>Exemple : “Head of Sales” avec “SaaS, CRM, business development”.</p></div>';
+        return;
+      }
+
+      if (!force) {
+        try {
+          const cached = JSON.parse(localStorage.getItem(CAREER_CACHE_KEY) || '{}');
+          if (cached.savedAt && Date.now() - cached.savedAt < 30 * 60 * 1000 && Array.isArray(cached.jobs)) {
+            renderCareerJobs(cached.jobs, profile, true);
+            return;
+          }
+        } catch {}
+      }
+
+      careerRefresh.disabled = true;
+      careerRefresh.textContent = 'Recherche…';
+      careerJobList.innerHTML = '<div class="career-loading"><span></span><p>Analyse des offres disponibles…</p></div>';
+      try {
+        const response = await fetch(CAREER_API, { headers: { Accept: 'application/json' } });
+        if (!response.ok) throw new Error(`CAREER_${response.status}`);
+        const payload = await response.json();
+        const jobs = Array.isArray(payload.data) ? payload.data : [];
+        localStorage.setItem(CAREER_CACHE_KEY, JSON.stringify({ savedAt: Date.now(), jobs }));
+        renderCareerJobs(jobs, profile, false);
+      } catch (error) {
+        console.warn('[SigmaCareer] job feed unavailable', error);
+        careerFeedSummary.textContent = 'Le flux d’offres est temporairement indisponible.';
+        careerJobList.innerHTML = '<div class="career-empty-guide"><strong>Impossible de charger les offres</strong><p>Réessayez plus tard. La connexion LinkedIn reste active et n’est pas affectée.</p></div>';
+      } finally {
+        careerRefresh.disabled = false;
+        careerRefresh.textContent = 'Actualiser';
+      }
+    }
 
     function demoInteractions(provider, accountId) {
       const common = [
@@ -368,6 +540,7 @@
     function render() {
       renderProviderPicker();
       renderAccounts();
+      renderLinkedInCareerState();
       renderInboxSummary();
       renderInteractions();
       renderDashboard();
@@ -434,6 +607,61 @@
       const resolve = event.target.closest('[data-social-resolve]');
       if (resolve) ctx.updateState((state) => { const item = state.socialInteractions.find((row) => row.id === resolve.dataset.socialResolve); if (item) item.handled = true; });
     });
+    commandTabs.forEach((tab) => tab.addEventListener('click', () => {
+      const view = tab.dataset.socialView;
+      commandTabs.forEach((item) => {
+        const active = item === tab;
+        item.classList.toggle('active', active);
+        item.setAttribute('aria-selected', String(active));
+      });
+      commandPanels.forEach((panel) => {
+        const active = panel.dataset.socialViewPanel === view;
+        panel.classList.toggle('active', active);
+        panel.hidden = !active;
+      });
+      if (view === 'career') {
+        renderLinkedInCareerState();
+        refreshCareerJobs(false);
+      }
+    }));
+
+    careerForm?.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const data = new FormData(careerForm);
+      saveCareerProfile({
+        role: String(data.get('role') || '').trim(),
+        skills: String(data.get('skills') || '').trim(),
+        location: String(data.get('location') || '').trim(),
+        remoteOnly: data.get('remoteOnly') === 'on'
+      });
+      localStorage.removeItem(CAREER_CACHE_KEY);
+      refreshCareerJobs(true);
+      ctx.toast('Profil professionnel mis à jour');
+    });
+
+    careerRefresh?.addEventListener('click', () => refreshCareerJobs(true));
+
+    careerJobList?.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-career-task]');
+      if (!button) return;
+      const title = `${button.dataset.careerTitle || 'Offre'} — ${button.dataset.careerCompany || ''}`.replace(/\s+—\s*$/, '');
+      ctx.updateState((state) => {
+        state.tasks.push({
+          id: ctx.uid(),
+          title,
+          category: 'work',
+          dueDate: tomorrow(),
+          priority: 'medium',
+          status: 'todo',
+          notes: button.dataset.careerUrl || '',
+          createdAt: new Date().toISOString()
+        });
+      });
+      ctx.toast('Offre ajoutée au plan');
+    });
+
+    loadCareerForm();
+
     accountFilter.addEventListener('change', render);
     statusFilter.addEventListener('change', render);
     searchInput?.addEventListener('input', renderInteractions);

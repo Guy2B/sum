@@ -55,7 +55,7 @@
   <script defer src="modules/youtube-social-v494.js?v=4940"></script>
   <script defer src="modules/x-v494.js?v=41050"></script>
   <script defer src="modules/tiktok-v494.js?v=41060"></script>
-  <script defer src="modules/social.js?v=41110"></script>
+  <script defer src="modules/social.js?v=41200"></script>
   <script defer src="modules/social-reality-v495.js?v=4950"></script>
   <script defer src="modules/linkedin-setup-v496.js?v=4960"></script>
   <script defer src="modules/x-setup-v497.js?v=4970"></script>
@@ -391,17 +391,24 @@
           <div class="page-heading"><div><span class="eyebrow" data-i18n="social.eyebrow">Professional interactions</span><h1 data-i18n="social.title">Σ Social</h1><p data-i18n="social.subtitle">Turn messages, comments and mentions into clear actions without living inside every network.</p></div><div class="page-heading-actions"><button class="button secondary" id="social-sync" type="button"><svg><use href="#i-sync"/></svg><span data-i18n="social.sync">Refresh</span></button><button class="button primary" id="social-add-account" type="button"><span>+</span><span data-i18n="social.addAccount">Connect a network</span></button></div></div>
           <div class="social-kpis"><article class="card"><span data-i18n="social.connectedAccounts">Connected</span><strong id="social-kpi-accounts">0</strong></article><article class="card"><span data-i18n="social.priority">Priority</span><strong id="social-kpi-priority">0</strong></article><article class="card"><span data-i18n="social.replyNeeded">Replies</span><strong id="social-kpi-replies">0</strong></article><article class="card"><span data-i18n="social.comments">Comments</span><strong id="social-kpi-comments">0</strong></article></div>
           <article class="card social-connected-card"><div class="social-connected-head"><div><span class="eyebrow" data-i18n="social.accountsEyebrow">Connections</span><h2 data-i18n="social.accountsTitle">Your connected networks</h2><p data-i18n="social.accountsText">One focused queue, with the source shown only when it helps.</p></div><span class="quota-pill" id="social-mode-label">RÉEL</span></div><div class="social-account-list" id="social-account-list"></div></article>
-          <article class="card social-queue-card social-inbox-card">
-            <header class="social-inbox-header">
-              <div class="social-inbox-heading">
-                <span class="eyebrow">Social Inbox · V4.11.1</span>
-                <h2>Messages, commentaires et mentions</h2>
-                <p class="social-inbox-summary" id="social-inbox-summary">Toutes les interactions disponibles, classées par priorité.</p>
+          <article class="card social-command-card">
+            <header class="social-command-header">
+              <div>
+                <span class="eyebrow">Social Command Center · V4.12</span>
+                <h2>Réseaux, conversations et opportunités</h2>
+                <p id="social-command-summary">Pilotez vos interactions et les opportunités professionnelles depuis un seul espace.</p>
               </div>
-              <div class="social-inbox-tools">
+              <div class="social-command-tabs" role="tablist" aria-label="Vue sociale">
+                <button class="active" type="button" role="tab" aria-selected="true" data-social-view="inbox">Inbox</button>
+                <button type="button" role="tab" aria-selected="false" data-social-view="career">Opportunités</button>
+              </div>
+            </header>
+
+            <section class="social-command-view active" id="social-inbox-view" data-social-view-panel="inbox">
+              <div class="social-inbox-toolbar">
                 <label class="social-search">
                   <span aria-hidden="true">⌕</span>
-                  <input id="social-search-input" type="search" placeholder="Rechercher…" autocomplete="off">
+                  <input id="social-search-input" type="search" placeholder="Rechercher un message, un auteur…" autocomplete="off">
                 </label>
                 <select id="social-account-filter" class="social-network-filter" aria-label="Filtrer par réseau">
                   <option value="all">Tous les réseaux</option>
@@ -415,9 +422,63 @@
                   <option value="all">Toutes les interactions</option>
                 </select>
               </div>
-            </header>
-            <nav class="social-inbox-strip" id="social-inbox-strip" aria-label="Filtres de la boîte sociale" aria-live="polite"></nav>
-            <div class="social-interaction-list" id="social-interaction-list"></div>
+              <div class="social-inbox-overview">
+                <div>
+                  <h3>Boîte de réception</h3>
+                  <p class="social-inbox-summary" id="social-inbox-summary">Toutes les interactions disponibles, classées par priorité.</p>
+                </div>
+                <nav class="social-inbox-strip" id="social-inbox-strip" aria-label="Filtres de la boîte sociale" aria-live="polite"></nav>
+              </div>
+              <div class="social-interaction-list" id="social-interaction-list"></div>
+            </section>
+
+            <section class="social-command-view" id="social-career-view" data-social-view-panel="career" hidden>
+              <div class="career-layout">
+                <aside class="career-profile-panel">
+                  <div class="career-linkedin-state" id="career-linkedin-state"></div>
+                  <div class="career-profile-heading">
+                    <span class="eyebrow">Profil de recherche</span>
+                    <h3>Ce que Sigma doit surveiller</h3>
+                    <p>Ces critères restent sur cet appareil et servent uniquement à classer les offres.</p>
+                  </div>
+                  <form id="career-profile-form" class="career-profile-form">
+                    <label>
+                      <span>Poste recherché</span>
+                      <input name="role" placeholder="Ex. Head of Sales, Account Executive">
+                    </label>
+                    <label>
+                      <span>Compétences</span>
+                      <textarea name="skills" rows="3" placeholder="Ex. SaaS, CRM, business development"></textarea>
+                    </label>
+                    <label>
+                      <span>Localisation</span>
+                      <input name="location" placeholder="Ex. France, Europe, Remote">
+                    </label>
+                    <label class="career-check">
+                      <input name="remoteOnly" type="checkbox">
+                      <span>Prioriser le télétravail</span>
+                    </label>
+                    <button class="button primary full" type="submit">Mettre à jour le matching</button>
+                  </form>
+                </aside>
+
+                <div class="career-feed-panel">
+                  <div class="career-feed-header">
+                    <div>
+                      <span class="eyebrow">Career Intelligence</span>
+                      <h3>Offres correspondant à votre profil</h3>
+                      <p id="career-feed-summary">Ajoutez vos critères pour recevoir des opportunités classées par pertinence.</p>
+                    </div>
+                    <button class="button secondary" id="career-refresh" type="button">Actualiser</button>
+                  </div>
+                  <div class="career-status-row" id="career-status-row"></div>
+                  <div class="career-job-list" id="career-job-list">
+                    <div class="empty-state">Aucune recherche lancée.</div>
+                  </div>
+                  <p class="career-source-note">Offres externes fournies par Arbeitnow. LinkedIn reste connecté pour l’identité du profil, mais son flux personnel et sa recherche d’emplois ne sont pas accessibles avec les permissions OAuth standard.</p>
+                </div>
+              </div>
+            </section>
           </article>
           <p class="disclaimer" data-i18n="social.disclaimer">Σ organises authorised professional interactions. It never asks for a social-network password and does not publish or send anything without confirmation.</p>
         </section>
