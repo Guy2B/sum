@@ -55,7 +55,7 @@
   <script defer src="modules/youtube-social-v494.js?v=4940"></script>
   <script defer src="modules/x-v494.js?v=41050"></script>
   <script defer src="modules/tiktok-v494.js?v=41060"></script>
-  <script defer src="modules/social.js?v=41060"></script>
+  <script defer src="modules/social.js?v=41100"></script>
   <script defer src="modules/social-reality-v495.js?v=4950"></script>
   <script defer src="modules/linkedin-setup-v496.js?v=4960"></script>
   <script defer src="modules/x-setup-v497.js?v=4970"></script>
@@ -391,7 +391,36 @@
           <div class="page-heading"><div><span class="eyebrow" data-i18n="social.eyebrow">Professional interactions</span><h1 data-i18n="social.title">Σ Social</h1><p data-i18n="social.subtitle">Turn messages, comments and mentions into clear actions without living inside every network.</p></div><div class="page-heading-actions"><button class="button secondary" id="social-sync" type="button"><svg><use href="#i-sync"/></svg><span data-i18n="social.sync">Refresh</span></button><button class="button primary" id="social-add-account" type="button"><span>+</span><span data-i18n="social.addAccount">Connect a network</span></button></div></div>
           <div class="social-kpis"><article class="card"><span data-i18n="social.connectedAccounts">Connected</span><strong id="social-kpi-accounts">0</strong></article><article class="card"><span data-i18n="social.priority">Priority</span><strong id="social-kpi-priority">0</strong></article><article class="card"><span data-i18n="social.replyNeeded">Replies</span><strong id="social-kpi-replies">0</strong></article><article class="card"><span data-i18n="social.comments">Comments</span><strong id="social-kpi-comments">0</strong></article></div>
           <article class="card social-connected-card"><div class="social-connected-head"><div><span class="eyebrow" data-i18n="social.accountsEyebrow">Connections</span><h2 data-i18n="social.accountsTitle">Your connected networks</h2><p data-i18n="social.accountsText">One focused queue, with the source shown only when it helps.</p></div><span class="quota-pill" id="social-mode-label">RÉEL</span></div><div class="social-account-list" id="social-account-list"></div></article>
-          <article class="card social-queue-card"><div class="social-toolbar"><div><span class="eyebrow" data-i18n="social.queueEyebrow">Attention queue</span><h2 data-i18n="social.queueTitle">What deserves a response or action</h2></div><div class="social-filters"><select id="social-account-filter" aria-label="Network"><option value="all" data-i18n="social.allAccounts">All networks</option></select><select id="social-status-filter" aria-label="Filter"><option value="priority" data-i18n="social.priority">Priority</option><option value="reply" data-i18n="social.replyNeeded">Replies</option><option value="comments" data-i18n="social.comments">Comments</option><option value="content" data-i18n="social.contentIdeas">Content ideas</option><option value="all" data-i18n="social.allInteractions">All interactions</option></select></div></div><div class="social-interaction-list" id="social-interaction-list"></div></article>
+          <article class="card social-queue-card social-inbox-card">
+            <div class="social-toolbar">
+              <div>
+                <span class="eyebrow">Social Inbox · V4.11</span>
+                <h2>Messages, commentaires et mentions</h2>
+                <p class="social-inbox-summary" id="social-inbox-summary">Toutes les interactions disponibles, classées par priorité.</p>
+              </div>
+              <div class="social-inbox-actions">
+                <label class="social-search">
+                  <span>⌕</span>
+                  <input id="social-search-input" type="search" placeholder="Rechercher un message, un auteur…" autocomplete="off">
+                </label>
+                <div class="social-filters">
+                  <select id="social-account-filter" aria-label="Réseau">
+                    <option value="all">Tous les réseaux</option>
+                  </select>
+                  <select id="social-status-filter" aria-label="Filtre">
+                    <option value="priority">Prioritaires</option>
+                    <option value="unread">Non lus</option>
+                    <option value="reply">Réponses attendues</option>
+                    <option value="comments">Commentaires</option>
+                    <option value="content">Idées de contenu</option>
+                    <option value="all">Toutes les interactions</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="social-inbox-strip" id="social-inbox-strip" aria-live="polite"></div>
+            <div class="social-interaction-list" id="social-interaction-list"></div>
+          </article>
           <p class="disclaimer" data-i18n="social.disclaimer">Σ organises authorised professional interactions. It never asks for a social-network password and does not publish or send anything without confirmation.</p>
         </section>
 

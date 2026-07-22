@@ -1,4 +1,5 @@
 'use strict';
+// Sigma V4.11.0 — Social Inbox foundation.
 (() => {
   const PROVIDERS = {
     instagram: { name: 'Instagram', icon: 'IG', live: true, auth: 'meta', copy: 'instagramCopy', status: 'requiresApproval' },
@@ -15,6 +16,9 @@
     const accountList = document.getElementById('social-account-list');
     const accountFilter = document.getElementById('social-account-filter');
     const statusFilter = document.getElementById('social-status-filter');
+    const searchInput = document.getElementById('social-search-input');
+    const inboxSummary = document.getElementById('social-inbox-summary');
+    const inboxStrip = document.getElementById('social-inbox-strip');
     const connectDialog = document.getElementById('social-connect-dialog');
     const infoDialog = document.getElementById('social-info-dialog');
     const picker = document.getElementById('social-provider-picker');
@@ -254,15 +258,21 @@
     function filtered() {
       const account = accountFilter.value || 'all';
       const status = statusFilter.value || 'priority';
+      const query = String(searchInput?.value || '').trim().toLowerCase();
       return ctx.getState().socialInteractions.map(normalise).filter((item) => {
         if (item.handled) return false;
         if (account !== 'all' && item.accountId !== account) return false;
+        if (query) {
+          const haystack = `${item.title || ''} ${item.content || ''} ${item.sender || ''} ${providerName(item.provider)}`.toLowerCase();
+          if (!haystack.includes(query)) return false;
+        }
         if (status === 'priority') return item.priority >= 70;
+        if (status === 'unread') return item.unread !== false;
         if (status === 'reply') return item.requiresReply;
         if (status === 'comments') return item.type === 'comment';
         if (status === 'content') return item.contentIdea;
         return true;
-      }).sort((a, b) => b.priority - a.priority || String(b.receivedAt).localeCompare(String(a.receivedAt)));
+      }).sort((a, b) => b.priority - a.priority || Number(Boolean(b.unread)) - Number(Boolean(a.unread)) || String(b.receivedAt).localeCompare(String(a.receivedAt)));
     }
 
     function renderAccounts() {
@@ -275,9 +285,32 @@
     }
 
     function typeLabel(type) { return ctx.t(`social.${type === 'message' ? 'message' : type === 'comment' ? 'comment' : 'mention'}`); }
+
+    function renderInboxSummary() {
+      const active = ctx.getState().socialInteractions.map(normalise).filter((item) => !item.handled);
+      const unread = active.filter((item) => item.unread !== false).length;
+      const replies = active.filter((item) => item.requiresReply).length;
+      const priority = active.filter((item) => item.priority >= 70).length;
+      if (inboxSummary) {
+        inboxSummary.textContent = active.length
+          ? `${active.length} interaction${active.length > 1 ? 's' : ''} · ${unread} non lue${unread > 1 ? 's' : ''} · ${replies} réponse${replies > 1 ? 's' : ''} attendue${replies > 1 ? 's' : ''}`
+          : 'Aucune interaction disponible pour le moment.';
+      }
+      if (inboxStrip) {
+        inboxStrip.innerHTML = [
+          ['Prioritaires', priority, 'priority'],
+          ['Non lus', unread, 'unread'],
+          ['À répondre', replies, 'reply'],
+          ['Total', active.length, 'all']
+        ].map(([label, value, filter]) =>
+          `<button type="button" class="social-inbox-pill ${statusFilter.value === filter ? 'active' : ''}" data-inbox-filter="${filter}"><strong>${value}</strong><span>${label}</span></button>`
+        ).join('');
+      }
+    }
+
     function renderInteractions() {
       const rows = filtered();
-      list.innerHTML = rows.length ? rows.map((item) => `<article class="social-interaction ${providerClass(item.provider)}"><div class="social-source-mark">${PROVIDERS[item.provider]?.icon || '@'}</div><div class="social-interaction-main"><div class="social-interaction-top"><div><span class="social-type">${typeLabel(item.type)}</span><strong>${ctx.escape(item.title || '')}</strong></div><time>${ctx.formatDateTime(item.receivedAt)}</time></div><span class="social-sender">${ctx.escape(item.sender || providerName(item.provider))}</span><p>${ctx.escape(item.content || '')}</p><div class="social-tags"><span class="priority-${item.priority >= 85 ? 'high' : item.priority >= 65 ? 'medium' : 'low'}">${ctx.t('social.priority')} ${item.priority}</span>${item.requiresReply ? `<span>${ctx.t('social.replySuggested')}</span>` : ''}${item.contentIdea ? `<span>${ctx.t('social.contentIdea')}</span>` : ''}</div></div><div class="social-interaction-actions"><button class="button secondary small" type="button" data-social-task="${item.id}">${ctx.t('social.createTask')}</button><button class="text-button" type="button" data-social-remind="${item.id}">${ctx.t('social.remind')}</button><button class="icon-button" type="button" data-social-resolve="${item.id}" title="${ctx.t('social.markHandled')}">✓</button>${item.sourceUrl ? `<a class="icon-button" href="${ctx.escape(item.sourceUrl)}" target="_blank" rel="noopener" title="${ctx.t('social.openSource')}">↗</a>` : ''}</div></article>`).join('') : `<div class="empty-state">${ctx.t('social.noInteractions')}</div>`;
+      list.innerHTML = rows.length ? rows.map((item) => `<article class="social-interaction ${providerClass(item.provider)} ${item.unread !== false ? 'is-unread' : ''}"><div class="social-source-mark">${PROVIDERS[item.provider]?.icon || '@'}</div><div class="social-interaction-main"><div class="social-interaction-top"><div><span class="social-type">${typeLabel(item.type)}</span><strong>${ctx.escape(item.title || '')}</strong></div><time>${ctx.formatDateTime(item.receivedAt)}</time></div><span class="social-sender">${ctx.escape(item.sender || providerName(item.provider))}</span><p>${ctx.escape(item.content || '')}</p><div class="social-tags"><span class="priority-${item.priority >= 85 ? 'high' : item.priority >= 65 ? 'medium' : 'low'}">${ctx.t('social.priority')} ${item.priority}</span>${item.requiresReply ? `<span>${ctx.t('social.replySuggested')}</span>` : ''}${item.contentIdea ? `<span>${ctx.t('social.contentIdea')}</span>` : ''}</div></div><div class="social-interaction-actions">${item.unread !== false ? `<button class="text-button" type="button" data-social-read="${item.id}">Marquer lu</button>` : ''}<button class="button secondary small" type="button" data-social-task="${item.id}">${ctx.t('social.createTask')}</button><button class="text-button" type="button" data-social-remind="${item.id}">${ctx.t('social.remind')}</button><button class="icon-button" type="button" data-social-resolve="${item.id}" title="${ctx.t('social.markHandled')}">✓</button>${item.sourceUrl ? `<a class="icon-button" href="${ctx.escape(item.sourceUrl)}" target="_blank" rel="noopener" title="${ctx.t('social.openSource')}">↗</a>` : ''}</div></article>`).join('') : `<div class="empty-state">${ctx.t('social.noInteractions')}</div>`;
     }
 
     function renderDashboard() {
@@ -297,6 +330,7 @@
     function render() {
       renderProviderPicker();
       renderAccounts();
+      renderInboxSummary();
       renderInteractions();
       renderDashboard();
     }
@@ -327,6 +361,14 @@
       });
     });
     list.addEventListener('click', (event) => {
+      const read = event.target.closest('[data-social-read]');
+      if (read) {
+        ctx.updateState((state) => {
+          const item = state.socialInteractions.find((row) => row.id === read.dataset.socialRead);
+          if (item) item.unread = false;
+        });
+        return;
+      }
       const task = event.target.closest('[data-social-task]');
       if (task) {
         const item = ctx.getState().socialInteractions.find((row) => row.id === task.dataset.socialTask);
@@ -346,8 +388,15 @@
       const resolve = event.target.closest('[data-social-resolve]');
       if (resolve) ctx.updateState((state) => { const item = state.socialInteractions.find((row) => row.id === resolve.dataset.socialResolve); if (item) item.handled = true; });
     });
-    accountFilter.addEventListener('change', renderInteractions);
-    statusFilter.addEventListener('change', renderInteractions);
+    accountFilter.addEventListener('change', render);
+    statusFilter.addEventListener('change', render);
+    searchInput?.addEventListener('input', renderInteractions);
+    inboxStrip?.addEventListener('click', (event) => {
+      const button = event.target.closest('[data-inbox-filter]');
+      if (!button) return;
+      statusFilter.value = button.dataset.inboxFilter;
+      render();
+    });
     document.getElementById('social-sync').addEventListener('click', async () => {
       if (API) await refreshRemote();
       else {

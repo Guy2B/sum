@@ -2142,3 +2142,68 @@ body[data-owner-preview="true"] [data-pro-lock],body[data-owner-preview="true"] 
   border-radius: inherit;
   display: block;
 }
+
+/* Sigma V4.11.0 — Social Inbox */
+.social-inbox-card { overflow: hidden; }
+.social-inbox-actions { display: grid; gap: 10px; min-width: min(100%, 440px); }
+.social-search {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface-soft);
+}
+.social-search:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent); }
+.social-search span { color: var(--muted); font-size: 18px; }
+.social-search input {
+  width: 100%;
+  border: 0;
+  outline: 0;
+  color: var(--text);
+  background: transparent;
+  font: inherit;
+}
+.social-inbox-summary { margin: 7px 0 0; color: var(--muted); font-size: 12px; }
+.social-inbox-strip {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 12px 0 14px;
+  scrollbar-width: thin;
+}
+.social-inbox-pill {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 7px 11px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-soft);
+  color: var(--muted);
+  cursor: pointer;
+}
+.social-inbox-pill strong { color: var(--text); font-size: 13px; }
+.social-inbox-pill span { font-size: 11px; }
+.social-inbox-pill:hover,
+.social-inbox-pill.active { border-color: var(--accent); color: var(--text); background: color-mix(in srgb, var(--accent) 9%, var(--surface-soft)); }
+.social-interaction.is-unread { border-left: 3px solid var(--accent); }
+.social-interaction.is-unread .social-interaction-top strong::after {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-left: 7px;
+  border-radius: 50%;
+  vertical-align: middle;
+  background: var(--accent);
+}
+@media (max-width: 780px) {
+  .social-inbox-actions { min-width: 0; width: 100%; }
+  .social-filters { grid-template-columns: 1fr; }
+}
+
