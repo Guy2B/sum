@@ -1,0 +1,150 @@
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mcalendar-connector/.env.example
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mcalendar-connector/README.md
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mcalendar-connector/lib/providers/google.js
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mcalendar-connector/lib/providers/microsoft.js
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mcalendar-connector/lib/state.js
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mcalendar-connector/lib/store.js
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mcalendar-connector/package-lock.json
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mcalendar-connector/package.json
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mcalendar-connector/server.js
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mgoogle-apps-script/Code.gs
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mgoogle-apps-script/README.md
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mgoogle-apps-script/appsscript.json
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mlocal-ai-gateway/.env.example
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mlocal-ai-gateway/README.md
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mlocal-ai-gateway/package-lock.json
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mlocal-ai-gateway/package.json
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mlocal-ai-gateway/server.js
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mmail-connector/.env.example
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mmail-connector/.gitignore
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mmail-connector/README.md
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mmail-connector/START-MAIL-CONNECTOR.bat
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mmail-connector/lib/providers/gmail.js
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mmail-connector/lib/providers/imap.js
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mmail-connector/lib/providers/outlook.js
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mmail-connector/lib/state.js
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mmail-connector/lib/store.js
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mmail-connector/package-lock.json
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mmail-connector/package.json
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mmail-connector/server.js
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[mmail-connector/start-mail-connector.sh
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/.env.example
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/.gitignore
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/README.md
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/START-SOCIAL-CONNECTOR.bat
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/lib/providers/linkedin.js
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/lib/providers/meta.js
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/lib/providers/tiktok.js
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/lib/providers/x.js
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/lib/providers/youtube.js
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/lib/state.js
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/lib/store.js
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/package-lock.json
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/package.json
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/server.js
+[35mFILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/start-social-connector.sh
+[35mGOOGLE-CLOUD-PHASES-1-3.md[m[36m:[mPour Gemini, suivez `[1;31mbackend/[mgoogle-apps-script-gemini/README.md` puis renseignez `appsScriptAiProxyUrl`.
+[35mONLINE-TEST-SETUP.md[m[36m:[m- `[1;31mbackend/[mmail-connector/.env.example`
+[35mONLINE-TEST-SETUP.md[m[36m:[m- `[1;31mbackend/[msocial-connector/.env.example`
+[35mONLINE-TEST-SETUP.md[m[36m:[m- `[1;31mbackend/[mcalendar-connector/.env.example`
+[35mREADME.md[m[36m:[m- `[1;31mbackend/[mmail-connector` — Gmail, Outlook, Yahoo and GMX.
+[35mREADME.md[m[36m:[m- `[1;31mbackend/[msocial-connector` — Meta, YouTube, X, LinkedIn and TikTok adapters, subject to provider permissions and product approval.
+[35mREADME.md[m[36m:[m- `[1;31mbackend/[mcalendar-connector` — read-only Google Calendar and Microsoft Calendar OAuth import.
+[35mREADME.md[m[36m:[m- `[1;31mbackend/[mlocal-ai-gateway` — optional self-hosted Ollama rewriting gateway.
+[35mV2.2-TO-V2.5-RELEASE-NOTES.md[m[36m:[m6. Pour Gemini, déployer `[1;31mbackend/[mgoogle-apps-script-gemini` et renseigner l’URL `/exec`.
+[35mV4.8-MULTI-PROVIDERS.md[m[36m:[mCes fournisseurs ne peuvent pas être joints directement depuis GitHub Pages par IMAP/SMTP. V4.8 affiche leur assistant et réutilise `[1;31mbackend/[mmail-connector`, mais vous devez déployer ce connecteur sur Firebase/Cloud Run, puis renseigner :
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mcalendar-connector/.env.example
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mcalendar-connector/README.md
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mcalendar-connector/lib/providers/google.js
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mcalendar-connector/lib/providers/microsoft.js
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mcalendar-connector/lib/state.js
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mcalendar-connector/lib/store.js
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mcalendar-connector/package-lock.json
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mcalendar-connector/package.json
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mcalendar-connector/server.js
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mgoogle-apps-script/Code.gs
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mgoogle-apps-script/README.md
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mgoogle-apps-script/appsscript.json
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mlocal-ai-gateway/.env.example
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mlocal-ai-gateway/README.md
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mlocal-ai-gateway/package-lock.json
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mlocal-ai-gateway/package.json
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mlocal-ai-gateway/server.js
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mmail-connector/.env.example
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mmail-connector/.gitignore
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mmail-connector/README.md
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mmail-connector/START-MAIL-CONNECTOR.bat
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mmail-connector/lib/providers/gmail.js
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mmail-connector/lib/providers/imap.js
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mmail-connector/lib/providers/outlook.js
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mmail-connector/lib/state.js
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mmail-connector/lib/store.js
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mmail-connector/package-lock.json
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mmail-connector/package.json
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mmail-connector/server.js
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[mmail-connector/start-mail-connector.sh
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/.env.example
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/.gitignore
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/README.md
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/START-SOCIAL-CONNECTOR.bat
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/lib/providers/linkedin.js
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/lib/providers/meta.js
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/lib/providers/tiktok.js
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/lib/providers/x.js
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/lib/providers/youtube.js
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/lib/state.js
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/lib/store.js
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/package-lock.json
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/package.json
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/server.js
+[35mbackend/FILES.txt[m[36m:[m./[1;31mbackend/[msocial-connector/start-social-connector.sh
+[35mbackend/GOOGLE-CLOUD-PHASES-1-3.md[m[36m:[mPour Gemini, suivez `[1;31mbackend/[mgoogle-apps-script-gemini/README.md` puis renseignez `appsScriptAiProxyUrl`.
+[35mbackend/ONLINE-TEST-SETUP.md[m[36m:[m- `[1;31mbackend/[mmail-connector/.env.example`
+[35mbackend/ONLINE-TEST-SETUP.md[m[36m:[m- `[1;31mbackend/[msocial-connector/.env.example`
+[35mbackend/ONLINE-TEST-SETUP.md[m[36m:[m- `[1;31mbackend/[mcalendar-connector/.env.example`
+[35mbackend/README.md[m[36m:[m- `[1;31mbackend/[mmail-connector` — Gmail, Outlook, Yahoo and GMX.
+[35mbackend/README.md[m[36m:[m- `[1;31mbackend/[msocial-connector` — Meta, YouTube, X, LinkedIn and TikTok adapters, subject to provider permissions and product approval.
+[35mbackend/README.md[m[36m:[m- `[1;31mbackend/[mcalendar-connector` — read-only Google Calendar and Microsoft Calendar OAuth import.
+[35mbackend/README.md[m[36m:[m- `[1;31mbackend/[mlocal-ai-gateway` — optional self-hosted Ollama rewriting gateway.
+[35mbackend/V2.2-TO-V2.5-RELEASE-NOTES.md[m[36m:[m6. Pour Gemini, déployer `[1;31mbackend/[mgoogle-apps-script-gemini` et renseigner l’URL `/exec`.
+[35mbackend/V4.8-MULTI-PROVIDERS.md[m[36m:[mCes fournisseurs ne peuvent pas être joints directement depuis GitHub Pages par IMAP/SMTP. V4.8 affiche leur assistant et réutilise `[1;31mbackend/[mmail-connector`, mais vous devez déployer ce connecteur sur Firebase/Cloud Run, puis renseigner :
+[35mbackend/docs/BROWSER-AI-COMPATIBILITY.md[m[36m:[m- `[1;31mbackend/[mlocal-ai-gateway` offers optional self-hosted Ollama rewriting to Chrome, Edge, Safari and Firefox.
+[35mbackend/docs/GIT-INTEGRATION-SOCIAL.md[m[36m:[mDeploy `[1;31mbackend/[msocial-connector`, then set its public HTTPS URL in `config.js`.
+[35mbackend/docs/GITHUB-DEPLOYMENT.md[m[36m:[mGitHub Pages ne peut pas exécuter Node.js. Déployez `[1;31mbackend/[mmail-connector` séparément sur un hébergeur Node sécurisé. Ajoutez les secrets dans les variables d'environnement de cet hébergeur, puis renseignez l'URL publique dans `config.js` :
+[35mbackend/docs/GITHUB-UPGRADE-V1.6.1.md[m[36m:[m4. Upload the contents of the patch directory, preserving `modules/`, `[1;31mbackend/[m`, `docs/` and `scripts/` paths.
+[35mbackend/docs/GO-LIVE.md[m[36m:[mRecommended: enable the checkout platform's licence keys and use the automatic Lemon validation mode described in `[1;31mbackend/[mgoogle-apps-script/README.md`. The manual Sheet mode remains available for other platforms.
+[35mbackend/docs/GO-LIVE.md[m[36m:[mFollow `[1;31mbackend/[mgoogle-apps-script/README.md`.
+[35mbackend/docs/MAIL-CONNECTOR-V1.5.md[m[36m:[m2. Configure and start `[1;31mbackend/[mmail-connector` on port 8787.
+[35mbackend/docs/SOCIAL-CONNECTOR-SETUP.md[m[36m:[mcd [1;31mbackend/[msocial-connector
+[35mbackend/docs/SOCIAL-HUB-V1.6.md[m[36m:[mDeploy `[1;31mbackend/[msocial-connector`, then set:
+[35mbackend/docs/UNIFIED-MAIL-V1.6.1.md[m[36m:[mConfigure `[1;31mbackend/[mmail-connector` and set only its public URL in `config.js`. OAuth client secrets and encrypted mailbox credentials remain on the backend.
+[35mbackend/firebase.json[m[36m:[m  "hosting": {"public":".","ignore":["firebase.json","**/.*","**/node_modules/**","functions/**","[1;31mbackend/[m**","mobile/**"],"headers":[{"source":"/**","headers":[{"key":"Cross-Origin-Opener-Policy","value":"same-origin-allow-popups"}]}]}
+[35mbackend/legacy-render/render.yaml[m[36m:[m    rootDir: [1;31mbackend/[mmail-connector
+[35mbackend/legacy-render/render.yaml[m[36m:[m    rootDir: [1;31mbackend/[msocial-connector
+[35mbackend/legacy-render/render.yaml[m[36m:[m    rootDir: [1;31mbackend/[mcalendar-connector
+[35mbackend/modules/multi-provider-hub-v48.js[m[36m:[m    if (!cfg.mailConnectorBaseUrl) return alert(`Le connecteur sécurisé n'est pas encore déployé. Consultez [1;31mbackend/[mmail-connector et V4.8-MULTI-PROVIDERS.md pour connecter ${provider.toUpperCase()}.`);
+[35mbackend/render.yaml[m[36m:[m    rootDir: [1;31mbackend/[mmail-connector
+[35mbackend/render.yaml[m[36m:[m    rootDir: [1;31mbackend/[msocial-connector
+[35mbackend/render.yaml[m[36m:[m    rootDir: [1;31mbackend/[mcalendar-connector
+[35mbackend/scripts/validate.mjs[m[36m:[mif (!files.includes(path.join(root, '[1;31mbackend/[mcalendar-connector/server.js'))) { console.error('Calendar connector backend is missing.'); process.exit(1); }
+[35mbackend/scripts/validate.mjs[m[36m:[m  if (!files.includes(path.join(root, '[1;31mbackend/[msocial-connector/lib/providers', providerFile))) {
+[35mdocs/BROWSER-AI-COMPATIBILITY.md[m[36m:[m- `[1;31mbackend/[mlocal-ai-gateway` offers optional self-hosted Ollama rewriting to Chrome, Edge, Safari and Firefox.
+[35mdocs/GIT-INTEGRATION-SOCIAL.md[m[36m:[mDeploy `[1;31mbackend/[msocial-connector`, then set its public HTTPS URL in `config.js`.
+[35mdocs/GITHUB-DEPLOYMENT.md[m[36m:[mGitHub Pages ne peut pas exécuter Node.js. Déployez `[1;31mbackend/[mmail-connector` séparément sur un hébergeur Node sécurisé. Ajoutez les secrets dans les variables d'environnement de cet hébergeur, puis renseignez l'URL publique dans `config.js` :
+[35mdocs/GITHUB-UPGRADE-V1.6.1.md[m[36m:[m4. Upload the contents of the patch directory, preserving `modules/`, `[1;31mbackend/[m`, `docs/` and `scripts/` paths.
+[35mdocs/GO-LIVE.md[m[36m:[mRecommended: enable the checkout platform's licence keys and use the automatic Lemon validation mode described in `[1;31mbackend/[mgoogle-apps-script/README.md`. The manual Sheet mode remains available for other platforms.
+[35mdocs/GO-LIVE.md[m[36m:[mFollow `[1;31mbackend/[mgoogle-apps-script/README.md`.
+[35mdocs/MAIL-CONNECTOR-V1.5.md[m[36m:[m2. Configure and start `[1;31mbackend/[mmail-connector` on port 8787.
+[35mdocs/SOCIAL-CONNECTOR-SETUP.md[m[36m:[mcd [1;31mbackend/[msocial-connector
+[35mdocs/SOCIAL-HUB-V1.6.md[m[36m:[mDeploy `[1;31mbackend/[msocial-connector`, then set:
+[35mdocs/UNIFIED-MAIL-V1.6.1.md[m[36m:[mConfigure `[1;31mbackend/[mmail-connector` and set only its public URL in `config.js`. OAuth client secrets and encrypted mailbox credentials remain on the backend.
+[35mfirebase.json[m[36m:[m  "hosting": {"public":".","ignore":["firebase.json","**/.*","**/node_modules/**","functions/**","[1;31mbackend/[m**","mobile/**"],"headers":[{"source":"/**","headers":[{"key":"Cross-Origin-Opener-Policy","value":"same-origin-allow-popups"}]}]}
+[35mlegacy-render/render.yaml[m[36m:[m    rootDir: [1;31mbackend/[mmail-connector
+[35mlegacy-render/render.yaml[m[36m:[m    rootDir: [1;31mbackend/[msocial-connector
+[35mlegacy-render/render.yaml[m[36m:[m    rootDir: [1;31mbackend/[mcalendar-connector
+[35mmodules/multi-provider-hub-v48.js[m[36m:[m    if (!cfg.mailConnectorBaseUrl) return alert(`Le connecteur sécurisé n'est pas encore déployé. Consultez [1;31mbackend/[mmail-connector et V4.8-MULTI-PROVIDERS.md pour connecter ${provider.toUpperCase()}.`);
+[35mrender.yaml[m[36m:[m    rootDir: [1;31mbackend/[mmail-connector
+[35mrender.yaml[m[36m:[m    rootDir: [1;31mbackend/[msocial-connector
+[35mrender.yaml[m[36m:[m    rootDir: [1;31mbackend/[mcalendar-connector
+[35mscripts/validate.mjs[m[36m:[mif (!files.includes(path.join(root, '[1;31mbackend/[mcalendar-connector/server.js'))) { console.error('Calendar connector backend is missing.'); process.exit(1); }
+[35mscripts/validate.mjs[m[36m:[m  if (!files.includes(path.join(root, '[1;31mbackend/[msocial-connector/lib/providers', providerFile))) {
