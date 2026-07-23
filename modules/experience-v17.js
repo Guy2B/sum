@@ -155,11 +155,11 @@
         return sourceRow({ icon: provider === 'gmail' ? 'G' : provider === 'outlook' ? 'O' : provider === 'yahoo' ? 'Y!' : 'GMX', name: ({gmail:'Gmail / Google Workspace',outlook:'Outlook / Microsoft 365',yahoo:'Yahoo Mail',gmx:'GMX'})[provider], detail: account?.email || 'OAuth / mot de passe d’application', status: account ? (account.demo ? copy().demo : copy().connected) : copy().notConnected, state: account ? 'connected' : 'off', panel: 'mail' });
       });
       document.getElementById('v17-connections-mail').innerHTML = mailRows.join('');
-      const socialRows = ['instagram','facebook','youtube','x','linkedin','tiktok'].map((provider) => {
+      const socialRows = ['youtube','x','linkedin','tiktok'].map((provider) => {
         const account = social.find((row) => row.provider === provider);
         const restricted = provider === 'linkedin' || provider === 'tiktok';
         const status = account ? (account.demo ? copy().demo : copy().connected) : restricted ? copy().approval : copy().notConnected;
-        return sourceRow({ icon: ({instagram:'IG',facebook:'f',youtube:'▶',x:'X',linkedin:'in',tiktok:'♪'})[provider], name: ({instagram:'Instagram Business',facebook:'Facebook Pages',youtube:'YouTube',x:'X',linkedin:'LinkedIn',tiktok:'TikTok'})[provider], detail: restricted ? copy().partial : 'OAuth officiel', status, state: account ? 'connected' : restricted ? 'partial' : 'off', panel: 'social' });
+        return sourceRow({ icon: ({youtube:'▶',x:'X',linkedin:'in',tiktok:'♪'})[provider], name: ({youtube:'YouTube',x:'X',linkedin:'LinkedIn',tiktok:'TikTok'})[provider], detail: restricted ? copy().partial : 'OAuth officiel', status, state: account ? 'connected' : restricted ? 'partial' : 'off', panel: 'social' });
       });
       document.getElementById('v17-connections-social').innerHTML = socialRows.join('');
       const calendarRows = ['google','microsoft'].map((provider) => {
@@ -249,8 +249,8 @@
           { id: ctx.uid(), accountId: 'demo-mail', provider: 'gmail', subject: 'Proposition et délai pour vendredi', sender: 'Martin Client', snippet: 'Pouvez-vous confirmer le tarif et le calendrier aujourd’hui ?', receivedAt: new Date(now.getTime() - 22 * 3600000).toISOString(), unread: true, importance: 'high', needsReply: true },
           { id: ctx.uid(), accountId: 'demo-mail', provider: 'gmail', subject: 'Renouvellement assurance', sender: 'Assurance', snippet: 'Un document est nécessaire avant le renouvellement.', receivedAt: new Date(now.getTime() - 30 * 3600000).toISOString(), unread: true, importance: 'normal', needsReply: false }
         ];
-        state.socialAccounts = [{ id: 'demo-social', provider: profile === 'creator' ? 'youtube' : 'instagram', label: 'Compte démo', demo: true, status: 'connected' }];
-        state.socialInteractions = [{ id: ctx.uid(), accountId: 'demo-social', provider: profile === 'creator' ? 'youtube' : 'instagram', type: 'comment', title: profile === 'creator' ? 'Question sur votre offre' : 'Demande de prix', content: 'Bonjour, pouvez-vous m’envoyer les conditions et le tarif ?', sender: 'Nadia', receivedAt: new Date(now.getTime() - 5 * 3600000).toISOString(), unread: true, requiresReply: true, priority: 88, contentIdea: profile === 'creator', handled: false }];
+        state.socialAccounts = [{ id: 'demo-social', provider: 'youtube', label: 'Compte démo', demo: true, status: 'connected' }];
+        state.socialInteractions = [{ id: ctx.uid(), accountId: 'demo-social', provider: 'youtube', type: 'comment', title: profile === 'creator' ? 'Question sur votre offre' : 'Demande de prix', content: 'Bonjour, pouvez-vous m’envoyer les conditions et le tarif ?', sender: 'Nadia', receivedAt: new Date(now.getTime() - 5 * 3600000).toISOString(), unread: true, requiresReply: true, priority: 88, contentIdea: profile === 'creator', handled: false }];
         state.health = [{ id: ctx.uid(), date: iso(0), source: 'demo', sleep: profile === 'life' ? 6.1 : 6.4, energy: profile === 'life' ? 4 : 5, stress: 7, steps: 4100, hrv: 38 }];
         state.healthSources = [{ provider: 'apple', status: 'connected', mode: 'demo', lastSync: now.toISOString() }];
         state.finance = [{ id: ctx.uid(), type: 'income', amount: 1200, description: 'Acompte client', category: 'Client', date: iso(-3) }, { id: ctx.uid(), type: 'expense', amount: 180, description: 'Logiciels', category: 'Abonnements', date: iso(-2) }];

@@ -2,8 +2,6 @@
 // Sigma V4.12.0 — Social Career Command Center.
 (() => {
   const PROVIDERS = {
-    instagram: { name: 'Instagram', icon: 'IG', live: true, auth: 'meta', copy: 'instagramCopy', status: 'requiresApproval' },
-    facebook: { name: 'Facebook Pages', icon: 'f', live: true, auth: 'meta', copy: 'facebookCopy', status: 'requiresApproval' },
     youtube: { name: 'YouTube', icon: '▶', live: true, auth: 'google', copy: 'youtubeCopy', status: 'professionalOnly' },
     x: { name: 'X', icon: 'X', live: true, auth: 'oauth-pkce', copy: 'xCopy', status: 'requiresApproval' },
     linkedin: { name: 'LinkedIn', icon: 'in', live: true, auth: 'oauth', copy: 'linkedinCopy', status: 'requiresApproval' },
@@ -350,14 +348,6 @@
         location.href = `${API}/api/social/connect/${provider}`;
         return;
       }
-      if ((provider === 'facebook' || provider === 'instagram') && window.SigmaMeta) {
-        connectDialog.close();
-        window.SigmaMeta.connect().catch((error) => {
-          console.error('[SigmaMeta] connection failed', error);
-          ctx.toast(error.message || ctx.t('common.error'), 'error');
-        });
-        return;
-      }
       if (provider === 'linkedin' && window.SigmaLinkedIn) {
         connectDialog.close();
         window.SigmaLinkedIn.connect().catch((error) => {
@@ -404,7 +394,7 @@
     function connectedAccounts() {
       const byKey = new Map();
       for (const account of ctx.getState().socialAccounts || []) {
-        if (!account || account.connected === false || account.status === 'disconnected') continue;
+        if (!account || ['facebook','instagram','meta'].includes(account.provider) || account.connected === false || account.status === 'disconnected') continue;
         const key = `${account.provider || 'unknown'}:${account.id || account.externalId || account.username || account.label || 'default'}`;
         byKey.set(key, account);
       }
@@ -418,7 +408,7 @@
     }
 
     function counts() {
-      const rows = ctx.getState().socialInteractions.map(normalise).filter((item) => !item.handled);
+      const rows = ctx.getState().socialInteractions.map(normalise).filter((item) => !item.handled && !['facebook','instagram','meta'].includes(item.provider));
       return {
         accounts: connectedAccounts().length,
         priority: rows.filter((item) => item.priority >= 70).length,
@@ -432,7 +422,7 @@
       const status = statusFilter.value || 'priority';
       const query = String(searchInput?.value || '').trim().toLowerCase();
       return ctx.getState().socialInteractions.map(normalise).filter((item) => {
-        if (item.handled) return false;
+        if (item.handled || ['facebook','instagram','meta'].includes(item.provider)) return false;
         if (account !== 'all' && item.accountId !== account) return false;
         if (query) {
           const haystack = `${item.title || ''} ${item.content || ''} ${item.sender || ''} ${providerName(item.provider)}`.toLowerCase();

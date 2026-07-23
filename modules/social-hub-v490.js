@@ -1,7 +1,6 @@
 'use strict';
 (() => {
   const providerMeta = {
-    meta: { icon:'◎', name:'Facebook + Instagram', phase:'V4.9.1 · OAuth sécurisé' },
     linkedin: { icon:'in', name:'LinkedIn', phase:'V4.9.2' },
     youtube: { icon:'▶', name:'YouTube', phase:'V4.9.3' },
     tiktok: { icon:'♪', name:'TikTok', phase:'V4.9.3' },

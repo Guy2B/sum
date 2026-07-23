@@ -4,7 +4,6 @@ window.SIGMA_PLATFORM_CONFIG = Object.freeze({
   microsoftTenant: 'common',
   microsoftRedirectUri: 'https://guy2b.github.io/sum/app.html',
   yahooClientId: '',
-  metaAppId: '',
   linkedinClientId: '',
   tiktokClientKey: '',
   xApiBaseUrl: '',
