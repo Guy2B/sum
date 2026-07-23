@@ -18,6 +18,7 @@
       source:{domain,provider:text(source.provider)||'sigma',sourceType:text(source.sourceType)||domain,sourceId,accountId:text(source.accountId),sourceUrl:text(source.sourceUrl),importedAt:iso(source.importedAt)||now,sourceUpdatedAt:iso(source.sourceUpdatedAt)},
       content:{title:text(content.title),summary:text(content.summary),body:text(content.body),sender:text(content.sender),recipients:Array.isArray(content.recipients)?content.recipients.map(text).filter(Boolean):[],receivedAt:iso(content.receivedAt)||now,language:text(content.language)||'und'},
       entities:{contacts:Array.isArray(entities.contacts)?entities.contacts:[],companies:Array.isArray(entities.companies)?entities.companies:[],projects:Array.isArray(entities.projects)?entities.projects:[],objectives:Array.isArray(entities.objectives)?entities.objectives:[],dates:Array.isArray(entities.dates)?entities.dates:[]},
+      facts:{important:Boolean(input.facts?.important),essential:Boolean(input.facts?.essential),urgent:Boolean(input.facts?.urgent),starred:Boolean(input.facts?.starred),replyExpected:Boolean(input.facts?.replyExpected),effortMinutes:Number(input.facts?.effortMinutes)||null,projectId:text(input.facts?.projectId),objectiveId:text(input.facts?.objectiveId)},
       intelligence:input.intelligence||null,recommendation:input.recommendation||null,
       approval:input.approval||{status:'not_required',approvedAt:null,approvedBy:'',rejectionReason:''},
       execution:input.execution||{status:'not_started',executedAt:null,resultReference:'',errorCode:''},

@@ -8,6 +8,8 @@ service cloud.firestore {
     match /users/{uid}/socialProviders/{provider} { allow read: if owner(uid); allow write: if false; }
     match /users/{uid}/socialSync/{provider} { allow read: if owner(uid); allow write: if false; }
     match /users/{uid}/signals/{signalId} { allow read: if owner(uid); allow write: if false; }
+    match /users/{uid}/entities/{entityId} { allow read: if owner(uid); allow write: if false; }
+    match /users/{uid}/signalRelations/{relationId} { allow read: if owner(uid); allow write: if false; }
     match /users/{uid}/actionRequests/{requestId} { allow read: if owner(uid); allow write: if false; }
     match /users/{uid}/auditEvents/{eventId} { allow read: if owner(uid); allow write: if false; }
     match /users/{uid}/todayProjections/{date} { allow read: if owner(uid); allow write: if false; }

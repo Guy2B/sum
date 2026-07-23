@@ -10,12 +10,13 @@
   const d=deps(),signals=d.normalizer.normalizeWorkspace(state,options);
   return signals.map(signal=>{
    const classification=d.classifier.classify(signal);
-   const intelligence=d.priority.score(signal,classification);
-   const recommendation=d.recommendation.recommend(signal,intelligence);
    const entities=d.relationships.resolve(signal,state);
-   const enriched={...signal,entities:{...signal.entities,...entities},intelligence,recommendation,approval:{...signal.approval,status:recommendation.requiresApproval?'pending':'not_required'}};
+   const relatedSignal={...signal,entities:{...signal.entities,...entities}};
+   const intelligence=d.priority.score(relatedSignal,classification,options);
+   const recommendation=d.recommendation.recommend(relatedSignal,intelligence);
+   const enriched={...relatedSignal,intelligence,recommendation,approval:{...signal.approval,status:recommendation.requiresApproval?'pending':'not_required'}};
    return{...enriched,explanation:d.explanation.explain(enriched)};
   }).sort((a,b)=>b.intelligence.priorityScore-a.intelligence.priorityScore||String(b.content.receivedAt).localeCompare(String(a.content.receivedAt)));
  }
- return Object.freeze({version:'1.2.0-phases-3-7',analyzeWorkspace});
+ return Object.freeze({version:'5.3.0',analyzeWorkspace});
 });
