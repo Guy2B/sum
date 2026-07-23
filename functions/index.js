@@ -110,7 +110,226 @@ function base64url(buffer){return Buffer.from(buffer).toString('base64').replace
 exports.xCreateOAuthSession=onCall(async req=>{const uid=requireAuth(req),{clientId,redirectUri}=xConfig(),state=crypto.randomBytes(32).toString('hex'),verifier=base64url(crypto.randomBytes(48)),challenge=base64url(crypto.createHash('sha256').update(verifier).digest());await db.doc(`socialOAuthStates/${state}`).set({uid,provider:'x',verifier,returnUrl:safeReturnUrl(req.data?.returnUrl),expiresAt:admin.firestore.Timestamp.fromMillis(Date.now()+10*60*1000)});const q=new URLSearchParams({response_type:'code',client_id:clientId,redirect_uri:redirectUri,scope:'tweet.read users.read offline.access',state,code_challenge:challenge,code_challenge_method:'S256'});return{authUrl:`https://x.com/i/oauth2/authorize?${q}`};});
 exports.xOAuthCallback=onRequest({secrets:[X_CLIENT_SECRET]},async(req,res)=>{const back=(base,status,message='')=>{const u=new URL(base||META_PUBLIC_APP_URL.value());u.searchParams.set('sigmaX',status);if(message)u.searchParams.set('message',message.slice(0,180));res.redirect(u.toString());};try{const state=String(req.query.state||''),code=String(req.query.code||''),ref=db.doc(`socialOAuthStates/${state}`),snap=await ref.get();if(!snap.exists||!code)throw new Error('OAuth session expired');const session=snap.data(),{clientId,redirectUri}=xConfig();const auth=Buffer.from(`${clientId}:${X_CLIENT_SECRET.value()}`).toString('base64');const r=await fetch('https://api.x.com/2/oauth2/token',{method:'POST',headers:{authorization:`Basic ${auth}`,'content-type':'application/x-www-form-urlencoded'},body:new URLSearchParams({code,grant_type:'authorization_code',redirect_uri:redirectUri,code_verifier:session.verifier})});const body=await r.json();if(!r.ok||!body.access_token)throw new Error(body.error_description||'X token exchange failed');await db.doc(`socialPrivateTokens/${session.uid}/providers/x`).set({provider:'x',...body,updatedAt:admin.firestore.FieldValue.serverTimestamp()});await db.doc(`users/${session.uid}/socialProviders/x`).set({provider:'x',connected:true,updatedAt:admin.firestore.FieldValue.serverTimestamp()},{merge:true});await ref.delete();back(session.returnUrl,'connected');}catch(e){console.error('xOAuthCallback',e);back(META_PUBLIC_APP_URL.value(),'error',e.message);}});
 exports.xStatus=onCall(async req=>{const uid=requireAuth(req),snap=await db.doc(`users/${uid}/socialProviders/x`).get();return snap.exists?snap.data():{provider:'x',connected:false};});
-exports.xSync=onCall({secrets:[X_CLIENT_SECRET]},async req=>{const uid=requireAuth(req),snap=await db.doc(`socialPrivateTokens/${uid}/providers/x`).get();if(!snap.exists)throw new HttpsError('failed-precondition','X is not connected');const token=snap.data().access_token;const me=await fetch('https://api.x.com/2/users/me?user.fields=id,name,username,profile_image_url,public_metrics',{headers:{authorization:`Bearer ${token}`}});const body=await me.json();if(!me.ok)throw new HttpsError('internal',body.detail||body.title||'X profile request failed');const user=body.data||{};return{accounts:[{id:user.id,externalId:user.id,provider:'x',displayName:user.name,title:user.name,username:user.username,avatar:user.profile_image_url,connected:true}],metrics:Object.entries(user.public_metrics||{}).map(([name,value])=>({id:`x_${user.id}_${name}`,externalId:`${user.id}_${name}`,provider:'x',name,title:name,value,period:'current'})),posts:[],messages:[],comments:[],notifications:[],syncedAt:new Date().toISOString()};});
+exports.xSync=onCall({secrets:[X_CLIENT_SECRET]},async req=>{
+  const uid=requireAuth(req);
+  const tokenRef=db.doc(`socialPrivateTokens/${uid}/providers/x`);
+  const snap=await tokenRef.get();
+
+  if(!snap.exists){
+    throw new HttpsError(
+      'failed-precondition',
+      'X is not connected. Disconnect and reconnect your X account.'
+    );
+  }
+
+  const storedTokens=snap.data()||{};
+
+  async function fetchCurrentUser(accessToken){
+    const response=await fetch(
+      'https://api.x.com/2/users/me?user.fields=id,name,username,profile_image_url,public_metrics',
+      {
+        headers:{
+          authorization:`Bearer ${accessToken}`
+        }
+      }
+    );
+
+    const body=await response.json().catch(()=>({}));
+
+    console.log('xSync users/me response',{
+      uid,
+      status:response.status,
+      ok:response.ok,
+      errorCode:body.errors?.[0]?.code||body.error||'',
+      errorTitle:body.title||'',
+      errorDetail:body.detail||body.errors?.[0]?.message||''
+    });
+
+    return{response,body};
+  }
+
+  async function refreshAccessToken(refreshToken){
+    const {clientId}=xConfig();
+
+    const auth=Buffer.from(
+      `${clientId}:${X_CLIENT_SECRET.value()}`
+    ).toString('base64');
+
+    const response=await fetch(
+      'https://api.x.com/2/oauth2/token',
+      {
+        method:'POST',
+        headers:{
+          authorization:`Basic ${auth}`,
+          'content-type':'application/x-www-form-urlencoded'
+        },
+        body:new URLSearchParams({
+          grant_type:'refresh_token',
+          refresh_token:refreshToken,
+          client_id:clientId
+        })
+      }
+    );
+
+    const body=await response.json().catch(()=>({}));
+
+    console.log('xSync token refresh response',{
+      uid,
+      status:response.status,
+      ok:response.ok,
+      error:body.error||'',
+      errorDescription:body.error_description||''
+    });
+
+    if(!response.ok||!body.access_token){
+      throw new HttpsError(
+        'failed-precondition',
+        'X authorization has expired. Disconnect and reconnect your X account.'
+      );
+    }
+
+    await tokenRef.set({
+      provider:'x',
+      access_token:body.access_token,
+      refresh_token:body.refresh_token||refreshToken,
+      token_type:body.token_type||storedTokens.token_type||'bearer',
+      expires_in:body.expires_in||storedTokens.expires_in||0,
+      scope:body.scope||storedTokens.scope||'',
+      refreshedAt:admin.firestore.FieldValue.serverTimestamp(),
+      updatedAt:admin.firestore.FieldValue.serverTimestamp()
+    },{merge:true});
+
+    return body.access_token;
+  }
+
+  let accessToken=storedTokens.access_token;
+
+  if(!accessToken){
+    throw new HttpsError(
+      'failed-precondition',
+      'X access token is missing. Disconnect and reconnect your X account.'
+    );
+  }
+
+  let result=await fetchCurrentUser(accessToken);
+
+  if(
+    result.response.status===401 &&
+    storedTokens.refresh_token
+  ){
+    accessToken=await refreshAccessToken(
+      storedTokens.refresh_token
+    );
+
+    result=await fetchCurrentUser(accessToken);
+  }
+
+  const {response,body}=result;
+
+  if(!response.ok){
+    const detail=
+      body.detail||
+      body.title||
+      body.errors?.[0]?.message||
+      'X profile request failed';
+
+    if(response.status===401){
+      throw new HttpsError(
+        'failed-precondition',
+        'X authorization has expired. Disconnect and reconnect your X account.'
+      );
+    }
+
+    if(response.status===403){
+      throw new HttpsError(
+        'permission-denied',
+        `X denied access to the profile: ${detail}`
+      );
+    }
+
+    if(response.status===429){
+      throw new HttpsError(
+        'resource-exhausted',
+        'X API rate limit reached. Try again later.'
+      );
+    }
+
+    console.error('xSync X API failure',{
+      uid,
+      status:response.status,
+      detail
+    });
+
+    throw new HttpsError(
+      'internal',
+      `X API error ${response.status}: ${detail}`
+    );
+  }
+
+  const user=body.data||{};
+
+  if(!user.id){
+    console.error(
+      'xSync incomplete X profile response',
+      {uid}
+    );
+
+    throw new HttpsError(
+      'data-loss',
+      'X returned an incomplete profile response.'
+    );
+  }
+
+  const account={
+    id:user.id,
+    externalId:user.id,
+    provider:'x',
+    displayName:user.name||user.username||'X',
+    title:user.name||user.username||'X',
+    username:user.username||'',
+    avatar:user.profile_image_url||'',
+    connected:true
+  };
+
+  await db.doc(
+    `users/${uid}/socialProviders/x`
+  ).set({
+    provider:'x',
+    connected:true,
+    accounts:[account],
+    displayName:account.displayName,
+    avatar:account.avatar,
+    permissions:[
+      'tweet.read',
+      'users.read',
+      'offline.access'
+    ],
+    updatedAt:
+      admin.firestore.FieldValue.serverTimestamp()
+  },{merge:true});
+
+  return{
+    accounts:[account],
+
+    metrics:Object.entries(
+      user.public_metrics||{}
+    ).map(([name,value])=>({
+      id:`x_${user.id}_${name}`,
+      externalId:`${user.id}_${name}`,
+      provider:'x',
+      name,
+      title:name,
+      value,
+      period:'current'
+    })),
+
+    posts:[],
+    messages:[],
+    comments:[],
+    notifications:[],
+    syncedAt:new Date().toISOString()
+  };
+});
 exports.xDisconnect=onCall(async req=>{const uid=requireAuth(req);await Promise.all([db.doc(`socialPrivateTokens/${uid}/providers/x`).delete(),db.doc(`users/${uid}/socialProviders/x`).delete()]);return{disconnected:true};});
 
 // Sigma V4.10.2 — TikTok Login Kit + connected-state return fix.
