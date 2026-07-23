@@ -2773,3 +2773,32 @@ a.social-icon-action {
   .career-job-actions a { flex: 1; text-align: center; }
 }
 
+
+/* Sigma Intelligence Engine V1 — read-only Today beta */
+.v1-today-controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
+.v1-today-beta { display: grid; gap: 10px; }
+.v1-beta-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border: 1px solid var(--border); border-radius: 14px; background: var(--surface-2); }
+.v1-beta-heading h3 { margin: 3px 0 0; font-size: 14px; }
+.v1-readonly-pill,.v1-approval { display: inline-flex; align-items: center; padding: 5px 8px; border-radius: 999px; background: color-mix(in srgb, var(--primary) 10%, var(--surface)); border: 1px solid color-mix(in srgb, var(--primary) 25%, var(--border)); color: var(--primary); font-size: 8px; font-weight: 800; white-space: nowrap; }
+.v1-signal-card { display: grid; grid-template-columns: 34px minmax(0,1fr) 155px; gap: 12px; align-items: start; padding: 14px; border: 1px solid var(--border); border-radius: 15px; background: var(--surface); }
+.v1-signal-rank { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 10px; background: var(--surface-2); font-size: 11px; font-weight: 900; }
+.v1-signal-meta,.v1-score-row { display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
+.v1-signal-meta span,.v1-signal-meta b { font-size: 8px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+.v1-signal-meta b { margin-left: auto; color: var(--primary); }
+.v1-signal-body h3 { margin: 7px 0 3px; font-size: 13px; }
+.v1-signal-body p { margin: 3px 0; color: var(--muted); font-size: 9px; line-height: 1.55; }
+.v1-signal-sender { color: var(--text) !important; font-weight: 700; }
+.v1-score-row { margin-top: 10px; }
+.v1-score-badge { display: inline-flex; align-items: center; gap: 5px; padding: 5px 7px; border-radius: 9px; background: var(--surface-2); }
+.v1-score-badge small { color: var(--muted); font-size: 7px; }
+.v1-score-badge strong { font-size: 9px; }
+.v1-signal-body details { margin-top: 9px; }
+.v1-signal-body summary { cursor: pointer; color: var(--primary); font-size: 9px; font-weight: 800; }
+.v1-signal-body ul { margin: 7px 0 0; padding-left: 17px; color: var(--muted); font-size: 9px; line-height: 1.5; }
+.v1-uncertainty { padding: 7px 8px; border-radius: 8px; border: 1px dashed var(--border-strong); }
+.v1-signal-action { display: grid; justify-items: start; gap: 7px; }
+.v1-signal-action > strong { font-size: 10px; line-height: 1.35; }
+.v1-signal-action > small { color: var(--muted); font-size: 8px; }
+@media (max-width: 760px) { .v1-signal-card { grid-template-columns: 30px minmax(0,1fr); } .v1-signal-action { grid-column: 2; } .v1-beta-heading { align-items: flex-start; flex-direction: column; } }
+.v1-primary-toggle{display:flex;align-items:center;gap:.45rem;font-size:.78rem;color:var(--text-muted,#6b7280)}
+.v1-primary-toggle input{accent-color:currentColor}.v1-signal-action button{width:100%}.v1-signal-action small{max-width:190px;line-height:1.35}

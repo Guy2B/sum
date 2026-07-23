@@ -64,7 +64,26 @@
   <script defer src="modules/ai-settings.js"></script>
   <script defer src="modules/coach-v121.js"></script>
   <script defer src="modules/dashboard.js"></script>
+  <script defer src="modules/intelligence/core/signal-schema.js?v=5000"></script>
+  <script defer src="modules/intelligence/core/signal-validator.js?v=5000"></script>
+  <script defer src="modules/intelligence/adapters/_shared.js?v=5000"></script>
+  <script defer src="modules/intelligence/adapters/mail-signal-adapter.js?v=5000"></script>
+  <script defer src="modules/intelligence/adapters/social-signal-adapter.js?v=5000"></script>
+  <script defer src="modules/intelligence/adapters/task-signal-adapter.js?v=5000"></script>
+  <script defer src="modules/intelligence/adapters/event-signal-adapter.js?v=5000"></script>
+  <script defer src="modules/intelligence/adapters/opportunity-signal-adapter.js?v=5000"></script>
+  <script defer src="modules/intelligence/services/classification-service.js?v=5000"></script>
+  <script defer src="modules/intelligence/services/priority-service.js?v=5000"></script>
+  <script defer src="modules/intelligence/services/recommendation-service.js?v=5000"></script>
+  <script defer src="modules/intelligence/services/relationship-service.js?v=5010"></script>
+  <script defer src="modules/intelligence/services/explanation-service.js?v=5010"></script>
+  <script defer src="modules/intelligence/services/normalization-service.js?v=5000"></script>
+  <script defer src="modules/intelligence/services/engine.js?v=5000"></script>
+  <script defer src="modules/intelligence/repositories/signal-repository.js?v=5070"></script>
+  <script defer src="modules/intelligence/services/action-service.js?v=5070"></script>
   <script defer src="modules/intelligence-v17.js"></script>
+  <script defer src="modules/intelligence/diagnostics/comparison-bridge.js?v=5010"></script>
+  <script defer src="modules/intelligence/ui/today-beta.js?v=5010"></script>
   <script defer src="modules/experience-v17.js?v=4810"></script>
   <script defer src="app.js?v=4910"></script>
   <script defer src="v4-system.js?v=4910"></script>
@@ -166,8 +185,8 @@
           </div>
 
           <section class="v17-today-shell">
-            <div class="v17-today-heading"><div><span class="eyebrow" id="v17-today-eyebrow">Votre attention aujourd’hui</span><h2 id="v17-today-title">Trois décisions utiles</h2></div><button class="text-button" id="v17-full-dashboard-toggle" type="button">Voir le tableau complet</button></div>
-            <div id="v17-today-recommendations" class="v17-recommendations"></div>
+            <div class="v17-today-heading"><div><span class="eyebrow" id="v17-today-eyebrow">Votre attention aujourd’hui</span><h2 id="v17-today-title">Trois décisions utiles</h2></div><div class="v1-today-controls"><button class="text-button" id="v1-today-mode-toggle" type="button" aria-pressed="false">Intelligence V1 Beta</button><button class="text-button" id="v17-full-dashboard-toggle" type="button">Voir le tableau complet</button></div></div>
+            <div id="v17-today-recommendations" class="v17-recommendations"></div><div id="v1-today-beta" class="v1-today-beta" hidden></div>
             <div class="v17-trust-strip">
               <div><span id="v17-confidence-label">Confiance du conseil</span><strong id="v17-confidence-value">0%</strong><div class="progress-track"><span id="v17-confidence-bar"></span></div></div>
               <div><span id="v17-sources-label">Sources prises en compte</span><strong id="v17-source-count">0 sources actives</strong><small id="v17-context-graph-summary">0 signals · 0 relations</small></div>

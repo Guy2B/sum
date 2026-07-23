@@ -30,8 +30,10 @@ if (!configured) {
   const appMod = await import('https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js');
   const authMod = await import('https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js');
   const fs = await import('https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js');
+  const fn = await import('https://www.gstatic.com/firebasejs/11.1.0/firebase-functions.js');
   const app = appMod.initializeApp(cfg);
-  cloud.auth=authMod.getAuth(app); cloud.db=fs.getFirestore(app); cloud.api={...authMod,...fs};
+  cloud.auth=authMod.getAuth(app); cloud.db=fs.getFirestore(app); cloud.functions=fn.getFunctions(app,'europe-west1'); cloud.api={...authMod,...fs,...fn};
+  cloud.callFunction=async(name,data={})=>{const callable=fn.httpsCallable(cloud.functions,name);const result=await callable(data);return result.data;};
   cloud.signInGoogle=()=>authMod.signInWithPopup(cloud.auth,new authMod.GoogleAuthProvider());
   cloud.signInEmail=(e,p)=>authMod.signInWithEmailAndPassword(cloud.auth,e,p);
   cloud.signUpEmail=(e,p)=>authMod.createUserWithEmailAndPassword(cloud.auth,e,p);

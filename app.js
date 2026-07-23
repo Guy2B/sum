@@ -3,7 +3,7 @@
   const { init: initI18n, t, getLanguage, setLanguage } = window.SUM_I18N;
   const {
     initTasks, initProjects, initFinance, initHealth,
-    initJournal, initLearning, initPlanner, initCalendarConnect, initContext, initMail, initSocial, initAiSettings, initCoach, initDashboard, initExperienceV17
+    initJournal, initLearning, initPlanner, initCalendarConnect, initContext, initMail, initSocial, initAiSettings, initCoach, initDashboard, initExperienceV17, initTodayIntelligenceV1
   } = window.SUM_MODULES;
   const CONFIG = window.SUM_CONFIG;
   const EDITIONS = window.SUM_EDITIONS;
@@ -932,6 +932,7 @@
     initCoach(ctx);
     initDashboard(ctx);
     initExperienceV17?.(ctx);
+    initTodayIntelligenceV1?.(ctx);
     subscribe(updateSidebarProfile);
     document.addEventListener('languagechange', updateSidebarProfile);
     updateSidebarProfile();

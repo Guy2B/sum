@@ -1,0 +1,22 @@
+'use strict';
+const ALLOWED_ACTIONS=new Set(['read','reply','schedule','create_task','create_reminder','create_opportunity','prepare_meeting','create_content_idea','ignore','archive']);
+const MAX_SIGNALS=100;
+function cleanSignal(raw,uid){
+ if(!raw||typeof raw!=='object')throw new Error('Invalid signal');
+ const id=String(raw.id||'').slice(0,300);if(!id)throw new Error('Signal id is required');
+ const clone=JSON.parse(JSON.stringify(raw));clone.id=id;clone.userId=uid;clone.schemaVersion=1;clone.updatedAt=new Date().toISOString();
+ delete clone.approval?.approvedBy;
+ return clone;
+}
+function createHandlers({onCall,HttpsError,admin,db}){
+ const auth=req=>{if(!req.auth)throw new HttpsError('unauthenticated','Authentication required');return req.auth.uid;};
+ const audit=(uid,type,data)=>db.collection(`users/${uid}/auditEvents`).add({type,...data,userId:uid,createdAt:admin.firestore.FieldValue.serverTimestamp(),engineVersion:'1.2.0'});
+ return {
+  syncIntelligenceSignals:onCall(async req=>{const uid=auth(req),rows=Array.isArray(req.data?.signals)?req.data.signals:[];if(rows.length>MAX_SIGNALS)throw new HttpsError('invalid-argument',`Maximum ${MAX_SIGNALS} signals`);const batch=db.batch();for(const raw of rows){let signal;try{signal=cleanSignal(raw,uid);}catch(e){throw new HttpsError('invalid-argument',e.message);}const ref=db.doc(`users/${uid}/signals/${encodeURIComponent(signal.id)}`);batch.set(ref,{...signal,serverUpdatedAt:admin.firestore.FieldValue.serverTimestamp()},{merge:true});}await batch.commit();await audit(uid,'signals.synced',{count:rows.length});return{synced:rows.length};}),
+  createIntelligenceActionRequest:onCall(async req=>{const uid=auth(req),signalId=String(req.data?.signalId||''),action=String(req.data?.action||'');if(!signalId||!ALLOWED_ACTIONS.has(action))throw new HttpsError('invalid-argument','Invalid signal or action');const signalRef=db.doc(`users/${uid}/signals/${encodeURIComponent(signalId)}`),snap=await signalRef.get();if(!snap.exists)throw new HttpsError('not-found','Signal not found');const ref=db.collection(`users/${uid}/actionRequests`).doc();await ref.set({userId:uid,signalId,action,label:String(req.data?.label||action).slice(0,160),status:'pending',createdAt:admin.firestore.FieldValue.serverTimestamp(),updatedAt:admin.firestore.FieldValue.serverTimestamp()});await audit(uid,'action.requested',{requestId:ref.id,signalId,action});return{requestId:ref.id,status:'pending'};}),
+  approveIntelligenceAction:onCall(async req=>{const uid=auth(req),id=String(req.data?.requestId||''),ref=db.doc(`users/${uid}/actionRequests/${id}`),snap=await ref.get();if(!snap.exists)throw new HttpsError('not-found','Action request not found');if(snap.data().status!=='pending')throw new HttpsError('failed-precondition','Action is not pending');await ref.update({status:'approved',approvedBy:uid,approvedAt:admin.firestore.FieldValue.serverTimestamp(),updatedAt:admin.firestore.FieldValue.serverTimestamp()});await audit(uid,'action.approved',{requestId:id,signalId:snap.data().signalId,action:snap.data().action});return{requestId:id,status:'approved'};}),
+  rejectIntelligenceAction:onCall(async req=>{const uid=auth(req),id=String(req.data?.requestId||''),ref=db.doc(`users/${uid}/actionRequests/${id}`),snap=await ref.get();if(!snap.exists)throw new HttpsError('not-found','Action request not found');await ref.update({status:'rejected',rejectionReason:String(req.data?.reason||'').slice(0,500),updatedAt:admin.firestore.FieldValue.serverTimestamp()});await audit(uid,'action.rejected',{requestId:id,signalId:snap.data().signalId,action:snap.data().action});return{requestId:id,status:'rejected'};}),
+  executeApprovedIntelligenceAction:onCall(async req=>{const uid=auth(req),id=String(req.data?.requestId||''),ref=db.doc(`users/${uid}/actionRequests/${id}`),snap=await ref.get();if(!snap.exists)throw new HttpsError('not-found','Action request not found');const row=snap.data();if(row.status!=='approved')throw new HttpsError('failed-precondition','Human approval is required');await ref.update({status:'completed',executedAt:admin.firestore.FieldValue.serverTimestamp(),executionMode:'client_handoff',updatedAt:admin.firestore.FieldValue.serverTimestamp()});await audit(uid,'action.completed',{requestId:id,signalId:row.signalId,action:row.action,executionMode:'client_handoff'});return{requestId:id,status:'completed',action:row.action,signalId:row.signalId,executionMode:'client_handoff'};})
+ };
+}
+module.exports={createHandlers,ALLOWED_ACTIONS,cleanSignal};

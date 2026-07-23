@@ -7,6 +7,10 @@ service cloud.firestore {
     match /workspaces/{uid} { allow read, create, update, delete: if owner(uid) && request.resource.data.userId == uid; }
     match /users/{uid}/socialProviders/{provider} { allow read: if owner(uid); allow write: if false; }
     match /users/{uid}/socialSync/{provider} { allow read: if owner(uid); allow write: if false; }
+    match /users/{uid}/signals/{signalId} { allow read: if owner(uid); allow write: if false; }
+    match /users/{uid}/actionRequests/{requestId} { allow read: if owner(uid); allow write: if false; }
+    match /users/{uid}/auditEvents/{eventId} { allow read: if owner(uid); allow write: if false; }
+    match /users/{uid}/todayProjections/{date} { allow read: if owner(uid); allow write: if false; }
     match /socialPrivateTokens/{document=**} { allow read, write: if false; }
     match /socialOAuthStates/{document=**} { allow read, write: if false; }
     match /socialWebhookEvents/{document=**} { allow read, write: if false; }
