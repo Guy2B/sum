@@ -13,6 +13,8 @@ service cloud.firestore {
     match /users/{uid}/actionRequests/{requestId} { allow read: if owner(uid); allow write: if false; }
     match /users/{uid}/auditEvents/{eventId} { allow read: if owner(uid); allow write: if false; }
     match /users/{uid}/todayProjections/{date} { allow read: if owner(uid); allow write: if false; }
+    match /users/{uid}/intelligenceMemory/{memoryId} { allow read: if owner(uid); allow write: if false; }
+    match /users/{uid}/actionArtifacts/{artifactId} { allow read: if owner(uid); allow write: if false; }
     match /socialPrivateTokens/{document=**} { allow read, write: if false; }
     match /socialOAuthStates/{document=**} { allow read, write: if false; }
     match /socialWebhookEvents/{document=**} { allow read, write: if false; }

@@ -1,0 +1,15 @@
+'use strict';
+const test=require('node:test');const assert=require('node:assert/strict');
+const Today=require('../../modules/intelligence/services/today-service.js');
+const Memory=require('../../modules/intelligence/services/memory-service.js');
+const Planner=require('../../modules/intelligence/services/action-planner.js');
+const BackendToday=require('../../functions/src/intelligence/today-engine.js');
+const BackendMemory=require('../../functions/src/intelligence/memory-engine.js');
+const signal=(id,score,action='read',extra={})=>({id,status:'new',source:{provider:'gmail'},content:{title:id},intelligence:{priorityScore:score,priorityBand:score>=80?'critical':'high',effortMinutes:20,category:'communication',...extra.intelligence},recommendation:{action,...extra.recommendation}});
+test('5.4 groups a critical reply into act now once',()=>{const p=Today.select([signal('a',90,'reply')],{now:Date.parse('2026-07-23T08:00:00Z')});assert.deepEqual(p.signalIds,['a']);assert.equal(p.sections.actNow.length,1);assert.equal(Today.flatten(p).length,1);});
+test('5.4 respects capacity while keeping deterministic order',()=>{const p=Today.select([signal('b',70),signal('a',90),signal('c',60)],{capacityMinutes:40});assert.deepEqual(p.signalIds,['a','b']);assert.equal(p.plannedMinutes,40);});
+test('backend Today projection stores ids only',()=>{const p=BackendToday.project([{...signal('a',90),originalId:'mail|1'}],{capacityMinutes:60});assert.deepEqual(p.signalIds,['mail|1']);assert.equal(typeof p.sections.actNow[0],'string');});
+test('5.5 memory requires repeated observations',()=>{const rows=[1,2,3].map(()=>({type:'action.approved',action:'create_task',provider:'gmail',category:'execution',createdAt:'2026-07-23T08:00:00Z'}));const m=Memory.derive(rows,{now:0});assert.ok(m.some(x=>x.id==='action:create_task'));assert.ok(m.some(x=>x.id==='action_acceptance:create_task'&&x.acceptanceRate===1));});
+test('backend and client memory use observed history only',()=>{const rows=[1,2].map(()=>({type:'action.approved',action:'reply'}));assert.equal(BackendMemory.derive(rows).length,0);});
+test('5.6 reply is a draft-only external action',()=>{const p=Planner.plan({...signal('x',80,'reply'),content:{title:'Reply',summary:'Body',sender:'a@example.com'}},'reply');assert.equal(p.executionClass,'external_sensitive');assert.equal(p.payload.draftOnly,true);});
+test('5.6 calendar proposal never authorizes calendar write',()=>{const p=Planner.plan(signal('x',80,'schedule'),'schedule');assert.equal(p.payload.calendarWrite,false);assert.equal(p.requiresApproval,true);});

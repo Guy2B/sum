@@ -377,3 +377,8 @@ exports.tiktokDisconnect=onCall(async req=>{
 // human approval workflow and audit history. No external side effect is executed.
 const intelligenceHandlers=require('./src/intelligence/action-engine').createHandlers({onCall,HttpsError,admin,db});
 Object.assign(exports,intelligenceHandlers);
+
+// Sigma Intelligence — Sprints 5.4–5.6: Today projection, observed memory,
+// and controlled action artifacts. No message, publication or calendar write.
+Object.assign(exports,require('./src/intelligence/today-engine').createHandlers({onCall,HttpsError,admin,db}));
+Object.assign(exports,require('./src/intelligence/memory-engine').createHandlers({onCall,HttpsError,admin,db}));
