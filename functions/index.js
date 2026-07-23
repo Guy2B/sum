@@ -372,3 +372,8 @@ exports.tiktokDisconnect=onCall(async req=>{
   return{disconnected:true};
 });
 
+
+// Sigma Intelligence Engine V1 — phases 3–5. Server-authoritative persistence,
+// human approval workflow and audit history. No external side effect is executed.
+const intelligenceHandlers=require('./src/intelligence/action-engine').createHandlers({onCall,HttpsError,admin,db});
+Object.assign(exports,intelligenceHandlers);

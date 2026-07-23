@@ -12,7 +12,8 @@
     "firebase:emulators": "firebase emulators:start",
     "firebase:deploy": "firebase deploy",
     "firebase:deploy:rules": "firebase deploy --only firestore:rules,firestore:indexes,storage",
-    "test:intelligence": "node --test tests/intelligence/*.test.js"
+    "test:intelligence": "node --test tests/intelligence/*.test.js",
+    "audit:repo": "node scripts/audit-repository.mjs"
   },
   "engines": {
     "node": ">=20"
