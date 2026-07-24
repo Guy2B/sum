@@ -1,10 +1,10 @@
 {
   "name": "sigma-life-os",
   "private": true,
-  "version": "5.6.0",
+  "version": "15.0.0",
   "description": "Sigma Life OS V2.0 Beta — Google Cloud Edition with Firebase Auth, Firestore, Storage and Cloud Functions.",
   "scripts": {
-    "check": "node --check modules/core/event-bus.js && node --check modules/workspace/model.js && node --check modules/workspace/repository.js && node --check modules/workspace/service.js && node --check modules/entity-engine/records.js && node --check modules/planning/goal-engine.js",
+    "check": "node --check modules/core/event-bus.js && node --check modules/workspace/model.js && node --check modules/workspace/repository.js && node --check modules/workspace/service.js && node --check modules/entity-engine/records.js && node --check modules/planning/goal-engine.js && node --check modules/identity/profile-service.js && node --check modules/collaboration/invitation-service.js && node --check modules/knowledge/persistent-graph.js && node --check modules/search/context-index.js && node --check modules/orchestration/adaptive-planner.js && node --check modules/observability/audit-log.js && node --check modules/security/policy-engine.js && node --check modules/connectors/unified-registry.js && node --check modules/memory/long-term-memory.js && node --check modules/agents/approval-agent.js && node --check modules/release/readiness.js",
     "rc:check": "node scripts/rc-check.mjs",
     "release:check": "node scripts/release-check.mjs",
     "release:build": "node scripts/build-commercial.mjs",
@@ -15,9 +15,10 @@
     "test:intelligence": "node --test tests/intelligence/*.test.js",
     "audit:repo": "node scripts/audit-repository.mjs",
     "test:core": "node --test tests/core/*.test.js tests/workspace/*.test.js tests/knowledge/*.test.js tests/planning/*.test.js",
-    "test": "npm run test:core && npm run test:intelligence && node --test tests/entity-engine/*.test.js",
+    "test": "npm run test:core && npm run test:intelligence && node --test tests/entity-engine/*.test.js && npm run test:platform",
     "verify": "npm run audit:repo && npm run check && npm test",
-    "check:legacy": "node scripts/validate.mjs"
+    "check:legacy": "node scripts/validate.mjs",
+    "test:platform": "node --test tests/identity/*.test.js tests/collaboration/*.test.js tests/knowledge/*.test.js tests/search/*.test.js tests/orchestration/*.test.js tests/observability/*.test.js tests/connectors/*.test.js tests/memory/*.test.js tests/agents/*.test.js tests/release/*.test.js"
   },
   "engines": {
     "node": ">=20"

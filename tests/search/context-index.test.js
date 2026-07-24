@@ -1,0 +1,2 @@
+'use strict';const test=require('node:test');const assert=require('node:assert/strict');const {createContextIndex}=require('../../modules/search/context-index');
+test('Sprint 9 search is accent-insensitive and workspace scoped',()=>{const index=createContextIndex();index.add({id:'1',workspaceId:'w1',title:'Réunion client',text:'Projet Sigma'});index.add({id:'2',workspaceId:'w2',title:'Réunion',text:'Autre'});assert.deepEqual(index.search('reunion sigma',{workspaceId:'w1'}).map(x=>x.id),['1']);});

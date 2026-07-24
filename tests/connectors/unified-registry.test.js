@@ -1,0 +1,2 @@
+'use strict';const test=require('node:test');const assert=require('node:assert/strict');const {createConnectorRegistry}=require('../../modules/connectors/unified-registry');
+test('Sprint 12 connector registry isolates provider failures',async()=>{const registry=createConnectorRegistry();registry.register({id:'mail',capabilities:['signals'],pull:async()=>[1]});registry.register({id:'bad',pull:async()=>{throw new Error('offline')}});const results=await registry.pullAll();assert.deepEqual(results.map(x=>x.status),['fulfilled','rejected']);});

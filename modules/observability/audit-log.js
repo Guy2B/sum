@@ -1,0 +1,5 @@
+'use strict';
+const crypto=require('node:crypto');
+function canonical(entry){return JSON.stringify({sequence:entry.sequence,type:entry.type,actorId:entry.actorId||null,workspaceId:entry.workspaceId||null,occurredAt:entry.occurredAt,payload:entry.payload||{},previousHash:entry.previousHash||null});}
+function createAuditLog(){const entries=[];return Object.freeze({append(input){const entry={sequence:entries.length+1,type:input.type,actorId:input.actorId||null,workspaceId:input.workspaceId||null,occurredAt:input.occurredAt||new Date().toISOString(),payload:input.payload||{},previousHash:entries.at(-1)?.hash||null};entry.hash=crypto.createHash('sha256').update(canonical(entry)).digest('hex');const frozen=Object.freeze(entry);entries.push(frozen);return frozen;},verify(){let previous=null;return entries.every((entry,index)=>entry.sequence===index+1&&entry.previousHash===previous&&(previous=crypto.createHash('sha256').update(canonical(entry)).digest('hex'))===entry.hash);},list(filter={}){return entries.filter(e=>(!filter.actorId||e.actorId===filter.actorId)&&(!filter.workspaceId||e.workspaceId===filter.workspaceId)).slice();}});}
+module.exports={createAuditLog};

@@ -1,0 +1,3 @@
+'use strict';
+function assessReadiness(input={}){const checks=[['tests',input.testsPassed===true],['repositoryAudit',input.repositoryAuditPassed===true],['secrets',Number(input.exposedSecrets||0)===0],['coverage',Number(input.coverage||0)>=Number(input.minimumCoverage||70)],['migrations',input.migrationsValidated===true]];const failures=checks.filter(([,ok])=>!ok).map(([name])=>name);return Object.freeze({ready:failures.length===0,checks:Object.freeze(Object.fromEntries(checks)),failures:Object.freeze(failures),grade:failures.length===0?'RC':failures.length<=1?'BETA':'BLOCKED'});}
+module.exports={assessReadiness};

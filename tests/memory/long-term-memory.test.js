@@ -1,0 +1,2 @@
+'use strict';const test=require('node:test');const assert=require('node:assert/strict');const {createLongTermMemory}=require('../../modules/memory/long-term-memory');
+test('Sprint 13 forms beliefs only after repeated evidence',()=>{const memory=createLongTermMemory({minimumObservations:3});for(let i=0;i<2;i++)memory.observe({subject:'u1',predicate:'focus_time',value:'morning'});assert.equal(memory.recall('u1','focus_time'),null);memory.observe({subject:'u1',predicate:'focus_time',value:'morning'});assert.equal(memory.recall('u1','focus_time').evidenceCount,3);});
