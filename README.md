@@ -1,20 +1,31 @@
-# Correctif YouTube Guard
+# Sigma Life OS
 
-Copier les deux fichiers à la racine de `C:\Dev\sum`, puis lancer :
+Sigma est un Life Operating System web, mobile et cloud. Le dépôt canonique est le dossier Git existant `C:\Dev\sum`.
 
-```cmd
-APPLY-YOUTUBE-GUARD-FIX.cmd
+## Démarrage local
+
+```bash
+npm ci
+npm run verify
+npm run serve
 ```
 
-Le script :
+Ouvrir ensuite `http://localhost:8080`.
 
-- sauvegarde `modules/decision-engine/engine.js` ;
-- ajoute une détection dure des signaux `youtube_subscription` ;
-- retourne `ignore` avant classification et scoring ;
-- exécute `tests\intelligence\decision-engine-v6.test.js`.
+## Validation
 
-Restauration manuelle :
-
-```powershell
-Copy-Item modules\decision-engine\engine.js.before-youtube-guard-fix modules\decision-engine\engine.js -Force
+```bash
+npm run audit:repo
+npm run check
+npm test
 ```
+
+## Architecture
+
+- `modules/` : application et moteurs métier ;
+- `functions/` : Firebase Cloud Functions ;
+- `mobile/` : Capacitor Android/iOS ;
+- `tests/` : tests automatisés ;
+- `docs/SPRINTS-MINUS-1-TO-5.md` : état de la livraison.
+
+Les actions externes sensibles restent soumises à validation humaine et produisent des brouillons ou artefacts contrôlés.

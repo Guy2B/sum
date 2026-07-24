@@ -33,3 +33,6 @@ build/
 *.log
 node_modules/
 functions/node_modules/
+# Local dependencies and secrets
+functions/.env
+functions/.env.*

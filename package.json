@@ -4,7 +4,7 @@
   "version": "5.6.0",
   "description": "Sigma Life OS V2.0 Beta — Google Cloud Edition with Firebase Auth, Firestore, Storage and Cloud Functions.",
   "scripts": {
-    "check": "node scripts/validate.mjs",
+    "check": "node --check modules/core/event-bus.js && node --check modules/workspace/model.js && node --check modules/workspace/repository.js && node --check modules/workspace/service.js && node --check modules/entity-engine/records.js && node --check modules/planning/goal-engine.js",
     "rc:check": "node scripts/rc-check.mjs",
     "release:check": "node scripts/release-check.mjs",
     "release:build": "node scripts/build-commercial.mjs",
@@ -13,7 +13,11 @@
     "firebase:deploy": "firebase deploy",
     "firebase:deploy:rules": "firebase deploy --only firestore:rules,firestore:indexes,storage",
     "test:intelligence": "node --test tests/intelligence/*.test.js",
-    "audit:repo": "node scripts/audit-repository.mjs"
+    "audit:repo": "node scripts/audit-repository.mjs",
+    "test:core": "node --test tests/core/*.test.js tests/workspace/*.test.js tests/knowledge/*.test.js tests/planning/*.test.js",
+    "test": "npm run test:core && npm run test:intelligence && node --test tests/entity-engine/*.test.js",
+    "verify": "npm run audit:repo && npm run check && npm test",
+    "check:legacy": "node scripts/validate.mjs"
   },
   "engines": {
     "node": ">=20"

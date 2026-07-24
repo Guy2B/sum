@@ -1,0 +1,3 @@
+'use strict';
+const test=require('node:test');const assert=require('node:assert/strict');const {createRecord,timeline,evidenceFor}=require('../../modules/entity-engine/records');
+test('knowledge records preserve provenance and timeline',()=>{const statement=createRecord('statement',{id:'s1',workspaceId:'w',entityId:'e1',predicate:'status',value:'active',confidence:.8,observedAt:'2026-01-01T00:00:00Z'});const evidence={...createRecord('evidence',{id:'ev1',workspaceId:'w',entityId:'e1',observedAt:'2026-01-02T00:00:00Z',metadata:{statementId:'s1'}}),statementId:'s1'};assert.equal(statement.confidence,.8);assert.deepEqual(timeline([statement,evidence],{entityId:'e1'}).map(x=>x.id),['ev1','s1']);assert.equal(evidenceFor([statement,evidence],'s1').length,1);});

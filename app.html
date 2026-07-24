@@ -579,6 +579,14 @@
   <dialog class="modal edition-switcher" id="edition-dialog"><button class="modal-close icon-button" id="edition-dialog-close" type="button">Ã—</button><span class="eyebrow">Î£ Editions</span><h2>Choisissez votre cockpit</h2><p class="muted">Vous pouvez changer dâ€™Ã©dition sans perdre vos donnÃ©es.</p><div class="edition-dialog-grid" id="edition-dialog-grid"></div></dialog>
 
   <dialog class="modal quick-modal" id="quick-dialog"><button class="modal-close icon-button" id="quick-close" type="button">Ã—</button><span class="eyebrow" data-i18n="quick.eyebrow">Quick add</span><h2 data-i18n="quick.title">What do you want to capture?</h2><div class="quick-grid"><button type="button" data-quick-panel="tasks" data-focus="#inbox-form input[name=title]"><svg><use href="#i-inbox"/></svg><span data-i18n="quick.task">Task</span></button><button type="button" data-quick-panel="planner" data-focus="#event-form input[name=title]"><svg><use href="#i-calendar"/></svg><span data-i18n="planner.event">Event</span></button><button type="button" data-quick-panel="planner" data-focus="#habit-form input[name=name]"><svg><use href="#i-repeat"/></svg><span data-i18n="planner.habits">Habit</span></button><button type="button" data-quick-panel="journal" data-focus="#journal-form textarea"><svg><use href="#i-journal"/></svg><span data-i18n="quick.journal">Journal entry</span></button></div></dialog>
+
+  <!-- Sigma compatibility mounts: modules progressively enhanced by their owning sprint. -->
+  <section id="sigma-compatibility-mounts" hidden aria-hidden="true">
+    <div id="v47-map-canvas"></div><div id="v47-map-result"></div><input id="v47-map-query"><input id="v47-route-origin"><input id="v47-route-destination">
+    <div id="v1-today-beta"></div><button id="v1-today-mode-toggle" type="button"></button><div id="v48-other-accounts"></div>
+    <div id="social-v490-foundation"></div><div id="social-v490-diagnostics"></div>
+  </section>
+  <dialog id="v47-maps-modal"></dialog><dialog id="vdiag-modal"></dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script src="modules/entity-engine/memory-v8.1.js"></script>
   <script src="modules/entity-engine/inspector.js"></script>

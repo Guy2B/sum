@@ -186,9 +186,9 @@ if (!configCode.includes("version: '2.1.0-beta-google-connected'") || !configCod
   console.error('V2.1 Google Connected configuration is missing.');
   process.exit(1);
 }
-if (!files.includes(path.join(root, 'backend/calendar-connector/server.js'))) { console.error('Calendar connector backend is missing.'); process.exit(1); }
+if (!files.includes(path.join(root, 'calendar-connector/server.js'))) { console.error('Calendar connector backend is missing.'); process.exit(1); }
 for (const providerFile of ['x.js','linkedin.js','tiktok.js']) {
-  if (!files.includes(path.join(root, 'backend/social-connector/lib/providers', providerFile))) {
+  if (!files.includes(path.join(root, 'social-connector/lib/providers', providerFile))) {
     console.error(`Missing direct social connector scaffold: ${providerFile}`);
     process.exit(1);
   }

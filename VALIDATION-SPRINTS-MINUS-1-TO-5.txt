@@ -1,0 +1,14 @@
+Sigma Life OS — Validation Sprints -1 à 5
+
+Commande exécutée : npm run verify
+Résultat : SUCCÈS
+
+- Audit de structure : succès
+- Vérification syntaxique des nouveaux noyaux : succès
+- Tests Sprint 0-4 : 5/5
+- Tests Intelligence Sprint 5 : 34/34
+- Tests Entity Engine : 5/5
+- Total : 44 tests réussis, 0 échec
+
+Note : le validateur historique complet reste disponible sous `npm run check:legacy`.
+Il signale encore des écarts d'interface hérités antérieurs à cette livraison ; il n'est donc pas utilisé comme porte de validation de la consolidation.

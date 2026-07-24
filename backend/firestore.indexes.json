@@ -1,1 +1,0 @@
-{"indexes":[{"collectionGroup":"healthMetrics","queryScope":"COLLECTION","fields":[{"fieldPath":"userId","order":"ASCENDING"},{"fieldPath":"recordedAt","order":"DESCENDING"}]},{"collectionGroup":"tasks","queryScope":"COLLECTION","fields":[{"fieldPath":"userId","order":"ASCENDING"},{"fieldPath":"dueAt","order":"ASCENDING"}]}],"fieldOverrides":[]}
