@@ -31,3 +31,5 @@ coverage/
 dist/
 build/
 *.log
+node_modules/
+functions/node_modules/
