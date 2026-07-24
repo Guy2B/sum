@@ -1,0 +1,14 @@
+'use strict';
+(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.SIGMA_GRAPH_MEMORY=api;})(typeof globalThis!=='undefined'?globalThis:window,function(){
+ const VERSION='8.1.0',KEY='sigma.knowledgeGraph.v8.1',LEGACY='sigma.knowledgeGraph.v8';
+ const blank=()=>({version:VERSION,graph:null,history:[],savedAt:null});
+ const store=o=>o.storage||(typeof localStorage!=='undefined'?localStorage:null);
+ const clean=g=>g&&typeof g==='object'?{...g,nodes:g.nodes&&typeof g.nodes==='object'?g.nodes:{},edges:Array.isArray(g.edges)?g.edges:[],signalEntityMap:g.signalEntityMap&&typeof g.signalEntityMap==='object'?g.signalEntityMap:{},diagnostics:g.diagnostics&&typeof g.diagnostics==='object'?g.diagnostics:{}}:null;
+ const parse=v=>{try{return v?JSON.parse(v):null}catch(_){return null}};
+ function load(o={}){const s=store(o);if(!s)return blank();let x=parse(s.getItem(o.key||KEY));if(!x){const old=parse(s.getItem(LEGACY));if(old){x={...blank(),graph:clean(old.graph||old),savedAt:new Date().toISOString(),history:[{at:new Date().toISOString(),reason:'migration'}]};s.setItem(o.key||KEY,JSON.stringify(x));}}return x?{...blank(),...x,version:VERSION,graph:clean(x.graph),history:Array.isArray(x.history)?x.history.slice(-20):[]}:blank();}
+ function dedupe(edges){const seen=new Set();return edges.filter(e=>{const k=[e.from||e.source,e.type||e.relation,e.to||e.target].join('|');if(seen.has(k))return false;seen.add(k);return true;});}
+ function save(graph,o={}){const s=store(o),cur=load(o),g=clean(graph),state={version:VERSION,graph:g,savedAt:new Date().toISOString(),history:[...(cur.history||[]),{at:new Date().toISOString(),reason:o.reason||'save',nodes:Object.keys(g?.nodes||{}).length,edges:(g?.edges||[]).length}].slice(-20)};if(s)s.setItem(o.key||KEY,JSON.stringify(state));return state;}
+ function merge(graph,o={}){const cur=load(o).graph;if(!cur)return save(graph,{...o,reason:'initial'});const g=clean(graph);return save({...cur,...g,nodes:{...(cur.nodes||{}),...(g?.nodes||{})},edges:dedupe([...(cur.edges||[]),...(g?.edges||[])]),signalEntityMap:{...(cur.signalEntityMap||{}),...(g?.signalEntityMap||{})}},{...o,reason:'merge'});}
+ function clear(o={}){const s=store(o);if(s){s.removeItem(o.key||KEY);if(o.includeLegacy)s.removeItem(LEGACY);}return blank();}
+ return{version:VERSION,key:KEY,load,save,merge,clear,exportState:o=>JSON.stringify(load(o),null,2),importState:(p,o={})=>{const x=typeof p==='string'?parse(p):p;if(!x)throw new TypeError('Invalid graph payload');return save(x.graph||x,{...o,reason:'import'});}};
+});
