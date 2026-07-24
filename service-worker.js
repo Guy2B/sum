@@ -1,6 +1,6 @@
 'use strict';
 // V4.5 deliberately uses network-first delivery to prevent stale UI bundles on GitHub Pages.
-const CACHE = 'sigma-life-os-v4.5';
+const CACHE = 'sigma-life-os-v8000';
 self.addEventListener('install', event => event.waitUntil(self.skipWaiting()));
 self.addEventListener('activate', event => event.waitUntil(
   caches.keys().then(keys => Promise.all(keys.map(key => caches.delete(key)))).then(() => self.clients.claim())

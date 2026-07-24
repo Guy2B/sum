@@ -147,3 +147,24 @@ test('selects a capacity-limited today list', () => {
   assert.ok(payload.today.usedMinutes <= 120);
   assert.ok(payload.today.items.length <= 3);
 });
+
+
+test('suppresses YouTube subscription signals before classification and scoring', () => {
+  const result = engine.decide({
+    id: 'social:youtube_subscription_UChE4aVxHHk5Mx9fZ2DaPJGw',
+    sourceType: 'social',
+    socialType: 'subscription',
+    category: 'youtube_subscription',
+    title: 'YouTube channel subscription',
+    body: 'Imported channel subscription',
+    receivedAt: '2026-07-23T08:00:00Z'
+  }, {}, { now });
+
+  assert.equal(result.action, 'ignore');
+  assert.equal(result.score, 0);
+  assert.equal(result.priorityBand, 'low');
+  assert.equal(result.classification.intent, 'information');
+  assert.equal(result.classification.isAutomated, true);
+  assert.equal(result.requiresApproval, false);
+  assert.deepEqual(result.rules, ['guardrail.youtube.subscription']);
+});

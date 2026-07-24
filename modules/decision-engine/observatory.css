@@ -1,0 +1,62 @@
+.sigma-observatory {
+  font: 14px/1.45 system-ui, sans-serif;
+  background: var(--surface, #fff);
+  color: var(--text, #111);
+  border: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+  border-radius: 18px;
+  padding: 20px;
+}
+.sigma-observatory header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.sigma-observatory h2,
+.sigma-observatory p { margin: 0; }
+.sigma-observatory p { opacity: .65; }
+.sigma-observatory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.sigma-observatory-card {
+  display: grid;
+  gap: 3px;
+  padding: 12px;
+  border-radius: 12px;
+  background: color-mix(in srgb, currentColor 5%, transparent);
+}
+.sigma-observatory-card strong { font-size: 20px; }
+.sigma-observatory-card span { opacity: .65; }
+.sigma-observatory details {
+  border-top: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+  padding: 12px 0;
+}
+.sigma-observatory summary {
+  cursor: pointer;
+  font-weight: 650;
+}
+.sigma-observatory-table-wrap {
+  overflow-x: auto;
+  margin-top: 10px;
+}
+.sigma-observatory table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.sigma-observatory th,
+.sigma-observatory td {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 10%, transparent);
+}
+.sigma-observatory pre {
+  overflow: auto;
+  max-height: 420px;
+  padding: 12px;
+  border-radius: 12px;
+  background: color-mix(in srgb, currentColor 5%, transparent);
+}

@@ -61,6 +61,130 @@
       if (item.sourceType === 'health') return copy().plan;
       return copy().use;
     }
+
+    /*
+     * Sigma Decision Engine V6 dashboard bridge.
+     *
+     * Important:
+     * - V6 is authoritative when it is available.
+     * - The legacy engine is used only when V6 is unavailable or throws.
+     * - An empty V6 result is respected; it does not reactivate ignored promotions.
+     */
+    function todayRecommendations(state) {
+      const engine = window.SUM_DECISION_ENGINE_V6;
+
+      if (!engine?.decideLegacyState) {
+        return INTEL.recommendations(state);
+      }
+
+      try {
+        const decisionResult = engine.decideLegacyState(state, {
+          capacityMinutes: 180
+        });
+
+        const legacyItems = INTEL.attention(state);
+        const legacyById = new Map(
+          legacyItems.map((item) => [String(item.id), item])
+        );
+
+        const decisions = Array.isArray(decisionResult?.decisions)
+          ? decisionResult.decisions
+          : [];
+
+        const decisionById = new Map(
+          decisions.map((decision) => [
+            String(decision.signalId || decision.id || ''),
+            decision
+          ])
+        );
+
+        const selected = Array.isArray(decisionResult?.today?.items)
+          ? decisionResult.today.items
+          : [];
+
+        return selected
+          .map((selectedItem) => {
+            const id = String(
+              selectedItem?.signalId ||
+              selectedItem?.id ||
+              ''
+            );
+
+            const decision =
+              decisionById.get(id) ||
+              selectedItem;
+
+            if (!id || decision?.action === 'ignore') {
+              return null;
+            }
+
+            const sourceItem = legacyById.get(id) || {};
+            const intent = decision?.classification?.intent;
+
+            let category = sourceItem.category || 'communication';
+
+            if (intent === 'opportunity') {
+              category = 'opportunity';
+            } else if (
+              intent === 'transactional' ||
+              intent === 'administrative'
+            ) {
+              category = 'admin';
+            }
+
+            return {
+              ...sourceItem,
+              id,
+              sourceType:
+                sourceItem.sourceType ||
+                id.split(':')[0] ||
+                'signal',
+              sourceId:
+                sourceItem.sourceId ||
+                id.split(':').slice(1).join(':'),
+              provider:
+                sourceItem.provider ||
+                id.split(':')[0] ||
+                'Sigma',
+              title:
+                sourceItem.title ||
+                decision?.title ||
+                'Décision',
+              body:
+                sourceItem.body ||
+                decision?.body ||
+                '',
+              sender:
+                sourceItem.sender ||
+                decision?.sender ||
+                '',
+              score: Number(decision?.score ?? sourceItem.score ?? 0),
+              needsReply:
+                decision?.action === 'reply' ||
+                Boolean(sourceItem.needsReply),
+              category,
+              reasons: Array.isArray(decision?.reasons)
+                ? decision.reasons
+                : (sourceItem.reasons || []),
+              action: decision?.action || 'review',
+              confidence: Number(decision?.confidence || 0),
+              priorityBand:
+                decision?.priorityBand ||
+                'low',
+              decision
+            };
+          })
+          .filter(Boolean);
+      } catch (error) {
+        console.error(
+          'Decision Engine V6 dashboard bridge failed',
+          error
+        );
+
+        return INTEL.recommendations(state);
+      }
+    }
+
     function reasonText(item) {
       const lang = ctx.language();
       const map = {
@@ -97,7 +221,7 @@
     }
     function renderToday() {
       const state = ctx.getState();
-      const recs = INTEL.recommendations(state);
+      const recs = todayRecommendations(state);
       const root = document.getElementById('v17-today-recommendations');
       root.innerHTML = recs.length ? recs.map((item, index) => card(item, index)).join('') : `<div class="empty-state">${copy().todayEmpty}</div>`;
       const confidence = INTEL.confidence(state);
@@ -131,7 +255,7 @@
     function renderPlan() {
       const state = ctx.getState();
       const capacity = INTEL.capacity(state);
-      const items = INTEL.recommendations(state);
+      const items = todayRecommendations(state);
       document.getElementById('v17-capacity-value').textContent = `${Math.round(capacity.adjustedMinutes / 60 * 10) / 10} h`;
       document.getElementById('v17-planned-value').textContent = `${Math.round(capacity.plannedMinutes / 60 * 10) / 10} h`;
       document.getElementById('v17-capacity-bar').style.width = `${Math.min(100, capacity.load)}%`;
