@@ -1,0 +1,1 @@
+import test from'node:test';import assert from'node:assert/strict';import{activeKeywords}from'../../modules/signals/life-context-profiles.js';test('combines profile vocabulary',()=>{const k=activeKeywords(['jobSeeker','family']);assert.ok(k.includes('recruteur'));assert.ok(k.includes('école'));});

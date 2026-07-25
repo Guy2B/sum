@@ -1,0 +1,1 @@
+import test from'node:test';import assert from'node:assert/strict';import{prioritizeSignal}from'../../modules/signals/signal-priority-engine.js';test('raises rejected bank debit',()=>{const r=prioritizeSignal({title:'Prélèvement rejeté'},{domain:'finance',confidence:1});assert.ok(['critical','high'].includes(r.priority));});

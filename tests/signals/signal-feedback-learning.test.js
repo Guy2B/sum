@@ -1,0 +1,1 @@
+import test from'node:test';import assert from'node:assert/strict';import{applyFeedback}from'../../modules/signals/signal-feedback-learning.js';test('learns from correction',()=>{const m=applyFeedback({}, {source:'email',domain:'school',correct:true});assert.equal(m.weights['email:school'],0.05);});

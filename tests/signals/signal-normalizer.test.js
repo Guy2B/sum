@@ -1,0 +1,1 @@
+import test from'node:test';import assert from'node:assert/strict';import{normalizeSignal}from'../../modules/signals/signal-normalizer.js';test('normalizes provider fields',()=>{const s=normalizeSignal({source:'email',subject:'Facture',text:'À payer',from:'EDF'});assert.equal(s.title,'Facture');assert.equal(s.sender,'EDF');});

@@ -1,0 +1,1 @@
+import test from'node:test';import assert from'node:assert/strict';import{injectSignalActions}from'../../modules/planning/signal-daily-plan-bridge.js';test('orders critical first and deduplicates',()=>{const r=injectSignalActions([], [{sourceSignalId:'a',priority:'low'},{sourceSignalId:'b',priority:'critical'}]);assert.equal(r[0].sourceSignalId,'b');});

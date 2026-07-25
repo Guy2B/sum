@@ -1,0 +1,1 @@
+import test from'node:test';import assert from'node:assert/strict';import{createSignal}from'../../modules/signals/universal-signal-schema.js';test('creates canonical signal',()=>{const s=createSignal({source:'sms',title:'École'});assert.equal(s.source,'sms');assert.ok(s.id);});

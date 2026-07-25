@@ -1,0 +1,1 @@
+import test from'node:test';import assert from'node:assert/strict';import{classifySignal}from'../../modules/signals/contextual-signal-classifier.js';test('classifies school signal',()=>{const r=classifySignal({title:'École : sortie scolaire',body:'autorisation'});assert.equal(r.domain,'school');});

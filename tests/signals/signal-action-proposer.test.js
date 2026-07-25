@@ -1,0 +1,1 @@
+import test from'node:test';import assert from'node:assert/strict';import{proposeAction}from'../../modules/signals/signal-action-proposer.js';test('proposes contextual action',()=>{const a=proposeAction({id:'1',title:'Entretien'},{domain:'employment'},{priority:'high',reasons:['impact']});assert.match(a.title,/Répondre/);assert.equal(a.requiresApproval,true);});
