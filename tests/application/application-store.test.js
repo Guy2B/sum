@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {ApplicationStore} from '../../modules/application/application-store.js';test('Sprint 40 persists application records and snapshots',()=>{const s=new ApplicationStore();s.save('goals',{id:'g1',title:'Launch'});assert.equal(s.get('goals','g1').title,'Launch');assert.equal(s.snapshot().goals.length,1);});

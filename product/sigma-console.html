@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sigma Console</title>
+<style>body{font-family:system-ui;max-width:1000px;margin:2rem auto;padding:0 1rem}header,section{border:1px solid #ddd;border-radius:12px;padding:1rem;margin-bottom:1rem}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.75rem}.card{background:#f6f6f6;padding:.8rem;border-radius:8px}form{display:flex;gap:.5rem;flex-wrap:wrap}input,button{padding:.65rem}li{margin:.5rem 0}</style></head>
+<body><header><h1>Sigma — Tableau de bord produit</h1><p>Objectifs, tâches et priorités dans une interface locale fonctionnelle.</p></header>
+<section><div class="grid" id="counters"></div></section>
+<section><h2>Ajouter un objectif</h2><form id="goal-form"><input id="goal-title" required placeholder="Titre de l’objectif"><input id="goal-date" type="date"><button>Créer</button></form></section>
+<section><h2>Ajouter une tâche</h2><form id="task-form"><input id="task-title" required placeholder="Titre de la tâche"><input id="task-date" type="date"><button>Créer</button></form></section>
+<section class="grid"><div><h2>Objectifs</h2><ul id="goals"></ul></div><div><h2>Tâches</h2><ul id="tasks"></ul></div></section>
+<script type="module" src="./sigma-console.js"></script></body></html>
