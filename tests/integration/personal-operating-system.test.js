@@ -1,0 +1,21 @@
+'use strict';
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const { PersonalOperatingSystem } = require('../../modules/integration/personal-operating-system');
+const { GoalOutcomeEngine } = require('../../modules/goals/goal-outcome-engine');
+const { TaskExecutionEngine } = require('../../modules/tasks/task-execution-engine');
+const { DecisionEngine } = require('../../modules/decisions/decision-engine');
+const { AttentionEngine } = require('../../modules/attention/attention-engine');
+const { ReviewReflectionEngine } = require('../../modules/reviews/review-reflection-engine');
+const { ExecutiveDailyPlanner } = require('../../modules/planning/executive-daily-planner');
+const { RecommendationEngineV2 } = require('../../modules/recommendations/recommendation-engine-v2');
+const { TemporalEngineV2 } = require('../../modules/temporal/temporal-engine-v2');
+test('Sprint 39 executes the end-to-end personal operating cycle', () => {
+  const system = new PersonalOperatingSystem({ goalEngine: new GoalOutcomeEngine(), taskEngine: new TaskExecutionEngine(), decisionEngine: new DecisionEngine(), attentionEngine: new AttentionEngine(), reviewEngine: new ReviewReflectionEngine(), planner: new ExecutiveDailyPlanner({ recommendationEngine: new RecommendationEngineV2(), temporalEngine: new TemporalEngineV2() }) });
+  const goal = system.goalEngine.createGoal({ id: 'g1', title: 'Ship', workspaceId: 'w', targetAt: '2026-07-24', milestones: [{ progress: 0.2 }] });
+  const task = system.taskEngine.createTask({ id: 't1', title: 'Finish release', workspaceId: 'w', goalId: 'g1', status: 'ready', priority: 1, estimateMinutes: 60 });
+  const output = system.runDailyCycle({ date: '2026-07-25', goals: [goal], tasks: [task], commitments: [] });
+  assert.equal(output.readyTasks[0].id, 't1');
+  assert.equal(output.attention[0].groupKey, 'goals');
+  assert.equal(output.requiresApproval, true);
+});
