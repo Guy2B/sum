@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {assertUtf8Document,hasMojibake} from '../../modules/product/utf8-integrity.js';test('Sprint 50 rejects mojibake and requires UTF-8',()=>{assert.equal(hasMojibake('RÃ©seaux'),true);assert.equal(assertUtf8Document('<meta charset="UTF-8"><h1>Σ Réseaux</h1>'),true);});

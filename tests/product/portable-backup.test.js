@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {exportBackup,importBackup} from '../../modules/product/portable-backup.js';test('Sprint 58 exports and imports a validated backup',()=>{const s={goals:[],tasks:[]};assert.deepEqual(importBackup(exportBackup(s)),s);});

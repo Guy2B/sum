@@ -1,9 +1,37 @@
 <!doctype html>
-<html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Sigma Console</title>
-<style>body{font-family:system-ui;max-width:1000px;margin:2rem auto;padding:0 1rem}header,section{border:1px solid #ddd;border-radius:12px;padding:1rem;margin-bottom:1rem}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.75rem}.card{background:#f6f6f6;padding:.8rem;border-radius:8px}form{display:flex;gap:.5rem;flex-wrap:wrap}input,button{padding:.65rem}li{margin:.5rem 0}</style></head>
-<body><header><h1>Sigma — Tableau de bord produit</h1><p>Objectifs, tâches et priorités dans une interface locale fonctionnelle.</p></header>
-<section><div class="grid" id="counters"></div></section>
-<section><h2>Ajouter un objectif</h2><form id="goal-form"><input id="goal-title" required placeholder="Titre de l’objectif"><input id="goal-date" type="date"><button>Créer</button></form></section>
-<section><h2>Ajouter une tâche</h2><form id="task-form"><input id="task-title" required placeholder="Titre de la tâche"><input id="task-date" type="date"><button>Créer</button></form></section>
-<section class="grid"><div><h2>Objectifs</h2><ul id="goals"></ul></div><div><h2>Tâches</h2><ul id="tasks"></ul></div></section>
-<script type="module" src="./sigma-console.js"></script></body></html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Σ Sigma — Espace produit</title>
+  <link rel="stylesheet" href="./sigma-console.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">Σ</span><div><strong>Life OS</strong><small>par A.I.G.B.r.</small></div></div>
+      <div class="edition"><span>ADMIN</span><strong>Espace local</strong><small>Données privées enregistrées dans ce navigateur.</small></div>
+      <nav aria-label="Navigation principale">
+        <button data-route="today" class="active">Aujourd’hui</button>
+        <button data-route="goals">Objectifs</button>
+        <button data-route="tasks">Tâches</button>
+        <button data-route="plan">Plan</button>
+        <button data-route="reviews">Revues</button>
+      </nav>
+      <div class="sidebar-footer"><button id="export-button">Exporter</button><label class="import-label">Importer<input id="import-input" type="file" accept="application/json"></label></div>
+    </aside>
+    <main>
+      <header class="topbar"><input id="global-search" type="search" placeholder="Rechercher dans Σ…" aria-label="Recherche"><span class="badge">PRODUIT LOCAL</span></header>
+      <div class="content">
+        <section id="view-today" class="view active"><div class="hero"><div><span class="eyebrow">CENTRE DE COMMANDE</span><h1>Bonjour, voici votre journée.</h1><p>Objectifs, tâches et décisions réunis dans une seule expérience.</p></div><button id="generate-plan" class="primary">Générer mon plan</button></div><div id="counters" class="stats"></div><div class="panel"><div class="panel-head"><h2>Priorités du jour</h2><span id="today-count"></span></div><div id="today-list" class="list"></div></div></section>
+        <section id="view-goals" class="view"><div class="section-title"><div><span class="eyebrow">DIRECTION</span><h1>Objectifs</h1></div></div><form id="goal-form" class="composer"><input id="goal-title" required placeholder="Titre de l’objectif"><input id="goal-date" type="date"><button class="primary">Créer l’objectif</button></form><div id="goals" class="cards"></div></section>
+        <section id="view-tasks" class="view"><div class="section-title"><div><span class="eyebrow">EXÉCUTION</span><h1>Tâches</h1></div></div><form id="task-form" class="composer"><input id="task-title" required placeholder="Titre de la tâche"><input id="task-date" type="date"><select id="task-priority"><option value="high">Haute</option><option value="medium" selected>Moyenne</option><option value="low">Basse</option></select><select id="task-goal"><option value="">Sans objectif</option></select><button class="primary">Créer la tâche</button></form><div id="task-board" class="board"></div></section>
+        <section id="view-plan" class="view"><div class="section-title"><div><span class="eyebrow">PLANIFICATION</span><h1>Plan quotidien</h1></div><button id="regenerate-plan" class="primary">Recalculer</button></div><div id="plan-list" class="list"></div></section>
+        <section id="view-reviews" class="view"><div class="section-title"><div><span class="eyebrow">RÉFLEXION</span><h1>Revues</h1></div><button id="create-review" class="primary">Créer la revue du jour</button></div><div id="reviews" class="cards"></div></section>
+      </div>
+    </main>
+  </div>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="./sigma-console.js"></script>
+</body>
+</html>

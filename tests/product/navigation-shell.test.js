@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createNavigationState} from '../../modules/product/navigation-shell.js';test('Sprint 52 navigates only known product routes',()=>{const nav=createNavigationState('goals');assert.equal(nav.active,'goals');assert.equal(nav.navigate('unknown'),'today');});

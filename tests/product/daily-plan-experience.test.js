@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {buildDailyPlan} from '../../modules/product/daily-plan-experience.js';test('Sprint 55 prioritizes high priority work',()=>{const p=buildDailyPlan([{id:'1',title:'B',priority:'low',status:'open'},{id:'2',title:'A',priority:'high',status:'open'}]);assert.equal(p[0].id,'2');});

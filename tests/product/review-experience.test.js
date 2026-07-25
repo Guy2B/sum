@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createReview} from '../../modules/product/review-experience.js';test('Sprint 56 produces a daily review',()=>{const r=createReview({tasks:[{title:'A',status:'done'},{title:'B',status:'open'}]},new Date('2026-01-01'));assert.deepEqual([r.completed,r.remaining],[1,1]);});

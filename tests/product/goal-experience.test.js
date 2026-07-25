@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createGoal,updateGoalProgress} from '../../modules/product/goal-experience.js';test('Sprint 53 creates goals and tracks progress',()=>{const g=createGoal({id:'g1',title:'Lancer Sigma'},new Date('2026-01-01'));assert.equal(updateGoalProgress(g,100).status,'completed');});

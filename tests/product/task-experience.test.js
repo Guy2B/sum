@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createTask,moveTask} from '../../modules/product/task-experience.js';test('Sprint 54 supports task workflow',()=>{const t=createTask({id:'t1',title:'Tester'},new Date('2026-01-01'));assert.equal(moveTask(t,'done').status,'done');});

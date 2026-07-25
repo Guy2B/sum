@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {token} from '../../modules/product/design-system.js';test('Sprint 51 exposes shared design tokens',()=>assert.equal(token('radius.md'),16));
