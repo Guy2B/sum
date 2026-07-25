@@ -1,0 +1,2 @@
+import test from 'node:test'; import assert from 'node:assert/strict'; import { buildEditionAttentionQueue } from '../../modules/attention/edition-attention-queue.js';
+test('Sprint 77 attention queue excludes medium signals',()=>{const out=buildEditionAttentionQueue([{id:'1',edition:'family',domain:'school',priority:'high'},{id:'2',edition:'student',domain:'course',priority:'medium'}]);assert.equal(out.length,1);assert.equal(out[0].position,1);});

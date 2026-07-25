@@ -1,0 +1,2 @@
+import test from 'node:test'; import assert from 'node:assert/strict'; import { projectEditionSignalInbox } from '../../modules/dashboard/edition-signal-inbox-projection.js';
+test('Sprint 77 projects critical signals first',()=>{const out=projectEditionSignalInbox([{signal:{id:'1',title:'A',editionId:'family',domain:'school',priorityLevel:'high',priorityScore:70},action:{title:'A',explanation:'x'}},{signal:{id:'2',title:'B',editionId:'creator',domain:'rights',priorityLevel:'critical',priorityScore:90},action:{title:'B',explanation:'y'}}]);assert.equal(out[0].id,'2');});

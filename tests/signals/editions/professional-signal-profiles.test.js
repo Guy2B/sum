@@ -1,0 +1,2 @@
+import test from 'node:test'; import assert from 'node:assert/strict'; import { freelancerSignalProfile,smallBusinessSignalProfile } from '../../../modules/signals/editions/professional-signal-profiles.js';
+test('Sprint 73 professional profiles cover invoices and cashflow',()=>{assert.ok(freelancerSignalProfile.domains.includes('invoice'));assert.ok(smallBusinessSignalProfile.domains.includes('cashflow'));});

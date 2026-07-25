@@ -1,0 +1,2 @@
+import test from 'node:test'; import assert from 'node:assert/strict'; import { EditionSignalFeedback } from '../../modules/signals/edition-signal-feedback.js';
+test('Sprint 78 learns bounded edition preferences',()=>{const f=new EditionSignalFeedback();f.record({editionId:'creator',domain:'publishing',delta:7});const out=f.apply({editionId:'creator',domain:'publishing',priorityScore:50});assert.equal(out.priorityScore,57);});

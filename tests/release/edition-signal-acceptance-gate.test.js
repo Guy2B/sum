@@ -1,0 +1,2 @@
+import test from 'node:test'; import assert from 'node:assert/strict'; import { editionSignalAcceptanceGate } from '../../modules/release/edition-signal-acceptance-gate.js'; import { defaultEditionSignalProfiles } from '../../modules/signals/default-edition-signal-profiles.js';
+test('Sprint 79 requires every edition and actionable scenarios',()=>{const result=editionSignalAcceptanceGate({profiles:defaultEditionSignalProfiles,scenarios:[{signal:{id:'s',priorityLevel:'high'},action:{title:'Agir'}}]});assert.equal(result.ok,true);});
