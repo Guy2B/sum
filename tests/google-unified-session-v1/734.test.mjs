@@ -1,0 +1,8 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import vm from 'node:vm';
+const store=new Map();const localStorage={get length(){return store.size},key(i){return [...store.keys()][i]??null},getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
+const dummy={addEventListener(){},appendChild(){},querySelector(){return null},querySelectorAll(){return[]},showModal(){},close(){},classList:{add(){}}};
+const document={readyState:'loading',body:{...dummy,dataset:{}},head:dummy,addEventListener(){},querySelector(){return null},querySelectorAll(){return[]},getElementById(){return null},createElement(){return{...dummy,dataset:{}}}};
+const window={localStorage,document,addEventListener(){},dispatchEvent(){},setTimeout,clearTimeout};window.window=window;
+const context=vm.createContext({window,document,localStorage,console,Date,JSON,Math,Promise,setTimeout,clearTimeout,CustomEvent:function(){}});
+for(const file of ["connector-registry-v1.js", "connector-inventory-v1.js", "legacy-connector-migration-v1.js", "google-scope-catalog-v1.js", "google-account-bridge-v1.js", "google-unified-oauth-v1.js", "google-consent-onboarding-v1.js", "google-connector-autoload-v1.js", "connector-navigation-recovery-v1.js", "non-google-connector-preserver-v1.js", "connector-firestore-sync-v1.js", "google-unified-session-diagnostics-v1.js", "release-status-734.js", "google-unified-session-acceptance-v1.js"]){vm.runInContext(fs.readFileSync(new URL('../../modules/google-unified-session-v1/'+file,import.meta.url),'utf8'),context);}
+test('Sprint 734',()=>{assert.equal(context.window.SigmaGoogleUnifiedSessionAcceptanceV1.validate().ok,true);});

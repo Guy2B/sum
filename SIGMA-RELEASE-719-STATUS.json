@@ -1,0 +1,11 @@
+﻿{
+    "release":  719,
+    "revision":  "v2",
+    "windowsPathFix":  true,
+    "gitCommit":  "6f50a3451514c1216a725a319f72e84f99a989c1",
+    "gitCommitted":  true,
+    "gitPushed":  true,
+    "firestoreRulesDeployed":  true,
+    "firebaseHostingDeployed":  true,
+    "generatedAt":  "2026-07-26T17:58:25.3664789+02:00"
+}
