@@ -38,3 +38,6 @@ functions/.env
 functions/.env.*
 
 .release-backups/
+
+functions/.env.local
+functions/.env.project-sum-b961a

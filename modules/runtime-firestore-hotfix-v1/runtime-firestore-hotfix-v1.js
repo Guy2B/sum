@@ -33,8 +33,12 @@
   }
 
   function diagnostics(){
-    const user=window.SigmaFirebaseRuntimeAdapterV1?.currentUser?.()||
-      window.firebase?.auth?.()?.currentUser||null;
+    const user =
+  window.SigmaCloud?.auth?.currentUser ||
+  window.SigmaCloud?.user ||
+  window.SigmaFirebaseRuntimeAdapterV1?.currentUser?.() ||
+  window.firebase?.auth?.()?.currentUser ||
+  null;
     return{
       ok:state.permissionErrors.length===0,
       release:719,

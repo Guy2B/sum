@@ -1,0 +1,32 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function owner(uid) { return signedIn() && request.auth.uid == uid; }
+    match /profiles/{uid} { allow read, create, update, delete: if owner(uid); }
+    match /workspaces/{uid} { allow read, create, update, delete: if owner(uid) && request.resource.data.userId == uid; }
+    match /users/{uid}/socialProviders/{provider} { allow read: if owner(uid); allow write: if false; }
+    match /users/{uid}/socialSync/{provider} { allow read: if owner(uid); allow write: if false; }
+    match /users/{uid}/signals/{signalId} { allow read: if owner(uid); allow write: if false; }
+    match /users/{uid}/entities/{entityId} { allow read: if owner(uid); allow write: if false; }
+    match /users/{uid}/signalRelations/{relationId} { allow read: if owner(uid); allow write: if false; }
+    match /users/{uid}/actionRequests/{requestId} { allow read: if owner(uid); allow write: if false; }
+    match /users/{uid}/auditEvents/{eventId} { allow read: if owner(uid); allow write: if false; }
+    match /users/{uid}/todayProjections/{date} { allow read: if owner(uid); allow write: if false; }
+    match /users/{uid}/intelligenceMemory/{memoryId} { allow read: if owner(uid); allow write: if false; }
+    match /users/{uid}/actionArtifacts/{artifactId} { allow read: if owner(uid); allow write: if false; }
+    match /socialPrivateTokens/{document=**} { allow read, write: if false; }
+    match /socialOAuthStates/{document=**} { allow read, write: if false; }
+    match /socialWebhookEvents/{document=**} { allow read, write: if false; }
+    match /{document=**} { allow read, write: if false; }
+  
+    // SIGMA-USER-OWNERSHIP-RULES-735
+    match /users/{uid} {
+      allow read, create, update, delete: if request.auth != null && request.auth.uid == uid;
+
+      match /{document=**} {
+        allow read, create, update, delete: if request.auth != null && request.auth.uid == uid;
+      }
+    }
+}
+}
