@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Σ Assistant quotidien</title>
+  <link rel="stylesheet" href="./daily-executive-assistant.css">
+</head>
+<body>
+  <aside>
+    <strong>Σ Life OS</strong>
+    <nav>
+      <button>Attention</button>
+      <button class="active">Aujourd’hui</button>
+      <button>Tâches</button>
+      <button>Objectifs</button>
+    </nav>
+    <p>Sigma organise la journée selon l’urgence, l’impact, le temps disponible et votre énergie.</p>
+  </aside>
+  <main>
+    <header>
+      <div><small>ASSISTANT EXÉCUTIF QUOTIDIEN</small><h1 id="title">Bonjour, voici votre journée.</h1></div>
+      <button id="replan">Replanifier</button>
+    </header>
+    <section id="summary" class="summary"></section>
+    <section>
+      <h2>Trois résultats essentiels</h2>
+      <div id="focus" class="focus-grid"></div>
+    </section>
+    <section class="columns">
+      <div><h2>Planifié</h2><div id="scheduled"></div></div>
+      <div><h2>Différé</h2><div id="deferred"></div></div>
+    </section>
+  </main>
+  <script type="module" src="./daily-executive-assistant.js"></script>
+</body>
+</html>
