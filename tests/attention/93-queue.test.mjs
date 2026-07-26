@@ -1,0 +1,1 @@
+import test from"node:test";import assert from"node:assert/strict";import{buildAttentionQueue as b}from"../../modules/attention/attention-queue.mjs";test("Sprint 93",()=>assert.equal(b([{id:"a",priority:{level:"info",score:1}},{id:"b",priority:{level:"critical",score:90}}]).groups.critical[0].id,"b"));

@@ -1,0 +1,1 @@
+import test from"node:test";import assert from"node:assert/strict";import{processUniversalInbox as p}from"../../modules/attention/universal-inbox.mjs";test("Sprint 90",()=>assert.equal(Object.values(p([{source:"email",subject:"Facture"}]).counts).reduce((a,b)=>a+b,0),1));

@@ -1,0 +1,1 @@
+import test from"node:test";import assert from"node:assert/strict";import{explainPriority as e}from"../../modules/attention/explainability.mjs";test("Sprint 94",()=>assert.match(e({source:"email"},{level:"high",score:60,confidence:.8,reasons:["Échéance proche."],dimensions:{}}).summary,/Échéance/));

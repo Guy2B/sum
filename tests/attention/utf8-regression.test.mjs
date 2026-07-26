@@ -1,0 +1,1 @@
+import test from"node:test";import assert from"node:assert/strict";import fs from"node:fs";test("UTF-8",()=>{for(const p of["product/attention-center.html","product/attention-center.js"])assert.doesNotMatch(fs.readFileSync(p,"utf8"),/(?:Ã.|Â.|â€|ï¿½|Î£)/)});

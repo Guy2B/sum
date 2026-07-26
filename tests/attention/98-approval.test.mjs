@@ -1,0 +1,1 @@
+import test from"node:test";import assert from"node:assert/strict";import{createApproval as c}from"../../modules/attention/approval-workflow.mjs";test("Sprint 98",()=>assert.equal(c({kind:"pay"}).status,"pending-approval"));

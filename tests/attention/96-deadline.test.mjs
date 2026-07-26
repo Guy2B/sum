@@ -1,0 +1,1 @@
+import test from"node:test";import assert from"node:assert/strict";import{inferDeadline as i}from"../../modules/attention/deadline-intelligence.mjs";test("Sprint 96",()=>assert.equal(i({title:"À rendre demain"},new Date("2026-07-25T08:00:00Z")).source,"relative-date"));

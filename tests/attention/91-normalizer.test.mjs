@@ -1,0 +1,1 @@
+import test from"node:test";import assert from"node:assert/strict";import{normalizeSignal as n}from"../../modules/attention/signal-normalizer.mjs";test("Sprint 91",()=>assert.equal(n({channel:"gmail",subject:"Bonjour"}).source,"email"));

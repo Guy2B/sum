@@ -1,0 +1,1 @@
+import test from"node:test";import assert from"node:assert/strict";import{resolveDuplicates as r}from"../../modules/attention/duplicate-resolver.mjs";test("Sprint 95",()=>assert.equal(r([{id:"1",externalId:"x",title:"Facture"},{id:"2",externalId:"x",title:"RE: Facture"}])[0].duplicateCount,1));

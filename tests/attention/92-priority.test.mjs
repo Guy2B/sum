@@ -1,0 +1,1 @@
+import test from"node:test";import assert from"node:assert/strict";import{scorePriority as s}from"../../modules/attention/priority-engine-v2.mjs";test("Sprint 92",()=>assert.ok(["critical","high","today"].includes(s({title:"École",body:"Autorisation demain"},{editions:["family"]}).level)));

@@ -1,0 +1,1 @@
+import test from"node:test";import assert from"node:assert/strict";import{createAttentionDashboard as c}from"../../modules/attention/attention-dashboard-model.mjs";test("Sprint 97",()=>assert.equal(c({counts:{critical:1,high:0,today:0,week:0,info:0},groups:{critical:[],high:[],today:[],week:[],info:[]},nextBestActions:[]}).counters.length,5));
