@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createHealthProbe} from '../../modules/observability-v2/health-probe.mjs';test('Sprint 349',async ()=>{const p=createHealthProbe();p.register('x',async()=>({status:'healthy'}));assert.equal((await p.run()).status,'healthy');});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {calculateContinuityMetrics} from '../../modules/resilience-v2/continuity-metrics.mjs';test('Sprint 444',()=>{assert.equal(calculateContinuityMetrics({incidents:[{downtimeMs:10,recoveryMs:5}],totalPeriodMs:100}).availability,0.9);});

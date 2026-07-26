@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createMetricRegistry} from '../../modules/observability-v2/metric-registry.mjs';test('Sprint 347',()=>{const r=createMetricRegistry();r.increment('x');assert.equal(r.get('x').value,1);});

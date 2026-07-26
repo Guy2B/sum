@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createRiskRegister} from '../../modules/governance-v2/risk-register.mjs';test('Sprint 368',()=>{const r=createRiskRegister();assert.equal(r.add({id:'r',title:'Risk',likelihood:2,impact:3}).score,6);});

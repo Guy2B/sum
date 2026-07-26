@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createTelemetryEvent} from '../../modules/observability-v2/telemetry-contract.mjs';test('Sprint 345',()=>{assert.equal(createTelemetryEvent({id:'e',type:'x',source:'s'}).severity,'info');});

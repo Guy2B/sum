@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createIncrementalSync} from '../../modules/integrations/incremental-sync.mjs';test('Sprint 318',()=>{const s=createIncrementalSync();s.checkpoint('c2');assert.equal(s.state().cursor,'c2');});

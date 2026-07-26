@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createExecutionState,transitionExecution} from '../../modules/automation-v2/execution-state.mjs';test('Sprint 336',()=>{const s=transitionExecution(createExecutionState({workflowId:'w'}),'running');assert.equal(s.history.length,1);});

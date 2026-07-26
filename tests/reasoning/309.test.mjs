@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {estimateConfidence} from '../../modules/reasoning/confidence-estimator.mjs';test('Sprint 309',()=>{assert.equal(estimateConfidence({evidence:[1,2,3,4,5]}).level,'high');});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createAuditLedger} from '../../modules/governance-v2/audit-ledger.mjs';test('Sprint 367',()=>{const l=createAuditLedger();l.append({type:'x'});l.append({type:'y'});assert.equal(l.verify().valid,true);});

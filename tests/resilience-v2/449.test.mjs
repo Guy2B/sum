@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {validateResilienceOrchestrator} from '../../modules/resilience-v2/product-acceptance.mjs';test('Sprint 449',()=>{assert.equal(validateResilienceOrchestrator({execute(){},breaker(){},audit(){}}).ok,true);});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createFailure} from '../../modules/resilience-v2/failure-contract.mjs';test('Sprint 435',()=>{assert.equal(createFailure({id:'f',type:'x',source:'s',message:'m'}).severity,'medium');});

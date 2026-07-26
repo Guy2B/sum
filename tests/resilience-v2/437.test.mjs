@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createBulkheadManager} from '../../modules/resilience-v2/bulkhead-manager.mjs';test('Sprint 437',()=>{const b=createBulkheadManager();assert.equal(b.enter('x',{limit:1}).accepted,true);assert.equal(b.enter('x',{limit:1}).accepted,false);});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {evaluateCapacity} from '../../modules/planning-v2/capacity-model.mjs';test('Sprint 409',()=>{assert.equal(evaluateCapacity({availableHours:8,commitments:[{hours:3},{hours:4}]}).remainingHours,1);});

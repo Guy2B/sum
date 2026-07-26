@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {withTimeout} from '../../modules/resilience-v2/timeout-controller.mjs';test('Sprint 438',async ()=>{assert.equal(await withTimeout(async()=>7,{timeoutMs:50}),7);});

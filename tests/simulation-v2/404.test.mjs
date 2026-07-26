@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {validateSimulationOrchestrator} from '../../modules/simulation-v2/product-acceptance.mjs';test('Sprint 404',()=>{assert.equal(validateSimulationOrchestrator({evaluate(){},audit(){}}).ok,true);});

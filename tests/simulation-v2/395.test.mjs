@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {applyImpactModel} from '../../modules/simulation-v2/impact-model.mjs';test('Sprint 395',()=>{assert.equal(applyImpactModel({x:2},[{metric:'x',operation:'multiply',value:3}]).state.x,6);});

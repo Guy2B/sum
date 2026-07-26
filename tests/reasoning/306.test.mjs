@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createPlan} from '../../modules/reasoning/multi-step-planner.mjs';test('Sprint 306',()=>{assert.equal(createPlan('goal',[{title:'step'}]).steps[0].status,'pending');});

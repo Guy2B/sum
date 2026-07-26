@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createExplainabilityReport} from '../../modules/governance-v2/explainability-report.mjs';test('Sprint 370',()=>{assert.equal(createExplainabilityReport({decision:'allow'}).decision,'allow');});

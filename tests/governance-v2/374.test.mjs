@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {validateGovernanceOrchestrator} from '../../modules/governance-v2/product-acceptance.mjs';test('Sprint 374',()=>{assert.equal(validateGovernanceOrchestrator({addPolicy(){},authorize(){},protect(){},audit(){},verifyAudit(){}}).ok,true);});

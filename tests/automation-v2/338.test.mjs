@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {executeWithRetry} from '../../modules/automation-v2/retry-executor.mjs';test('Sprint 338',async ()=>{let n=0;const r=await executeWithRetry(async()=>{n++;if(n<2)throw new Error('x');return 7});assert.equal(r.value,7);});

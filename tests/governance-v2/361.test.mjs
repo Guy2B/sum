@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createIdentityContext} from '../../modules/governance-v2/identity-context.mjs';test('Sprint 361',()=>{assert.deepEqual(createIdentityContext({subjectId:'u',roles:['owner','owner']}).roles,['owner']);});

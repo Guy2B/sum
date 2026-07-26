@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createDependencyMap} from '../../modules/observability-v2/dependency-map.mjs';test('Sprint 354',()=>{const m=createDependencyMap();m.connect('api','db');assert.deepEqual(m.impactedBy('db'),['api']);});

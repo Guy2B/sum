@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createDependencyGraph} from '../../modules/planning-v2/dependency-graph.mjs';test('Sprint 408',()=>{const g=createDependencyGraph();g.addNode({id:'a'});g.addNode({id:'b'});g.addDependency('b','a');assert.deepEqual(g.topologicalOrder().map(x=>x.id),['a','b']);});

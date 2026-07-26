@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createOAuthSession, completeOAuthSession} from '../../modules/integrations/oauth-session.mjs';test('Sprint 317',()=>{const s=completeOAuthSession(createOAuthSession({provider:'p',state:'s'}),{accessTokenRef:'r'});assert.equal(s.status,'connected');});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {normalizeExternalRecord} from '../../modules/integrations/normalization-map.mjs';test('Sprint 320',()=>{assert.equal(normalizeExternalRecord({a:1},{x:'a'}).x,1);});

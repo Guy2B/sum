@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createDriveAdapter} from '../../modules/integrations/drive-adapter.mjs';test('Sprint 325',()=>{const a=createDriveAdapter({listFiles:async()=>({items:[]})});assert.equal(a.normalize({id:'1',name:'F'}).type,'document');});

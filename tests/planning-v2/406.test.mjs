@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {planMilestones} from '../../modules/planning-v2/milestone-planner.mjs';test('Sprint 406',()=>{assert.equal(planMilestones({goalId:'g',startDate:'2026-01-01',targetDate:'2026-01-05',count:2}).length,2);});

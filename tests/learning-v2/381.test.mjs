@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createLabelMemory} from '../../modules/learning-v2/label-memory.mjs';test('Sprint 381',()=>{const m=createLabelMemory();m.remember('x','urgent');assert.equal(m.recall('x').label,'urgent');});

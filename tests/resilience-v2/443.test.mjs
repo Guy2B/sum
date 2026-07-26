@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createChaosScenario,evaluateChaosSafety} from '../../modules/resilience-v2/chaos-scenario.mjs';test('Sprint 443',()=>{const s=createChaosScenario({id:'c',name:'C',target:'api',fault:{type:'latency'},safeguards:[{id:'stop'}]});assert.equal(evaluateChaosSafety(s,{allowedTargets:['api']}).safe,true);});

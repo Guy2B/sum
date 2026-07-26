@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createSloPolicy,evaluateSlo} from '../../modules/observability-v2/slo-policy.mjs';test('Sprint 350',()=>{const p=createSloPolicy({id:'s',name:'S',target:.99,indicator:{type:'availability'}});assert.equal(evaluateSlo(p,{good:99,total:100}).met,true);});

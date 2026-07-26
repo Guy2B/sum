@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {rankPriorities} from '../../modules/planning-v2/priority-engine.mjs';test('Sprint 410',()=>{assert.equal(rankPriorities([{id:'a',urgency:2},{id:'b',urgency:1}])[0].id,'a');});

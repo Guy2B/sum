@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createExecutionState,transitionExecutionState} from '../../modules/execution-v2/execution-state.mjs';test('Sprint 427',()=>{const s=transitionExecutionState(createExecutionState({id:'e',intentId:'i'}),'running');assert.equal(s.status,'running');});

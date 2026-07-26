@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {buildTimeboxes} from '../../modules/planning-v2/timebox-planner.mjs';test('Sprint 411',()=>{assert.equal(buildTimeboxes([{id:'t',title:'T'}],{startAt:'2026-01-01T08:00:00Z'})[0].durationMinutes,30);});

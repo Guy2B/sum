@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createWebhookIngress} from '../../modules/integrations/webhook-ingress.mjs';test('Sprint 319',async ()=>{const i=createWebhookIngress({verify:async()=>true,transform:async r=>r.body});assert.equal((await i.receive({body:{x:1}})).event.x,1);});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createObservabilityOrchestrator} from '../../modules/observability-v2/observability-orchestrator.mjs';test('Sprint 358',()=>{const o=createObservabilityOrchestrator();o.registerAlert({id:'a',path:'x',operator:'gt',threshold:1});assert.equal(o.evaluateAlerts({x:2}).length,1);});

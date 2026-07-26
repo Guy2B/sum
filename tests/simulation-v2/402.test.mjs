@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {evaluateDecisionPolicy} from '../../modules/simulation-v2/decision-policy.mjs';test('Sprint 402',()=>{assert.equal(evaluateDecisionPolicy({score:.8,confidence:.9,risk:.2},{minimumScore:.7,minimumConfidence:.8,maximumRisk:.5}).accepted,true);});

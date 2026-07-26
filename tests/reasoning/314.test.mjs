@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createReasoningOrchestrator} from '../../modules/reasoning/reasoning-orchestrator.mjs';import {validateReasoningOrchestrator} from '../../modules/reasoning/product-acceptance.mjs';test('Sprint 314',()=>assert.equal(validateReasoningOrchestrator(createReasoningOrchestrator()).ok,true));

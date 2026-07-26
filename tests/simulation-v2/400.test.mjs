@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createDecisionRecord} from '../../modules/simulation-v2/decision-record.mjs';test('Sprint 400',()=>{assert.equal(createDecisionRecord({id:'d',title:'D',selectedOption:{id:'a'}}).selectedOption.id,'a');});

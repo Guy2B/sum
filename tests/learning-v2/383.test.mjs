@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {detectDistributionDrift} from '../../modules/learning-v2/drift-detector.mjs';test('Sprint 383',()=>{assert.equal(detectDistributionDrift({a:1},{a:0,b:1},{threshold:.5}).drift,true);});

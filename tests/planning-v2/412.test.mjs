@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {calculateProgress} from '../../modules/planning-v2/progress-tracker.mjs';test('Sprint 412',()=>{assert.equal(calculateProgress([{status:'completed'},{status:'pending'}]).percent,50);});

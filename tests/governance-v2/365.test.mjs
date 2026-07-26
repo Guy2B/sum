@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {redactRecord} from '../../modules/governance-v2/redaction-engine.mjs';test('Sprint 365',()=>{assert.equal(redactRecord({email:'a'},{fields:[{field:'email',classification:'sensitive'}]}).email,'[REDACTED]');});

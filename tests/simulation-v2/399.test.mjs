@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {generateCounterfactual} from '../../modules/simulation-v2/counterfactual-engine.mjs';test('Sprint 399',()=>{const r=generateCounterfactual({input:{x:1},target:o=>o>=2,mutableFields:['x'],candidates:{x:[2]},evaluate:o=>o.x});assert.equal(r.found,true);});

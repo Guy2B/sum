@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createRecoveryPlan} from '../../modules/resilience-v2/recovery-plan.mjs';test('Sprint 441',()=>{assert.equal(createRecoveryPlan({id:'p',name:'P'}).status,'ready');});

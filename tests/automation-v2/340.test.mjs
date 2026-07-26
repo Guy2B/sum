@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createWorkflowRunner} from '../../modules/automation-v2/workflow-runner.mjs';test('Sprint 340',async ()=>{const a={execute:async()=>({ok:true})};const r=createWorkflowRunner({actions:a});const s=await r.run({id:'w',steps:[{id:'x',type:'t',config:{}}]},{});assert.equal(s.status,'completed');});

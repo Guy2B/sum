@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {runMonteCarlo} from '../../modules/simulation-v2/monte-carlo.mjs';test('Sprint 396',()=>{const r=runMonteCarlo({iterations:3,sample:i=>i,evaluate:x=>x});assert.equal(r.p50,1);});

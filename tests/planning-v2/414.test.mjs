@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {optimizePlan} from '../../modules/planning-v2/plan-optimizer.mjs';test('Sprint 414',()=>{const r=optimizePlan([{id:'a',hours:3,priority:2},{id:'b',hours:4,priority:1}],{capacityHours:3});assert.deepEqual(r.selected.map(x=>x.id),['a']);});

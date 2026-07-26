@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {extractFeatures} from '../../modules/learning-v2/feature-extractor.mjs';test('Sprint 379',()=>{assert.equal(extractFeatures({title:'abcd'}).tokenEstimate,1);});

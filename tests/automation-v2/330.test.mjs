@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createWorkflow} from '../../modules/automation-v2/workflow-contract.mjs';test('Sprint 330',()=>{assert.equal(createWorkflow({id:'w',name:'W',trigger:{type:'x'}}).steps.length,0);});

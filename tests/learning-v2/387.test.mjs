@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {evaluateLearningPolicy} from '../../modules/learning-v2/learning-policy.mjs';test('Sprint 387',()=>{assert.equal(evaluateLearningPolicy({source:'ui',type:'feedback',subjectId:'u'},{allowedSources:['ui'],requireSubject:true}).accepted,true);});

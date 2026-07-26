@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createRetentionGovernor} from '../../modules/governance-v2/retention-governor.mjs';test('Sprint 366',()=>{const g=createRetentionGovernor();g.register({classification:'sensitive',maxAgeMs:1000});assert.equal(g.evaluate({classification:'sensitive',timestamp:new Date().toISOString()}).retain,true);});

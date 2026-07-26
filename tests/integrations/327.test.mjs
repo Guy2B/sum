@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createGitHubAdapter} from '../../modules/integrations/github-adapter.mjs';test('Sprint 327',()=>{const a=createGitHubAdapter({listNotifications:async()=>({items:[]})});assert.equal(a.normalize({id:'1',title:'Issue'}).externalId,'1');});

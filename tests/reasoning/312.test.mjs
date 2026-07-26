@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {evaluateSafety} from '../../modules/reasoning/safety-reasoner.mjs';test('Sprint 312',()=>{assert.equal(evaluateSafety({request:{},policies:[{check:()=>true}]}).allowed,true);});

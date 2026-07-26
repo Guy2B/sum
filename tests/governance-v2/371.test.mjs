@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {evaluateModelGovernance} from '../../modules/governance-v2/model-governance.mjs';test('Sprint 371',()=>{assert.equal(evaluateModelGovernance({provider:'approved',confidence:.9},{approvedProviders:['approved'],minimumConfidence:.8}).approved,true);});

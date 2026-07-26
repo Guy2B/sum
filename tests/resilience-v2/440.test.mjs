@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createCheckpointStore} from '../../modules/resilience-v2/checkpoint-store.mjs';test('Sprint 440',()=>{const s=createCheckpointStore();s.save({executionId:'e',stepId:'a',state:{x:1}});assert.equal(s.load('e','a').state.x,1);});

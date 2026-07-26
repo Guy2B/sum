@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createReasoningGraph} from '../../modules/reasoning/reasoning-graph.mjs';test('Sprint 305',()=>{const g=createReasoningGraph();g.addNode({id:'a'});g.addNode({id:'b'});g.connect('a','b');assert.equal(g.snapshot().edges.length,1);});

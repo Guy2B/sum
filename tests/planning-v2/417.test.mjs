@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createPlanningAudit} from '../../modules/planning-v2/planning-audit.mjs';test('Sprint 417',()=>{const a=createPlanningAudit();a.record({type:'x'});assert.equal(a.list({type:'x'}).length,1);});

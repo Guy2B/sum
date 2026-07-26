@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {composePrompt} from '../../modules/reasoning/prompt-orchestrator.mjs';test('Sprint 301',()=>{assert.match(composePrompt({system:'S',input:'I'}),/INPUT: I/);});

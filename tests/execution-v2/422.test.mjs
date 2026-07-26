@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {evaluatePermissionBoundary} from '../../modules/execution-v2/permission-boundary.mjs';test('Sprint 422',()=>{assert.equal(evaluatePermissionBoundary({actor:{id:'u'},capability:'x',resource:'r'},{allowedCapabilities:['x']}).allowed,true);});

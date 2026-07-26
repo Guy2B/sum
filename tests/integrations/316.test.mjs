@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createCredentialVault} from '../../modules/integrations/credential-vault.mjs';test('Sprint 316',()=>{const v=createCredentialVault();v.put('a',{token:'x'});assert.equal(v.get('a').token,'x');});

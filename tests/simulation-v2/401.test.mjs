@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createSimulationAudit} from '../../modules/simulation-v2/simulation-audit.mjs';test('Sprint 401',()=>{const a=createSimulationAudit();a.record({type:'x'});assert.equal(a.list({type:'x'}).length,1);});

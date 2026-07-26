@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {critiqueResponse} from '../../modules/reasoning/self-critique.mjs';test('Sprint 307',()=>{assert.equal(critiqueResponse({answer:'ok',criteria:[{test:x=>x==='ok'}]}).ok,true);});

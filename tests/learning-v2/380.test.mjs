@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createRankingTrainer} from '../../modules/learning-v2/ranking-trainer.mjs';test('Sprint 380',()=>{const t=createRankingTrainer({learningRate:.1});const r=t.update({x:1},1);assert.equal(r.error,1);});

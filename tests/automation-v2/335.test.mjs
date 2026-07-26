@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {parseSchedule} from '../../modules/automation-v2/schedule-parser.mjs';test('Sprint 335',()=>{assert.equal(parseSchedule({type:'daily',time:'08:30'}).hour,8);});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {validateLearningOrchestrator} from '../../modules/learning-v2/product-acceptance.mjs';test('Sprint 389',()=>{assert.equal(validateLearningOrchestrator({ingest(){},profile(){},behavior(){},audit(){}}).ok,true);});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createCalendarAdapter} from '../../modules/integrations/calendar-adapter.mjs';test('Sprint 324',()=>{const a=createCalendarAdapter({listEvents:async()=>({items:[]})});assert.equal(a.normalize({id:'1',summary:'E'}).type,'calendar-event');});

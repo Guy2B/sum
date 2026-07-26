@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {evaluateExecutionPolicy} from '../../modules/execution-v2/execution-policy.mjs';test('Sprint 430',()=>{assert.equal(evaluateExecutionPolicy({actions:[{id:'a',capability:'x',risk:'low'}]},{allowedCapabilities:['x']}).accepted,true);});

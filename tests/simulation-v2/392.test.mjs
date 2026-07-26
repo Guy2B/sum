@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {evaluateConstraints} from '../../modules/simulation-v2/constraint-engine.mjs';test('Sprint 392',()=>{assert.equal(evaluateConstraints([{path:'x',operator:'gte',value:1}],{x:2}).feasible,true);});

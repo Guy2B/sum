@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createExceptionWorkflow} from '../../modules/governance-v2/exception-workflow.mjs';test('Sprint 372',()=>{const w=createExceptionWorkflow();w.request({id:'e',policyId:'p',reason:'test',requestedBy:'u'});assert.equal(w.decide('e','approved','admin').status,'approved');});

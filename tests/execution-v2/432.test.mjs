@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createExecutionQueue} from '../../modules/execution-v2/execution-queue.mjs';test('Sprint 432',()=>{const q=createExecutionQueue();q.enqueue({id:'x'});assert.equal(q.dequeue().id,'x');});

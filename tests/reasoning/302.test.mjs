@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createToolCallEngine} from '../../modules/reasoning/tool-call-engine.mjs';test('Sprint 302',async ()=>{const e=createToolCallEngine([{name:'sum',run:({a,b})=>a+b}]);assert.equal(await e.execute({name:'sum',arguments:{a:1,b:2}}),3);});

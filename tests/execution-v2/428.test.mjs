@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createActionRunner} from '../../modules/execution-v2/action-runner.mjs';test('Sprint 428',async ()=>{const j={append(){}};const r=createActionRunner({capabilities:{execute:async()=>7},journal:j});assert.equal((await r.run({id:'a',capability:'x'},{executionId:'e'})).result,7);});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {compensate} from '../../modules/automation-v2/compensation-engine.mjs';test('Sprint 339',async ()=>{const order=[];await compensate([{id:'a',compensate:async()=>order.push('a')},{id:'b',compensate:async()=>order.push('b')}]);assert.deepEqual(order,['b','a']);});

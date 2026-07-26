@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createModelProvider} from '../../modules/reasoning/model-provider.mjs';test('Sprint 300',async ()=>{const p=createModelProvider({id:'p',name:'P',invoke:async r=>r});assert.equal((await p.invoke({x:1})).x,1);});

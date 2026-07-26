@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {aggregateStatus} from '../../modules/observability-v2/status-aggregator.mjs';test('Sprint 356',()=>{assert.equal(aggregateStatus([{name:'a',status:'healthy'},{name:'b',status:'degraded'}]).status,'degraded');});

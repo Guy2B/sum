@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createIntegrationOrchestrator} from '../../modules/integrations/integration-orchestrator.mjs';test('Sprint 328',async ()=>{const o=createIntegrationOrchestrator();o.register('x',{listSignals:async()=>({items:[{id:'1'}]}),normalize:x=>x});assert.equal((await o.sync('x')).records.length,1);});

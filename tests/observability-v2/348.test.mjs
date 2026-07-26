@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createLogBuffer} from '../../modules/observability-v2/log-buffer.mjs';test('Sprint 348',()=>{const b=createLogBuffer({maxEntries:2});b.write({source:'a'});b.write({source:'b'});b.write({source:'c'});assert.equal(b.size(),2);});

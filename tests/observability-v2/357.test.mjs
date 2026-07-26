@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {applyRetention} from '../../modules/observability-v2/retention-policy.mjs';test('Sprint 357',()=>{const now=Date.now();const r=applyRetention([{timestamp:new Date(now).toISOString()}],{now,maxAgeMs:1000});assert.equal(r.length,1);});

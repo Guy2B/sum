@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createTriggerRegistry} from '../../modules/automation-v2/trigger-registry.mjs';test('Sprint 331',async ()=>{const r=createTriggerRegistry();r.register('x',async()=>true);assert.equal(await r.evaluate('x',{}),true);});

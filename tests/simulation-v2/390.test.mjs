@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createScenario} from '../../modules/simulation-v2/scenario-contract.mjs';test('Sprint 390',()=>{assert.equal(createScenario({id:'s',name:'S'}).horizon,'30d');});

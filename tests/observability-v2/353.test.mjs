@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {detectAnomaly} from '../../modules/observability-v2/anomaly-detector.mjs';test('Sprint 353',()=>{assert.equal(detectAnomaly([10,10,10],20).anomaly,true);});

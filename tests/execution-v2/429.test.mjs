@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createRollbackManager} from '../../modules/execution-v2/rollback-manager.mjs';test('Sprint 429',async ()=>{const r=createRollbackManager();r.register('x',async()=>true);assert.equal((await r.rollback([{id:'a',capability:'x'}]))[0].status,'rolled-back');});

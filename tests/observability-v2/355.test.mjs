@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createRunbookEngine} from '../../modules/observability-v2/runbook-engine.mjs';test('Sprint 355',async ()=>{const r=createRunbookEngine();r.register({id:'rb',name:'R',steps:[{id:'s'}]});assert.equal((await r.execute('rb')).results.length,1);});

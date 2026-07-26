@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createRecoveryAudit} from '../../modules/resilience-v2/recovery-audit.mjs';test('Sprint 446',()=>{const a=createRecoveryAudit();a.record({status:'completed'});assert.equal(a.list({status:'completed'}).length,1);});

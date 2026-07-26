@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createResilienceOrchestrator} from '../../modules/resilience-v2/resilience-orchestrator.mjs';test('Sprint 447',async ()=>{const o=createResilienceOrchestrator();const r=await o.execute({service:'s',operation:async()=>1});assert.equal(r.status,'completed');});

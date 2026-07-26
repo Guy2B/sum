@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createActionRegistry} from '../../modules/automation-v2/action-registry.mjs';test('Sprint 333',async ()=>{const r=createActionRegistry();r.register('x',async c=>c.value);assert.equal(await r.execute('x',{value:4}),4);});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createConversationMemory} from '../../modules/reasoning/conversation-memory.mjs';test('Sprint 304',()=>{const m=createConversationMemory({maxEntries:2});m.append({text:'a'});assert.equal(m.recent(1).length,1);});

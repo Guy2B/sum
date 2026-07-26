@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {evaluateConditions} from '../../modules/automation-v2/condition-engine.mjs';test('Sprint 332',()=>{assert.equal(evaluateConditions([{path:'a',operator:'gte',value:2}],{a:3}),true);});

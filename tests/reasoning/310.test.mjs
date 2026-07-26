@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createEvidenceManager} from '../../modules/reasoning/evidence-manager.mjs';test('Sprint 310',()=>{const e=createEvidenceManager();e.add({reliability:.9});assert.equal(e.strongest(1).length,1);});

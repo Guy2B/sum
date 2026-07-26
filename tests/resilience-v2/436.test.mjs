@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createCircuitBreaker} from '../../modules/resilience-v2/circuit-breaker.mjs';test('Sprint 436',()=>{const b=createCircuitBreaker({failureThreshold:2});b.failure();b.failure();assert.equal(b.snapshot().state,'open');});

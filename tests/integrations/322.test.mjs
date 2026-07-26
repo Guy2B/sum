@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {computeRetryDelay, shouldRetry} from '../../modules/integrations/retry-policy.mjs';test('Sprint 322',()=>{assert.equal(computeRetryDelay(2,{baseMs:100,jitter:0}),200);assert.equal(shouldRetry({retryable:true},{attempt:1,maxAttempts:2}),true);});

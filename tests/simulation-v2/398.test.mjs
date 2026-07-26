@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {buildTradeoffMatrix} from '../../modules/simulation-v2/tradeoff-matrix.mjs';test('Sprint 398',()=>{const r=buildTradeoffMatrix([{id:'a',metrics:{x:2}},{id:'b',metrics:{x:1}}],[{metric:'x',direction:'maximize'}]);assert.equal(r[0].optionId,'a');});

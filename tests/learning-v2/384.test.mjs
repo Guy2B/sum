@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createExperimentManager} from '../../modules/learning-v2/experiment-manager.mjs';test('Sprint 384',()=>{const m=createExperimentManager();m.create({id:'e',name:'E',variants:['a','b']});m.start('e');assert.ok(['a','b'].includes(m.assign('e','user')));});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createSlackAdapter} from '../../modules/integrations/slack-adapter.mjs';test('Sprint 326',()=>{const a=createSlackAdapter({listMessages:async()=>({items:[]})});assert.equal(a.normalize({ts:'1',text:'Hi'}).type,'chat-message');});

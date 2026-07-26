@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {consolidateKnowledge} from '../../modules/learning-v2/knowledge-consolidator.mjs';test('Sprint 385',()=>{const r=consolidateKnowledge([{key:'x',value:1,confidence:.8},{key:'x',value:2,confidence:1}]);assert.equal(r[0].observations,2);});

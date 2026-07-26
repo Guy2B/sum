@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createAssumptionRegistry} from '../../modules/simulation-v2/assumption-registry.mjs';test('Sprint 391',()=>{const r=createAssumptionRegistry();r.set({id:'a',label:'A',value:1});assert.equal(r.get('a').value,1);});

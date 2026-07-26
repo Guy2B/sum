@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createAutomationAudit} from '../../modules/automation-v2/automation-audit.mjs';test('Sprint 342',()=>{const a=createAutomationAudit();a.record({workflowId:'w'});assert.equal(a.list({workflowId:'w'}).length,1);});

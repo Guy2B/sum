@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {analyzeSensitivity} from '../../modules/simulation-v2/sensitivity-analysis.mjs';test('Sprint 397',()=>{const r=analyzeSensitivity({baseline:{x:1},variables:{x:[2]},evaluate:o=>o.x});assert.equal(r.results[0].delta,1);});

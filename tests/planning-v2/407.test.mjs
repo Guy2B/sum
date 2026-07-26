@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {decomposeTask} from '../../modules/planning-v2/task-decomposer.mjs';test('Sprint 407',()=>{assert.equal(decomposeTask({id:'t',title:'Task',steps:[{title:'A'},{title:'B'}]}).length,2);});

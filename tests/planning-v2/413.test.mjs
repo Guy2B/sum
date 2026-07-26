@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {applyRiskBuffer} from '../../modules/planning-v2/risk-buffer.mjs';test('Sprint 413',()=>{assert.equal(applyRiskBuffer(10,{uncertainty:.2}).bufferedEstimate,12);});

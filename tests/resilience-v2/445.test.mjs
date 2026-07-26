@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {evaluateResiliencePolicy} from '../../modules/resilience-v2/resilience-policy.mjs';test('Sprint 445',()=>{assert.equal(evaluateResiliencePolicy({service:'api',operation:'read',risk:'low'},{maximumRisk:'medium'}).allowed,true);});

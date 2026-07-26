@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createIntegrationOrchestrator} from '../../modules/integrations/integration-orchestrator.mjs';import {validateIntegrationOrchestrator} from '../../modules/integrations/product-acceptance.mjs';test('Sprint 329',()=>assert.equal(validateIntegrationOrchestrator(createIntegrationOrchestrator()).ok,true));

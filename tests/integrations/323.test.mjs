@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createGmailAdapter} from '../../modules/integrations/gmail-adapter.mjs';test('Sprint 323',()=>{const a=createGmailAdapter({listMessages:async()=>({items:[]})});assert.equal(a.normalize({id:'1',subject:'S'}).type,'email');});

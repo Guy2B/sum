@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {validateAutomationOrchestrator} from '../../modules/automation-v2/product-acceptance.mjs';test('Sprint 344',()=>{assert.equal(validateAutomationOrchestrator({register(){},dispatch(){},workflows(){},audit(){}}).ok,true);});

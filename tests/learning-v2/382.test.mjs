@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {applyCorrection} from '../../modules/learning-v2/correction-engine.mjs';test('Sprint 382',()=>{assert.equal(applyCorrection({label:'a'},{fields:{label:'b'}}).item.label,'b');});

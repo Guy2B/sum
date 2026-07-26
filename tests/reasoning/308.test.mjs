@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {reflectOnOutcome} from '../../modules/reasoning/reflection-engine.mjs';test('Sprint 308',()=>{assert.equal(reflectOnOutcome({goal:'g',result:1,expected:1}).matched,true);});

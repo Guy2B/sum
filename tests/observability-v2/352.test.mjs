@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createIncidentManager} from '../../modules/observability-v2/incident-manager.mjs';test('Sprint 352',()=>{const m=createIncidentManager();m.open({id:'i',title:'Incident'});assert.equal(m.resolve('i').status,'resolved');});

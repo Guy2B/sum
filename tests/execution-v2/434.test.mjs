@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {validateExecutionOrchestrator} from '../../modules/execution-v2/product-acceptance.mjs';test('Sprint 434',()=>{assert.equal(validateExecutionOrchestrator({execute(){},journal(){}}).ok,true);});

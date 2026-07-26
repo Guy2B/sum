@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {evaluateCompliance} from '../../modules/governance-v2/compliance-checker.mjs';test('Sprint 369',()=>{assert.equal(evaluateCompliance([{id:'x',key:'enabled',operator:'eq',value:true}],{enabled:true}).compliant,true);});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createPreferenceProfile} from '../../modules/learning-v2/preference-profile.mjs';test('Sprint 377',()=>{const p=createPreferenceProfile({subjectId:'u'});p.set('x',1);assert.equal(p.get('x'),1);});

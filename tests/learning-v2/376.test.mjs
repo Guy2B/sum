@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {normalizeFeedback} from '../../modules/learning-v2/feedback-normalizer.mjs';test('Sprint 376',()=>{assert.equal(normalizeFeedback({rating:2}).rating,1);});

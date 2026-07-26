@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {retrieveEvidence} from '../../modules/reasoning/retrieval-pipeline.mjs';test('Sprint 303',()=>{assert.equal(retrieveEvidence([{id:'a',title:'calendar',content:'event'}],'calendar')[0].id,'a');});

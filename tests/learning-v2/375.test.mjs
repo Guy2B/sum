@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createLearningEvent} from '../../modules/learning-v2/learning-event.mjs';test('Sprint 375',()=>{assert.equal(createLearningEvent({id:'e',type:'x',source:'s'}).type,'x');});

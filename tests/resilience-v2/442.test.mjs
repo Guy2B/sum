@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createReplayBuffer} from '../../modules/resilience-v2/replay-buffer.mjs';test('Sprint 442',()=>{const b=createReplayBuffer({maxEntries:2});b.push({id:1});b.push({id:2});b.push({id:3});assert.equal(b.size(),2);});

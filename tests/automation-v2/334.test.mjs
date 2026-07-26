@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {resolveVariables} from '../../modules/automation-v2/variable-resolver.mjs';test('Sprint 334',()=>{assert.equal(resolveVariables('Bonjour {{user.name}}',{user:{name:'Sigma'}}),'Bonjour Sigma');});

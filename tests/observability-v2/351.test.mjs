@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {evaluateAlertRule} from '../../modules/observability-v2/alert-rule.mjs';test('Sprint 351',()=>{assert.equal(evaluateAlertRule({id:'a',path:'x',operator:'gt',threshold:5},{x:6}).triggered,true);});

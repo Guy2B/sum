@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createTraceContext,childTraceContext} from '../../modules/observability-v2/trace-context.mjs';test('Sprint 346',()=>{const p=createTraceContext({traceId:'t',spanId:'a'});assert.equal(childTraceContext(p,'b').parentSpanId,'a');});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {scoreObjectives} from '../../modules/simulation-v2/objective-scorer.mjs';test('Sprint 393',()=>{assert.equal(scoreObjectives([{metric:'x',target:10,direction:'maximize'}],{x:10}).score,1);});

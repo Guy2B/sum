@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createExecutionReport} from '../../modules/execution-v2/execution-report.mjs';test('Sprint 431',()=>{assert.equal(createExecutionReport({execution:{id:'e',intentId:'i',status:'completed'}}).status,'completed');});

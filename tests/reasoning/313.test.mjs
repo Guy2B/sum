@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createReasoningOrchestrator} from '../../modules/reasoning/reasoning-orchestrator.mjs';test('Sprint 313',async ()=>{const o=createReasoningOrchestrator({providers:[{id:'p',capabilities:[],invoke:async()=>({ok:true})}],policies:[]});assert.equal((await o.reason({input:'x'})).status,'completed');});

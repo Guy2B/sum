@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createGoal} from '../../modules/planning-v2/goal-contract.mjs';test('Sprint 405',()=>{assert.equal(createGoal({id:'g',title:'G'}).status,'draft');});

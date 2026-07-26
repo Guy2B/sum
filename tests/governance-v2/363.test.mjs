@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createConsentRegistry} from '../../modules/governance-v2/consent-registry.mjs';test('Sprint 363',()=>{const r=createConsentRegistry();r.grant({subjectId:'u',purpose:'email',scope:['read']});assert.equal(r.check('u','email',{requiredScope:['read']}).granted,true);});

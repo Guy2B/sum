@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createWorkflowStore} from '../../modules/automation-v2/workflow-store.mjs';test('Sprint 341',()=>{const s=createWorkflowStore();s.save({id:'w',enabled:true});assert.equal(s.list().length,1);});

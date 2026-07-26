@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {authorize} from '../../modules/governance-v2/authorization-engine.mjs';test('Sprint 362',()=>{const d=authorize({policies:[{id:'p',effect:'allow',resource:'x',actions:['read'],conditions:[]}],identity:{},resource:'x',action:'read'});assert.equal(d.allowed,true);});

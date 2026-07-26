@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {validatePlanningOrchestrator} from '../../modules/planning-v2/product-acceptance.mjs';test('Sprint 419',()=>{assert.equal(validatePlanningOrchestrator({registerGoal(){},registerTasks(){},buildPlan(){},progress(){},updateTask(){},audit(){}}).ok,true);});

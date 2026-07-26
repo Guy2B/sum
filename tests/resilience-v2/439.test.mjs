@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createFallbackRegistry} from '../../modules/resilience-v2/fallback-registry.mjs';test('Sprint 439',async ()=>{const r=createFallbackRegistry();r.register('x',async()=>3);assert.equal(await r.execute('x'),3);});

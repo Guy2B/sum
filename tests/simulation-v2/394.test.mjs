@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {generateOptions} from '../../modules/simulation-v2/option-generator.mjs';test('Sprint 394',()=>{assert.equal(generateOptions({dimensions:{a:[1,2],b:['x','y']}}).length,4);});

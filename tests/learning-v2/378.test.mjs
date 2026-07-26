@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createBehaviorModel} from '../../modules/learning-v2/behavior-model.mjs';test('Sprint 378',()=>{const m=createBehaviorModel();m.observe('open');m.observe('open');assert.equal(m.probability('open'),1);});

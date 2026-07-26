@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {runDryRun} from '../../modules/execution-v2/dry-run-engine.mjs';test('Sprint 426',async ()=>{const r=await runDryRun([{id:'a'}],{simulate:async()=>({ok:true})});assert.equal(r.ok,true);});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createCommitmentLedger} from '../../modules/planning-v2/commitment-ledger.mjs';test('Sprint 416',()=>{const l=createCommitmentLedger();l.commit({id:'c',subjectId:'u',title:'Do'});assert.equal(l.update('c','completed').status,'completed');});

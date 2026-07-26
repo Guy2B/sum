@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createApprovalTicket,decideApproval} from '../../modules/execution-v2/approval-ticket.mjs';test('Sprint 423',()=>{const t=createApprovalTicket({id:'a',executionId:'e',actionId:'x',summary:'S',requestedBy:'u'});assert.equal(decideApproval(t,'approved','admin').status,'approved');});

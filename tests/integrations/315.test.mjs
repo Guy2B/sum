@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createConnectorContract} from '../../modules/integrations/connector-contract.mjs';test('Sprint 315',()=>{assert.equal(createConnectorContract({id:'x',name:'X',provider:'P'}).version,'1.0.0');});

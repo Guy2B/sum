@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {classifyData} from '../../modules/governance-v2/data-classifier.mjs';test('Sprint 364',()=>{assert.equal(classifyData({email:'a@b.com'}).classification,'sensitive');});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createIdempotencyStore} from '../../modules/execution-v2/idempotency-store.mjs';test('Sprint 424',()=>{const s=createIdempotencyStore();s.set('k',{x:1});s.set('k',{x:2});assert.equal(s.get('k').value.x,1);});

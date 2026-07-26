@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createCapabilityRegistry} from '../../modules/execution-v2/capability-registry.mjs';test('Sprint 421',async ()=>{const r=createCapabilityRegistry();r.register({id:'x',name:'X',execute:async()=>1});assert.equal(await r.execute('x'),1);});

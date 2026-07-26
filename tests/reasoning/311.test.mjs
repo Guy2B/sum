@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {routeModel} from '../../modules/reasoning/model-router.mjs';test('Sprint 311',()=>{assert.equal(routeModel([{id:'a',capabilities:['x'],priority:1}],{requiredCapabilities:['x']}).id,'a');});

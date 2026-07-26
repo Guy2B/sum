@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createLearningAudit} from '../../modules/learning-v2/learning-audit.mjs';test('Sprint 386',()=>{const a=createLearningAudit();a.record({type:'x'});assert.equal(a.list({type:'x'}).length,1);});

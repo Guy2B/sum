@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createPolicy} from '../../modules/governance-v2/policy-contract.mjs';test('Sprint 360',()=>{assert.equal(createPolicy({id:'p',name:'P'}).effect,'allow');});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {evaluateConnectorHealth} from '../../modules/integrations/connector-health.mjs';test('Sprint 321',()=>{assert.equal(evaluateConnectorHealth({lastSuccessAt:new Date().toISOString()}).status,'healthy');});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createExecutionIntent} from '../../modules/execution-v2/execution-intent.mjs';test('Sprint 420',()=>{assert.equal(createExecutionIntent({id:'i',title:'I',actorId:'u',objective:'O'}).status,'draft');});

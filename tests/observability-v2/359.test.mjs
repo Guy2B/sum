@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {validateObservabilityOrchestrator} from '../../modules/observability-v2/product-acceptance.mjs';test('Sprint 359',()=>{assert.equal(validateObservabilityOrchestrator({registerAlert(){},ingest(){},evaluateAlerts(){},snapshot(){}}).ok,true);});
