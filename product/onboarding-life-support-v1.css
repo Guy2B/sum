@@ -1,0 +1,18 @@
+.sigma-life-support-onboarding-v1{width:min(880px,calc(100vw - 28px));max-height:90vh;border:1px solid var(--border);border-radius:20px;padding:0;background:var(--surface);color:var(--text)}
+.sigma-life-support-onboarding-v1::backdrop{background:rgba(10,15,25,.62);backdrop-filter:blur(4px)}
+.sigma-life-support-onboarding-v1 form{padding:24px;display:grid;gap:22px}
+.sigma-life-support-onboarding-v1 header p{color:var(--muted)}
+.sigma-life-support-onboarding-v1 section{display:grid;gap:10px}
+.sigma-onboarding-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.sigma-onboarding-options label{display:flex;gap:10px;padding:13px;border:1px solid var(--border);border-radius:14px;background:var(--surface-2);cursor:pointer}
+.sigma-onboarding-options label:has(input:checked){border-color:var(--primary);box-shadow:0 0 0 2px color-mix(in srgb,var(--primary) 15%,transparent)}
+.sigma-onboarding-options input{margin-top:3px}
+.sigma-onboarding-options span{display:grid;gap:4px}
+.sigma-onboarding-options small{color:var(--muted)}
+.sigma-life-support-onboarding-v1 footer{display:flex;justify-content:flex-end;gap:10px}
+.sigma-compact-context-profiles-v1{margin-bottom:18px}
+.sigma-context-profile-groups{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.sigma-context-profile-groups section{padding:13px;border-radius:13px;background:var(--surface-2);border:1px solid var(--border)}
+.sigma-context-profile-groups section>div{display:flex;flex-wrap:wrap;gap:7px}
+.sigma-context-chip{display:inline-flex;padding:5px 9px;border-radius:999px;background:var(--surface);border:1px solid var(--border);font-size:12px;font-weight:750}
+@media(max-width:720px){.sigma-onboarding-options,.sigma-context-profile-groups{grid-template-columns:1fr}.sigma-life-support-onboarding-v1 form{padding:18px}}

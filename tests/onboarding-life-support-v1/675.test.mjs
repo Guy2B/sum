@@ -1,0 +1,8 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import vm from 'node:vm';
+const store=new Map();const localStorage={get length(){return store.size},key(i){return [...store.keys()][i]??null},getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
+const dummy={addEventListener(){},appendChild(){},prepend(){},querySelector(){return null},querySelectorAll(){return[]},showModal(){},close(){},classList:{add(){}}};
+const document={readyState:'loading',body:{...dummy,dataset:{}},head:dummy,addEventListener(){},querySelector(){return null},querySelectorAll(){return[]},getElementById(){return null},createElement(){return{...dummy,dataset:{}}}};
+const window={localStorage,document,addEventListener(){},dispatchEvent(){},setTimeout,clearTimeout};window.window=window;
+const context=vm.createContext({window,document,localStorage,console,Date,JSON,Math,Promise,setTimeout,clearTimeout,CustomEvent:function(){}});
+for(const file of ["onboarding-state-v1.js", "life-profile-proposals-v1.js", "support-profile-proposals-v1.js", "active-profile-store-v1.js", "existing-profile-migration-v1.js", "onboarding-recommendation-engine-v1.js", "signup-onboarding-trigger-v1.js", "onboarding-ui-v1.js", "compact-context-profiles-v1.js", "onboarding-data-source-bridge-v1.js", "release-status-689.js", "onboarding-life-support-acceptance-v1.js"]){vm.runInContext(fs.readFileSync(new URL('../../modules/onboarding-life-support-v1/'+file,import.meta.url),'utf8'),context);}
+test('Sprint 675',()=>{assert.equal(context.window.SigmaOnboardingStateV1.shouldRun(),true);});
