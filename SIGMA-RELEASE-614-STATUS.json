@@ -1,0 +1,22 @@
+﻿{
+    "release":  614,
+    "local":  {
+                  "path":  "C:\\Dev\\sum\\app.html",
+                  "gitHeadAfter":  "e475abd8a68e891fb4af710b66e52c5e356e95b9",
+                  "markersOk":  true,
+                  "gitHeadBefore":  "e475abd8a68e891fb4af710b66e52c5e356e95b9"
+              },
+    "git":  {
+                "branch":  "main",
+                "clean":  true,
+                "pushed":  true,
+                "remote":  "https://github.com/Guy2B/sum.git"
+            },
+    "firebase":  {
+                     "deployed":  true,
+                     "verifiedUrl":  "https://project-sum-b961a.web.app/app.html",
+                     "project":  "project-sum-b961a",
+                     "publicFolder":  "C:\\Dev\\sum"
+                 },
+    "generatedAt":  "2026-07-26T16:47:09.6552537+02:00"
+}
