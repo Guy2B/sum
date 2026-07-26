@@ -36,3 +36,5 @@ functions/node_modules/
 # Local dependencies and secrets
 functions/.env
 functions/.env.*
+
+.release-backups/
