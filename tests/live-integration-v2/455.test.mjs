@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {scoreSignal} from '../../modules/live-integration-v2/priority-scorer.mjs';test('Sprint 455',()=>{assert.equal(scoreSignal({text:'urgent action required',unread:true,receivedAt:new Date().toISOString()}).level,'critical');});

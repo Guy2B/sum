@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {normalizeMessage} from '../../modules/live-integration-v2/message-normalizer.mjs';test('Sprint 453',()=>{assert.equal(normalizeMessage({id:'m',subject:'S'}).subject,'S');});

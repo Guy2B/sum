@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createGmailAdapter} from '../../modules/live-integration-v2/gmail-adapter-contract.mjs';test('Sprint 460',async ()=>{const a=createGmailAdapter({fetchMessages:async()=>({messages:[]})});assert.deepEqual(await a.fetch({accessToken:'x'}),{messages:[]});});

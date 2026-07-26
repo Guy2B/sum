@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createSyncCursorStore} from '../../modules/live-integration-v2/sync-cursor-store.mjs';test('Sprint 452',()=>{const s=createSyncCursorStore();s.set('c',5);assert.equal(s.get('c').cursor,5);});

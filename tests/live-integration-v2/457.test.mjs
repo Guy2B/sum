@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createSyncDiagnostics} from '../../modules/live-integration-v2/sync-diagnostics.mjs';test('Sprint 457',()=>{const d=createSyncDiagnostics();d.record({type:'sync-completed'});assert.equal(d.summary().completed,1);});

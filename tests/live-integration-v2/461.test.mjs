@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {buildAppViewModel} from '../../modules/live-integration-v2/app-view-model.mjs';test('Sprint 461',()=>{assert.equal(buildAppViewModel({status:{connectors:{c:{status:'connected'}}},messages:[{unread:true}],signals:[]}).counters.unread,1);});

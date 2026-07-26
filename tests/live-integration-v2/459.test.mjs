@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createDemoMailConnector} from '../../modules/live-integration-v2/demo-mail-connector.mjs';test('Sprint 459',async ()=>{const c=createDemoMailConnector();await c.connect();assert.equal((await c.sync()).messages.length,2);});

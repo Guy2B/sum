@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createConnector} from '../../modules/live-integration-v2/connector-contract.mjs';test('Sprint 450',()=>{assert.equal(createConnector({id:'c',name:'C',type:'mail',connect:async()=>1,sync:async()=>2}).type,'mail');});

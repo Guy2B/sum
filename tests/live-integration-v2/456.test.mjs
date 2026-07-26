@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createLiveDataStore} from '../../modules/live-integration-v2/live-data-store.mjs';test('Sprint 456',()=>{const s=createLiveDataStore();s.upsertMessages([{id:'m'}]);assert.equal(s.messages().length,1);});

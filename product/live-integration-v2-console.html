@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Σ Live Integration V2</title>
+<link rel="stylesheet" href="./live-integration-v2-console.css">
+</head>
+<body>
+<aside><strong>Σ Life OS</strong><p>Données synchronisées, priorités et diagnostics.</p></aside>
+<main>
+<header>
+<div><small>LIVE INTEGRATION V2</small><h1>Des données réelles jusqu’à l’écran.</h1></div>
+<button id="sync">Actualiser</button>
+</header>
+<p data-live-sync-status>Jamais synchronisé</p>
+<section class="grid">
+<article class="card"><span>Connectés</span><h2 data-live-connected>0</h2></article>
+<article class="card"><span>Prioritaires</span><h2 data-live-priorities>0</h2></article>
+<article class="card"><span>Non lus</span><h2 data-live-unread>0</h2></article>
+<article class="card"><span>Total</span><h2 data-live-total>0</h2></article>
+</section>
+<section class="card">
+<h2>Priorités détectées</h2>
+<div data-live-priority-list></div>
+</section>
+</main>
+<script type="module" src="./live-integration-v2-console.js"></script>
+</body>
+</html>

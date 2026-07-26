@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createConnectorRegistry} from '../../modules/live-integration-v2/connector-registry.mjs';test('Sprint 451',async ()=>{const r=createConnectorRegistry();r.register({id:'c',name:'C',type:'mail',connect:async()=>1,sync:async()=>2});assert.equal((await r.connect('c')),1);});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {messageToSignal} from '../../modules/live-integration-v2/signal-transformer.mjs';test('Sprint 454',()=>{assert.equal(messageToSignal({id:'m',source:'mail',subject:'S'}).type,'message');});

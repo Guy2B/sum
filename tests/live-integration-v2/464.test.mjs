@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {validateLiveIntegration} from '../../modules/live-integration-v2/product-acceptance.mjs';test('Sprint 464',()=>{assert.equal(validateLiveIntegration({register(){},connect(){},sync(){},subscribe(){},view(){},diagnostics(){},raw(){}}).ok,true);});

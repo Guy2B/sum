@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createLiveIntegrationOrchestrator} from '../../modules/live-integration-v2/live-integration-orchestrator.mjs';test('Sprint 463',()=>{const o=createLiveIntegrationOrchestrator();assert.equal(typeof o.sync,'function');});
