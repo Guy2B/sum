@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Σ Centre des connexions</title>
+  <link rel="stylesheet" href="./connector-center.css">
+</head>
+<body>
+  <aside>
+    <strong>Σ Life OS</strong>
+    <nav>
+      <button>Attention</button>
+      <button>Aujourd’hui</button>
+      <button>Décisions</button>
+      <button class="active">Connexions</button>
+    </nav>
+    <p>Chaque connexion dispose de permissions explicites, d’un état de santé et d’un historique de synchronisation.</p>
+  </aside>
+  <main>
+    <header>
+      <div><small>CONNECTED SIGNAL HUB</small><h1>Vos sources, réunies sans perdre le contrôle.</h1></div>
+      <button id="sync-all">Synchroniser</button>
+    </header>
+    <section id="summary" class="summary"></section>
+    <section>
+      <h2>Connecteurs installés</h2>
+      <div id="connectors" class="grid"></div>
+    </section>
+    <section>
+      <h2>Derniers signaux importés</h2>
+      <div id="signals"></div>
+    </section>
+  </main>
+  <script type="module" src="./connector-center.js"></script>
+</body>
+</html>

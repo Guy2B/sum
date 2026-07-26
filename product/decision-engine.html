@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Σ Moteur de décision</title>
+  <link rel="stylesheet" href="./decision-engine.css">
+</head>
+<body>
+  <aside>
+    <strong>Σ Life OS</strong>
+    <nav>
+      <button>Attention</button>
+      <button>Aujourd’hui</button>
+      <button class="active">Décisions</button>
+      <button>Objectifs</button>
+    </nav>
+    <p>Sigma compare les options, explique ses critères et demande votre validation lorsque nécessaire.</p>
+  </aside>
+  <main>
+    <header>
+      <div><small>MOTEUR DE DÉCISION</small><h1>Quelle est la meilleure prochaine décision ?</h1></div>
+      <button id="recompute">Recalculer</button>
+    </header>
+    <section id="recommendation" class="recommendation"></section>
+    <section>
+      <h2>Options comparées</h2>
+      <div id="options" class="options"></div>
+    </section>
+    <section>
+      <h2>Ce qui changerait selon votre choix</h2>
+      <div id="counterfactuals"></div>
+    </section>
+  </main>
+  <script type="module" src="./decision-engine.js"></script>
+</body>
+</html>
