@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Σ Centre de confiance</title>
+  <link rel="stylesheet" href="./trust-center.css">
+</head>
+<body>
+  <aside>
+    <strong>Σ Life OS</strong>
+    <nav>
+      <button>Attention</button>
+      <button>Aujourd’hui</button>
+      <button>Décisions</button>
+      <button>Sources</button>
+      <button class="active">Confiance</button>
+    </nav>
+    <p>Permissions, conservation, export et suppression restent sous votre contrôle.</p>
+  </aside>
+  <main>
+    <header>
+      <div><small>TRUST & CONTROL CENTER</small><h1>Vos données. Vos règles. Vos décisions.</h1></div>
+      <button id="refresh">Actualiser</button>
+    </header>
+    <section id="summary" class="summary"></section>
+    <section class="columns">
+      <div>
+        <h2>Permissions actives</h2>
+        <div id="permissions"></div>
+      </div>
+      <div>
+        <h2>Conservation</h2>
+        <div id="retention" class="card"></div>
+      </div>
+    </section>
+    <section class="actions">
+      <button id="export-data">Exporter mes données</button>
+      <button id="delete-data" class="danger">Préparer la suppression</button>
+    </section>
+    <pre id="output"></pre>
+  </main>
+  <script type="module" src="./trust-center.js"></script>
+</body>
+</html>
