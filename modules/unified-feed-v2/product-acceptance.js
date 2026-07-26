@@ -1,0 +1,1 @@
+(function(g){g.SigmaUnifiedFeedAcceptance={validate(){const required=['SigmaUnifiedFeedNormalizer','SigmaUnifiedFeedPriority','SigmaExistingConnectorsAdapter','SigmaUnifiedFeedOrchestrator','SigmaUnifiedFeedUI'];return{ok:required.every(k=>Boolean(g[k])),missing:required.filter(k=>!g[k])};}}})(window);

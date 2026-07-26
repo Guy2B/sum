@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';test('UTF-8',()=>{for(const f of ['product/automation-studio-v2.css','modules/automation-studio-v2/automation-studio-ui.js'])assert.doesNotMatch(fs.readFileSync(f,'utf8'),/(?:Ã.|Â.|â€|ï¿½|Î£)/)});

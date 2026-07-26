@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import vm from 'node:vm';
+const storage=new Map();const document={readyState:'loading',addEventListener(){},getElementById(){return null},querySelector(){return null}};
+const window={localStorage:{getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v),removeItem:k=>storage.delete(k)},document,addEventListener(){},dispatchEvent(){},setTimeout,clearTimeout,crypto:globalThis.crypto,SigmaSocialEngine:{snapshot:()=>({})}};
+window.window=window;const context=vm.createContext({window,document,localStorage:window.localStorage,console,Date,JSON,Math,Promise,setTimeout,clearTimeout,crypto:globalThis.crypto,CustomEvent:function(){}});
+for(const file of ["feed-item-normalizer.js", "feed-deduplicator.js", "context-linker.js", "feed-priority-engine.js", "opportunity-detector.js", "rss-source-registry.js", "rss-fetcher.js", "existing-connectors-adapter.js", "unified-feed-store.js", "unified-feed-orchestrator.js", "app-shell-integration.js", "product-acceptance.js"]){vm.runInContext(fs.readFileSync(new URL('../../modules/unified-feed-v2/'+file,import.meta.url),'utf8'),context);}
+test('Sprint 474',async()=>{context.window.SigmaUnifiedFeedStore.save({items:[{id:'1'}]});assert.equal(context.window.SigmaUnifiedFeedStore.load().items.length,1);});
