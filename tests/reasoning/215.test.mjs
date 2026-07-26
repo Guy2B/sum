@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {simulateScenario} from '../../modules/reasoning/scenario-simulator.mjs';test('Sprint 215',()=>{assert.equal(simulateScenario({id:'a'},{outcomes:[{value:10,probability:.5}]}).expectedValue,5);});

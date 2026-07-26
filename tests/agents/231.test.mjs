@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createApprovalGate} from '../../modules/agents/approval-gate.mjs';test('Sprint 231',()=>{const g=createApprovalGate();g.request({id:'r',taskId:'t',summary:'s'});assert.equal(g.resolve('r','approved').status,'approved');});

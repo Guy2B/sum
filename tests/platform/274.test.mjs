@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createServiceRegistry} from '../../modules/platform/service-registry.mjs';test('Sprint 274',()=>{const r=createServiceRegistry();r.register({id:'api'});assert.equal(r.get('api').id,'api');});

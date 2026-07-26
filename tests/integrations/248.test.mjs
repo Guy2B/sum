@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {computeProviderHealth} from '../../modules/integrations/provider-health.mjs';test('Sprint 248',()=>{assert.equal(computeProviderHealth({latencyMs:10,errorRate:0}).status,'healthy');});

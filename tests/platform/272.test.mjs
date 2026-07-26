@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {resolveConfiguration} from '../../modules/platform/config-resolver.mjs';test('Sprint 272',()=>{assert.equal(resolveConfiguration({defaults:{x:1},runtime:{x:2}}).x,2);});

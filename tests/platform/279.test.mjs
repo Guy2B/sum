@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {resolveReleaseChannel} from '../../modules/platform/release-channel.mjs';test('Sprint 279',()=>{assert.equal(resolveReleaseChannel({channel:'stable',version:'1.0.0'}).rank,3);});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {assessRisk} from '../../modules/reasoning/risk-model.mjs';test('Sprint 216',()=>{assert.equal(assessRisk({id:'a'},{impact:.5,likelihood:.5}).rawRisk,.25);});

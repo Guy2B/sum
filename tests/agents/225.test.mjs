@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createAgent} from '../../modules/agents/agent-contract.mjs';test('Sprint 225',()=>{assert.equal(createAgent({id:'a',name:'A'}).id,'a');});

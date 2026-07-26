@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {coordinate} from '../../modules/agents/multi-agent-coordinator.mjs';test('Sprint 237',()=>{assert.equal(coordinate({id:'t',requiredCapabilities:['x']},[{id:'a',capabilities:['x']}]).complete,true);});

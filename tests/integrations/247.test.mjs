@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {mapScopes} from '../../modules/integrations/permission-mapper.mjs';test('Sprint 247',()=>{assert.ok(mapScopes(['mail.read','calendar.read']).includes('email'));});

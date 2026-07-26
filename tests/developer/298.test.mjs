@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createDeveloperPlatform} from '../../modules/developer/developer-platform.mjs';test('Sprint 298',()=>{const p=createDeveloperPlatform();assert.equal(typeof p.sdk.get,'function');});

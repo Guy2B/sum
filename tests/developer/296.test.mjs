@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createDeveloperAudit} from '../../modules/developer/developer-audit.mjs';test('Sprint 296',()=>{const a=createDeveloperAudit();a.record({actor:'dev'});assert.equal(a.list({actor:'dev'}).length,1);});

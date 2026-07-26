@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {deduplicateMemories} from '../../modules/memory/deduplication-engine.mjs';test('Sprint 201',()=>{assert.equal(deduplicateMemories([{id:'a',type:'semantic',owner:'self',content:'X',tags:[]},{id:'b',type:'semantic',owner:'self',content:'x',tags:[]}]).memories.length,1);});

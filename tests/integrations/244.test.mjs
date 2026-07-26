@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createSyncCursor} from '../../modules/integrations/sync-cursor.mjs';test('Sprint 244',()=>{const c=createSyncCursor();c.set('x','y');assert.equal(c.get('x'),'y');});

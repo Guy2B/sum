@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {normalizeExternalItem} from '../../modules/integrations/normalization-pipeline.mjs';test('Sprint 246',()=>{assert.equal(normalizeExternalItem({id:1,subject:'Hi'},{provider:'p',kind:'email'}).title,'Hi');});

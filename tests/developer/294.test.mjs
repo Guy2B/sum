@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createDeveloperToken, authorizeDeveloperToken} from '../../modules/developer/developer-token.mjs';test('Sprint 294',()=>{const t=createDeveloperToken({id:'t',owner:'o',scopes:['read']});assert.equal(authorizeDeveloperToken(t,'read'),true);});

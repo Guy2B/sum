@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {normalizeObjectives} from '../../modules/reasoning/objective-normalizer.mjs';test('Sprint 211',()=>{assert.equal(normalizeObjectives([{weight:1},{weight:1}])[0].normalizedWeight,.5);});

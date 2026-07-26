@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createSchemaRegistry} from '../../modules/developer/schema-registry.mjs';test('Sprint 287',()=>{const r=createSchemaRegistry();r.register('signal',{type:'object'});assert.equal(r.get('signal').type,'object');});

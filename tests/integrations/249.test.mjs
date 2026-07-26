@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {reconcileChanges} from '../../modules/integrations/change-reconciler.mjs';test('Sprint 249',()=>{assert.equal(reconcileChanges([],[{externalId:'1'}]).created.length,1);});

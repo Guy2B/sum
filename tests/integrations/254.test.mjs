@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createIntegrationHub} from '../../modules/integrations/integration-hub.mjs';import {validateIntegrationHub} from '../../modules/integrations/product-acceptance.mjs';test('Sprint 254',()=>assert.equal(validateIntegrationHub(createIntegrationHub()).ok,true));

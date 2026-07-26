@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createProductionPlatform} from '../../modules/platform/production-platform.mjs';test('Sprint 283',()=>{const p=createProductionPlatform();p.register({id:'api',status:'healthy'});assert.equal(p.status().services,1);});

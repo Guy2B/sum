@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {buildContextPanel} from '../../modules/experience/context-panel.mjs';test('Sprint 262',()=>{assert.equal(buildContextPanel({facts:['x']}).facts.length,1);});

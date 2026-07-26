@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createReasoningEngine} from '../../modules/reasoning/reasoning-engine.mjs';test('Sprint 223',()=>{const r=createReasoningEngine().evaluate([{id:'a',v:1}],[{id:'v',weight:1,score:o=>o.v}],[]);assert.equal(r.winner.option.id,'a');});

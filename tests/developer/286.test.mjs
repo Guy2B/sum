@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createApiContract} from '../../modules/developer/api-contract.mjs';test('Sprint 286',()=>{assert.equal(createApiContract({name:'core',routes:[{path:'/x'}]}).routes[0].method,'GET');});

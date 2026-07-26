@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createNavigationModel} from '../../modules/experience/navigation-model.mjs';test('Sprint 255',()=>{assert.equal(createNavigationModel([{id:'b',label:'B',order:2},{id:'a',label:'A',order:1}])[0].id,'a');});

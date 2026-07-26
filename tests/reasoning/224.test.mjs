@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createReasoningEngine} from '../../modules/reasoning/reasoning-engine.mjs';import {validateReasoningEngine} from '../../modules/reasoning/product-acceptance.mjs';test('Sprint 224',()=>assert.equal(validateReasoningEngine(createReasoningEngine()).ok,true));

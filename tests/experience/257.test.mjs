@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {searchCommands} from '../../modules/experience/command-palette.mjs';test('Sprint 257',()=>{assert.equal(searchCommands([{title:'Open settings',priority:1}],'settings').length,1);});

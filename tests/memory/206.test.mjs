@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {canStoreMemory} from '../../modules/memory/memory-consent.mjs';test('Sprint 206',()=>{assert.equal(canStoreMemory({owner:'self',type:'semantic',source:'x'},{default:{enabled:true}}).allowed,true);});

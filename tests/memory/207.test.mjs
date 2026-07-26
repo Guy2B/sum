@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {exportMemories} from '../../modules/memory/memory-export.mjs';test('Sprint 207',()=>{assert.match(exportMemories([{id:'a'}]),/sigma-memory-export-v1/);});

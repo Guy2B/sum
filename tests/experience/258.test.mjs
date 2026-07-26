@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createViewState} from '../../modules/experience/view-state.mjs';test('Sprint 258',()=>{const s=createViewState({x:1});s.patch({y:2});assert.equal(s.get().y,2);});

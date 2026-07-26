@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createSdkClient} from '../../modules/developer/sdk-client.mjs';test('Sprint 293',async ()=>{const c=createSdkClient({transport:async r=>r});assert.equal((await c.get('/x')).method,'GET');});

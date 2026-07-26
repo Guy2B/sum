@@ -1,0 +1,1 @@
+export function buildMemoryContext(ms=[],{tokenBudget=1200,estimateTokens=t=>Math.ceil(String(t).length/4)}={}){const selected=[];let tokens=0;for(const m of ms){const c=estimateTokens(m.content);if(tokens+c>tokenBudget)continue;selected.push(m);tokens+=c}return{selected:selected.map(x=>structuredClone(x)),estimatedTokens:tokens,truncated:selected.length<ms.length}}

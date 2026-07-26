@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createExtensionLoader} from '../../modules/developer/extension-loader.mjs';test('Sprint 292',()=>{const l=createExtensionLoader({policy:()=>({allowed:true})});l.load({id:'x'},{});assert.equal(l.list().length,1);});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {rankAttentionItems} from '../../modules/experience/attention-feed.mjs';test('Sprint 260',()=>{assert.equal(rankAttentionItems([{id:'a',urgency:1},{id:'b',urgency:0}])[0].id,'a');});

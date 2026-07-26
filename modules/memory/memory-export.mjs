@@ -1,0 +1,1 @@
+export function exportMemories(ms=[],{format='json',generatedAt=new Date().toISOString()}={}){const p={format:'sigma-memory-export-v1',generatedAt,count:ms.length,memories:ms};if(format==='json')return JSON.stringify(p,null,2);if(format==='ndjson')return ms.map(x=>JSON.stringify(x)).join('\n');throw new Error('unsupported export format')}

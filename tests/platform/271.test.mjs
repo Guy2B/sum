@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createDeploymentUnit} from '../../modules/platform/deployment-unit.mjs';test('Sprint 271',()=>{assert.equal(createDeploymentUnit({id:'api',version:'1.0.0',artifact:'a.zip',environment:'prod'}).status,'planned');});

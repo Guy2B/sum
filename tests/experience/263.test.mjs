@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {resolveThemePreferences} from '../../modules/experience/theme-preferences.mjs';test('Sprint 263',()=>{assert.equal(resolveThemePreferences({mode:'dark'}).mode,'dark');});

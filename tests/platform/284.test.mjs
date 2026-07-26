@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createProductionPlatform} from '../../modules/platform/production-platform.mjs';import {validateProductionPlatform} from '../../modules/platform/product-acceptance.mjs';test('Sprint 284',()=>assert.equal(validateProductionPlatform(createProductionPlatform()).ok,true));

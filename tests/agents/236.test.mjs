@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {observeRun} from '../../modules/agents/agent-observer.mjs';test('Sprint 236',()=>{assert.equal(observeRun([{type:'ok'}]).healthy,true);});

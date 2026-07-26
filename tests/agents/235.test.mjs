@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {buildCompensationPlan} from '../../modules/agents/compensation-plan.mjs';test('Sprint 235',()=>{assert.equal(buildCompensationPlan([{id:'a',compensation:'undo'}])[0].forStep,'a');});

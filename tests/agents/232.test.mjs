@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {planSteps} from '../../modules/agents/step-planner.mjs';test('Sprint 232',()=>{assert.equal(planSteps({id:'t',input:{steps:['a','b']}}).length,2);});

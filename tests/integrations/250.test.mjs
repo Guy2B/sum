@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createImportBatch} from '../../modules/integrations/import-batch.mjs';test('Sprint 250',()=>{assert.equal(createImportBatch([{id:1}],{provider:'p',accountId:'a'}).count,1);});

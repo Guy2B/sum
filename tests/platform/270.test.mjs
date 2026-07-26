@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createEnvironmentProfile} from '../../modules/platform/environment-profile.mjs';test('Sprint 270',()=>{assert.equal(createEnvironmentProfile({name:'prod'}).replicas,1);});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createTaskEnvelope} from '../../modules/agents/task-envelope.mjs';test('Sprint 226',()=>{assert.equal(createTaskEnvelope({id:'t',goal:'g'}).status,'queued');});

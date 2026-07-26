@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createExecutionJournal} from '../../modules/agents/execution-journal.mjs';test('Sprint 229',()=>{const j=createExecutionJournal();j.append({type:'x'});assert.equal(j.list().length,1);});

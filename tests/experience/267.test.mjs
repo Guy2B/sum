@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createExperienceOrchestrator} from '../../modules/experience/experience-orchestrator.mjs';test('Sprint 267',()=>{assert.equal(createExperienceOrchestrator().compose({width:500}).responsive.columns,1);});

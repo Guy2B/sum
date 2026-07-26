@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {decayMemory} from '../../modules/memory/memory-decay.mjs';test('Sprint 199',()=>{assert.ok(decayMemory({confidence:1,createdAt:new Date(0).toISOString()},{now:86400000}).confidence<1);});

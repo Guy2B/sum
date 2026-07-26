@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createRollbackPlan} from '../../modules/platform/rollback-plan.mjs';test('Sprint 281',()=>{assert.equal(createRollbackPlan([{id:'a'}])[0].action,'rollback');});

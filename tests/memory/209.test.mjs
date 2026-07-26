@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {validateMemoryEngine} from '../../modules/memory/product-acceptance.mjs';import {createMemoryEngine} from '../../modules/memory/memory-engine.mjs';test('Sprint 209',()=>assert.equal(validateMemoryEngine(createMemoryEngine()).ok,true));

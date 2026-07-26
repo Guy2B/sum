@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {evaluateConstraints} from '../../modules/reasoning/constraint-engine.mjs';test('Sprint 212',()=>{assert.equal(evaluateConstraints({x:1},[{test:o=>o.x===1}]).allowed,true);});

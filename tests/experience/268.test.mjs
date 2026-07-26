@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createExperienceShell} from '../../modules/experience/experience-shell.mjs';test('Sprint 268',()=>{const s=createExperienceShell({orchestrator:{compose:()=>({ok:true})}});assert.equal(s.render({}).ok,true);});

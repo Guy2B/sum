@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createNotificationCenter} from '../../modules/experience/notification-center.mjs';test('Sprint 259',()=>{const n=createNotificationCenter();const x=n.push({title:'x'});n.markRead(x.id);assert.equal(n.list({unreadOnly:true}).length,0);});

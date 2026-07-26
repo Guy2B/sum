@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createDeveloperRuntime} from '../../modules/developer/developer-runtime.mjs';test('Sprint 297',()=>{const r=createDeveloperRuntime({allowedCapabilities:['x']});r.loadExtension({id:'e',capabilities:['x'],entrypoint:'a'},{});assert.equal(r.extensions().length,1);});

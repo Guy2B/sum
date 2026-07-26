@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {buildMemoryContext} from '../../modules/memory/memory-context.mjs';test('Sprint 205',()=>{assert.equal(buildMemoryContext([{content:'a'},{content:'b'}],{tokenBudget:2,estimateTokens:()=>1}).selected.length,2);});

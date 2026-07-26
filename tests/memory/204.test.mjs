@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {rankMemories} from '../../modules/memory/retrieval-engine.mjs';test('Sprint 204',()=>{assert.equal(rankMemories([{id:'a',score:2,salience:1},{id:'b',score:1,salience:0}])[0].id,'a');});

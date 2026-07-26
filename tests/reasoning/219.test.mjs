@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {buildPlan} from '../../modules/reasoning/plan-builder.mjs';test('Sprint 219',()=>{assert.equal(buildPlan([{id:'a'}],['a'])[0].sequence,1);});

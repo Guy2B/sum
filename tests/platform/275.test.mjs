@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createRequestContext} from '../../modules/platform/request-context.mjs';test('Sprint 275',()=>{assert.equal(createRequestContext({requestId:'r'}).traceId,'r');});

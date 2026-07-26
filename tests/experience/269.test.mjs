@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createExperienceShell} from '../../modules/experience/experience-shell.mjs';import {validateExperienceShell} from '../../modules/experience/product-acceptance.mjs';test('Sprint 269',()=>assert.equal(validateExperienceShell(createExperienceShell()).ok,true));

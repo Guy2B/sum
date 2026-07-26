@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {evaluateRatePolicy} from '../../modules/platform/rate-policy.mjs';test('Sprint 276',()=>{assert.equal(evaluateRatePolicy({used:10,limit:10}).allowed,false);});

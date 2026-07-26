@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createMemoryIndex} from '../../modules/memory/memory-index.mjs';test('Sprint 197',()=>{const i=createMemoryIndex();i.add({id:'m1',content:'Projet Sigma',tags:[],type:'semantic',owner:'self'});assert.equal(i.search('Sigma')[0].id,'m1');});

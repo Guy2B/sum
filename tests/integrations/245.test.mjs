@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {fetchDelta} from '../../modules/integrations/delta-fetcher.mjs';test('Sprint 245',async ()=>{const r=await fetchDelta(async c=>c?{items:[2],nextCursor:null}:{items:[1],nextCursor:'n'});assert.equal(r.items.length,2);});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {scheduleTasks} from '../../modules/agents/agent-scheduler.mjs';test('Sprint 233',()=>{assert.equal(scheduleTasks([{id:'a',priority:.1},{id:'b',priority:.9}])[0].id,'b');});

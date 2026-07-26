@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {compareCounterfactual} from '../../modules/reasoning/counterfactual-planner.mjs';test('Sprint 220',()=>{assert.equal(compareCounterfactual({x:1},{x:2})[0].changed,true);});

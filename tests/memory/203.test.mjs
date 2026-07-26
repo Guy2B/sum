@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createAssociationGraph} from '../../modules/memory/association-graph.mjs';test('Sprint 203',()=>{const g=createAssociationGraph();g.addNode({id:'a'});g.addNode({id:'b'});g.connect('a','b');assert.equal(g.neighbors('a').length,1);});

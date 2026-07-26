@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createDependencyGraph} from '../../modules/reasoning/dependency-graph.mjs';test('Sprint 218',()=>{const g=createDependencyGraph();g.add('b',['a']);g.add('a');assert.deepEqual(g.order(),['a','b']);});

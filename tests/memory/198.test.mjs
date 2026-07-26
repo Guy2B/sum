@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {computeSalience} from '../../modules/memory/salience-engine.mjs';test('Sprint 198',()=>{assert.ok(computeSalience({importance:1,confidence:1,createdAt:new Date().toISOString()})>.5);});

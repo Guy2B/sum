@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {quantifyUncertainty} from '../../modules/reasoning/uncertainty-model.mjs';test('Sprint 217',()=>{assert.equal(quantifyUncertainty([1,1]).variance,0);});

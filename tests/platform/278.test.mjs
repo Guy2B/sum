@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {enforceTenantBoundary} from '../../modules/platform/tenant-boundary.mjs';test('Sprint 278',()=>{assert.equal(enforceTenantBoundary({tenantId:'t',id:'x'},'t').id,'x');});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {routeTask} from '../../modules/agents/capability-router.mjs';test('Sprint 227',()=>{assert.equal(routeTask({requiredCapabilities:['x']},[{id:'a',capabilities:['x']}]).id,'a');});

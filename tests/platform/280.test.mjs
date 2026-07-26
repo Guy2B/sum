@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {planDeployment} from '../../modules/platform/deployment-strategy.mjs';test('Sprint 280',()=>{assert.equal(planDeployment([{id:'a'},{id:'b'}],{batchSize:1}).length,2);});

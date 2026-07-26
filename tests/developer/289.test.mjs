@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createHookEngine} from '../../modules/developer/hook-engine.mjs';test('Sprint 289',async ()=>{const h=createHookEngine();h.register('x',async c=>({...c,v:2}));assert.equal((await h.run('x',{v:1})).v,2);});

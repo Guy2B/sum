@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {paretoFrontier} from '../../modules/reasoning/tradeoff-frontier.mjs';test('Sprint 214',()=>{assert.equal(paretoFrontier([{x:1},{x:2}],[o=>o.x]).length,1);});

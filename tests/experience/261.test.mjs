@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createActionDrawer} from '../../modules/experience/action-drawer.mjs';test('Sprint 261',()=>{assert.equal(createActionDrawer([{type:'run'}])[0].label,'run');});

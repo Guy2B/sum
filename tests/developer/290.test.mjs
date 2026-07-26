@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {evaluateSandboxPolicy} from '../../modules/developer/sandbox-policy.mjs';test('Sprint 290',()=>{assert.equal(evaluateSandboxPolicy({capabilities:['x'],entrypoint:'a'},{allowedCapabilities:['x']}).allowed,true);});

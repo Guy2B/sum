@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {consolidateMemories} from '../../modules/memory/consolidation-engine.mjs';test('Sprint 202',()=>{assert.equal(consolidateMemories([{id:'a',type:'semantic',owner:'self',importance:1,confidence:1,content:'x'}])[0].count,1);});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createProvider} from '../../modules/integrations/provider-contract.mjs';test('Sprint 240',()=>{assert.equal(createProvider({id:'p',name:'P',kind:'mail'}).id,'p');});

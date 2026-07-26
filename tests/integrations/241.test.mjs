@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createCredentialReference} from '../../modules/integrations/credential-reference.mjs';test('Sprint 241',()=>{assert.equal(createCredentialReference({providerId:'p',accountId:'a',secretId:'s'}).accountId,'a');});

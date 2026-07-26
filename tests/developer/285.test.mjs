@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createExtension} from '../../modules/developer/extension-contract.mjs';test('Sprint 285',()=>{assert.equal(createExtension({id:'x',name:'X',entrypoint:'./x.mjs'}).id,'x');});

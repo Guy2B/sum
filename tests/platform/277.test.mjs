@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {evaluateFeatureFlag} from '../../modules/platform/feature-flag.mjs';test('Sprint 277',()=>{assert.equal(evaluateFeatureFlag({enabled:true},{actorId:'a',percentage:100}),true);});

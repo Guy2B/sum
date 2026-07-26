@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createGoal} from '../../modules/reasoning/goal-model.mjs';test('Sprint 210',()=>{assert.equal(createGoal({id:'g',name:'Goal'}).id,'g');});

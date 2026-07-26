@@ -1,0 +1,1 @@
+export function decayMemory(m,{now=Date.now(),decayRatePerDay=.01,accessBoost=0}={}){const d=Math.max(0,now-new Date(m.createdAt).getTime())/86400000;return{...structuredClone(m),confidence:Math.max(0,Math.min(1,m.confidence*Math.exp(-decayRatePerDay*d)+accessBoost))}}

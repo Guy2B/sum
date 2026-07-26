@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {explainDecision} from '../../modules/reasoning/explanation-builder.mjs';test('Sprint 221',()=>{assert.match(explainDecision({winner:{id:'A'},utility:{score:1},risk:{residualRisk:0},alternatives:[]}).summary,/A/);});

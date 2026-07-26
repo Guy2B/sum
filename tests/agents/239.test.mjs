@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createAgentRuntime} from '../../modules/agents/agent-runtime.mjs';import {validateAgentRuntime} from '../../modules/agents/product-acceptance.mjs';test('Sprint 239',()=>assert.equal(validateAgentRuntime(createAgentRuntime()).ok,true));

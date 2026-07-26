@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {computeUtility} from '../../modules/reasoning/utility-model.mjs';test('Sprint 213',()=>{assert.equal(computeUtility({x:1},[{id:'x',normalizedWeight:1,score:o=>o.x}]).score,1);});

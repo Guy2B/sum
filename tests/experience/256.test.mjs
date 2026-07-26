@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createWorkspaceLayout} from '../../modules/experience/workspace-layout.mjs';test('Sprint 256',()=>{assert.equal(createWorkspaceLayout({panels:[{id:'x'}]}).panels.length,1);});

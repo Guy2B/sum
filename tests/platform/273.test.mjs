@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createSecretReference} from '../../modules/platform/secret-reference.mjs';test('Sprint 273',()=>{assert.equal(createSecretReference({name:'db',path:'secret/db'}).name,'db');});

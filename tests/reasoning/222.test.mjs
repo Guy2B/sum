@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createApprovalPlan} from '../../modules/reasoning/approval-plan.mjs';test('Sprint 222',()=>{assert.equal(createApprovalPlan([{id:'a',risk:.9}])[0].approvalRequired,true);});

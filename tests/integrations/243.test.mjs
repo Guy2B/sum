@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {verifyWebhook} from '../../modules/integrations/webhook-verifier.mjs';test('Sprint 243',async ()=>{const crypto=await import('node:crypto');const p='abc',s='secret',sig=crypto.createHmac('sha256',s).update(p).digest('hex');assert.equal(verifyWebhook({payload:p,signature:sig,secret:s}),true);});

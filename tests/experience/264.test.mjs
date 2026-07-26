@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {auditAccessibility} from '../../modules/experience/accessibility-audit.mjs';test('Sprint 264',()=>{assert.equal(auditAccessibility([{id:'x',interactive:true,label:'Run'}]).ok,true);});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {evaluateRetention} from '../../modules/memory/retention-policy.mjs';test('Sprint 200',()=>{assert.equal(evaluateRetention({type:'episodic',confidence:.1}).action,'archive');});

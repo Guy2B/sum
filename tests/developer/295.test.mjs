@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createWebhookSubscription} from '../../modules/developer/webhook-subscription.mjs';test('Sprint 295',()=>{assert.equal(createWebhookSubscription({id:'w',url:'https://example.com',secretRef:'s'}).active,true);});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {evaluateToolUse} from '../../modules/agents/tool-policy.mjs';test('Sprint 230',()=>{assert.equal(evaluateToolUse({tool:'x',action:'read',risk:.1},{allowedTools:['x']}).allowed,true);});

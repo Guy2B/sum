@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createEventBus} from '../../modules/developer/event-bus.mjs';test('Sprint 288',async ()=>{const b=createEventBus();b.subscribe('x',async p=>p.value);assert.deepEqual(await b.publish('x',{value:2}),[2]);});

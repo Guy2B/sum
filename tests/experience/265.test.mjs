@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {resolveResponsiveLayout} from '../../modules/experience/responsive-policy.mjs';test('Sprint 265',()=>{assert.equal(resolveResponsiveLayout(500).breakpoint,'mobile');});

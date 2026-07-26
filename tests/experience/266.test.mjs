@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {resolveEditionConfig} from '../../modules/experience/edition-config.mjs';test('Sprint 266',()=>{assert.equal(resolveEditionConfig('creator').label,'Creator');});

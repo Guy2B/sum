@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createPackageManifest} from '../../modules/developer/package-manifest.mjs';test('Sprint 291',()=>{assert.equal(createPackageManifest({name:'pkg',version:'1.0.0'}).schema,'sigma-package-v1');});

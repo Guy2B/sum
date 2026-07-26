@@ -1,0 +1,1 @@
+export function rankMemories(ms=[],{queryScore=m=>m.score||0,salienceScore=m=>m.salience||0,contextScore=m=>m.contextScore||0}={}){return ms.map(m=>({...structuredClone(m),retrievalScore:queryScore(m)*.45+salienceScore(m)*.35+contextScore(m)*.2})).sort((a,b)=>b.retrievalScore-a.retrievalScore)}

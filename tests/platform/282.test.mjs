@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {observePlatform} from '../../modules/platform/platform-observer.mjs';test('Sprint 282',()=>{assert.equal(observePlatform({services:[{status:'healthy'}],incidents:[]}).healthy,true);});

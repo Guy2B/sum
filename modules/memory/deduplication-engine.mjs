@@ -1,0 +1,2 @@
+function sig(r){return JSON.stringify({type:r.type,owner:r.owner,content:String(r.content).trim().toLowerCase(),tags:[...(r.tags||[])].sort()})}
+export function deduplicateMemories(ms=[]){const seen=new Map(),duplicates=[];for(const m of ms){const k=sig(m);if(!seen.has(k))seen.set(k,m);else duplicates.push({kept:seen.get(k).id,duplicate:m.id})}return{memories:[...seen.values()].map(x=>structuredClone(x)),duplicates}}

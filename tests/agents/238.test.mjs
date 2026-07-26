@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createAgentRuntime} from '../../modules/agents/agent-runtime.mjs';test('Sprint 238',()=>{const r=createAgentRuntime({agents:[{id:'a',capabilities:['x']}],policy:{allowedTools:['tool']}});const p=r.prepare({id:'t',requiredCapabilities:['x'],input:{steps:['go']}});assert.equal(p.agent.id,'a');});

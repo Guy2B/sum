@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createAgentState} from '../../modules/agents/agent-state.mjs';test('Sprint 228',()=>{const s=createAgentState();s.set('a',{x:1});assert.equal(s.get('a').x,1);});

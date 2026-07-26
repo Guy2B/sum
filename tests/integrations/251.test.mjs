@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createConnectorAudit} from '../../modules/integrations/connector-audit.mjs';test('Sprint 251',()=>{const a=createConnectorAudit();a.record({provider:'p'});assert.equal(a.list({provider:'p'}).length,1);});

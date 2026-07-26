@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createMemoryRecord} from '../../modules/memory/memory-record.mjs';test('Sprint 195',()=>{const r=createMemoryRecord({id:'m1',content:'x'});assert.equal(r.id,'m1');});

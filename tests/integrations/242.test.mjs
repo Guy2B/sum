@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createOAuthAuthorizationUrl} from '../../modules/integrations/oauth-flow.mjs';test('Sprint 242',()=>{assert.match(createOAuthAuthorizationUrl({authorizeUrl:'https://example.com/auth',clientId:'c',redirectUri:'https://app/cb',scopes:['mail'],state:'x'}),/client_id=c/);});
