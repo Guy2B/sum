@@ -1,0 +1,4 @@
+.sigma-cloud-profile-status{display:inline-flex;margin-top:7px;padding:4px 8px;border-radius:999px;border:1px solid var(--border);font-size:11px;font-weight:800;background:var(--surface-2);color:var(--muted)}
+.sigma-cloud-profile-status[data-state="cloud"]{border-color:color-mix(in srgb,var(--success) 40%,var(--border))}
+.sigma-profile-cloud-actions{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto}
+@media(max-width:720px){.sigma-profile-cloud-actions{width:100%;margin-left:0}.sigma-profile-cloud-actions .button{flex:1}}

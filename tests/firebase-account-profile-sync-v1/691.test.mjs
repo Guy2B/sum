@@ -1,0 +1,8 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import vm from 'node:vm';
+const store=new Map();const localStorage={getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
+const dummy={addEventListener(){},appendChild(){},prepend(){},querySelector(){return null},querySelectorAll(){return[]},click(){}};
+const document={readyState:'loading',body:{...dummy,dataset:{}},head:dummy,addEventListener(){},querySelector(){return null},querySelectorAll(){return[]},getElementById(){return null},createElement(){return{...dummy,dataset:{}}}};
+const window={localStorage,document,addEventListener(){},dispatchEvent(){},setTimeout,clearTimeout,URL:{createObjectURL(){return'blob:test'},revokeObjectURL(){}}};window.window=window;
+const context=vm.createContext({window,document,localStorage,console,Date,JSON,Math,Promise,setTimeout,clearTimeout,CustomEvent:function(){},Blob:function(){}});
+for(const file of ["firebase-runtime-adapter-v1.js", "account-bootstrap-v1.js", "firebase-account-store-v1.js", "profile-cloud-sync-v1.js", "profile-conflict-resolver-v1.js", "account-first-sync-v1.js", "profile-auto-sync-v1.js", "cross-device-indicator-v1.js", "account-data-export-v1.js", "firebase-profile-diagnostics-v1.js", "firebase-profile-ui-actions-v1.js", "release-status-704.js", "firebase-account-profile-sync-acceptance-v1.js"]){vm.runInContext(fs.readFileSync(new URL('../../modules/firebase-account-profile-sync-v1/'+file,import.meta.url),'utf8'),context);}
+test('Sprint 691',()=>{assert.equal(context.window.SigmaAccountBootstrapV1.profileFromUser({uid:'u1',providerData:[]}).uid,'u1');});
