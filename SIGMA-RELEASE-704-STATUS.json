@@ -1,0 +1,9 @@
+﻿{
+    "release":  704,
+    "gitCommit":  "07bed5309c9f434be16b23cdaa1bb7d830f12a75",
+    "gitCommitted":  false,
+    "gitPushed":  false,
+    "firebaseHostingDeployed":  false,
+    "firestoreRulesDeployed":  true,
+    "generatedAt":  "2026-07-26T17:35:09.1194809+02:00"
+}
