@@ -41,3 +41,9 @@ functions/.env.*
 
 functions/.env.local
 functions/.env.project-sum-b961a
+
+# SUM generated backups and reports
+*.backup-*
+*.before-*
+reports/waves-1-5/
+sum-wave-backups/
