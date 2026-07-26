@@ -19,9 +19,8 @@ service cloud.firestore {
     match /socialOAuthStates/{document=**} { allow read, write: if false; }
     match /socialWebhookEvents/{document=**} { allow read, write: if false; }
     match /{document=**} { allow read, write: if false; }
-  }
-
-    // SIGMA-USER-OWNERSHIP-RULES-719
+  
+    // SIGMA-USER-OWNERSHIP-RULES-735
     match /users/{uid} {
       allow read, create, update, delete: if request.auth != null && request.auth.uid == uid;
 
@@ -29,5 +28,5 @@ service cloud.firestore {
         allow read, create, update, delete: if request.auth != null && request.auth.uid == uid;
       }
     }
-
+}
 }
