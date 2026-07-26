@@ -1,0 +1,24 @@
+﻿{
+    "release":  644,
+    "path":  "C:\\Dev\\sum",
+    "markersOk":  true,
+    "missingMarkers":  [
+
+                       ],
+    "firebaseJson":  true,
+    "modules":  [
+                    {
+                        "path":  "modules\\real-data-audit-v1\\data-source-registry-v1.js",
+                        "exists":  true
+                    },
+                    {
+                        "path":  "modules\\real-data-audit-v1\\firebase-canonical-model-v1.js",
+                        "exists":  true
+                    },
+                    {
+                        "path":  "product\\real-data-audit-v1-loader.js",
+                        "exists":  true
+                    }
+                ],
+    "generatedAt":  "2026-07-26T17:11:43.3290662+02:00"
+}

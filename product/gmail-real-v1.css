@@ -1,0 +1,11 @@
+.sigma-gmail-real-v1{margin-bottom:18px}
+.sigma-gmail-actions{display:flex;gap:8px;flex-wrap:wrap}
+.sigma-gmail-status{display:flex;gap:18px;flex-wrap:wrap;padding:12px;border-radius:12px;background:var(--surface-2);margin-bottom:12px}
+.sigma-gmail-status span{color:var(--muted)}
+.sigma-gmail-messages{display:grid;gap:8px}
+.sigma-gmail-messages article{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--surface-2)}
+.sigma-gmail-messages article>span{font-weight:800;color:var(--primary)}
+.sigma-gmail-messages small{grid-column:1/-1;color:var(--muted)}
+.sigma-gmail-messages p{margin:4px 0 0;color:var(--muted)}
+.sigma-gmail-messages [data-priority="high"]{border-color:color-mix(in srgb,var(--danger) 38%,var(--border))}
+.sigma-gmail-messages [data-priority="medium"]{border-color:color-mix(in srgb,var(--warning) 38%,var(--border))}

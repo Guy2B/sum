@@ -1,0 +1,7 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import vm from 'node:vm';
+const store=new Map();const localStorage={get length(){return store.size},key(i){return [...store.keys()][i]??null},getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v)),removeItem:k=>store.delete(k)};
+const document={readyState:'loading',head:{appendChild(){}},addEventListener(){},querySelector(){return null},querySelectorAll(){return[]},getElementById(){return null},createElement(){return{addEventListener(){},click(){},set src(v){this._src=v},get src(){return this._src}}}};
+const window={localStorage,document,addEventListener(){},dispatchEvent(){},setTimeout,clearTimeout,alert(){},prompt(){return''}};window.window=window;
+const context=vm.createContext({window,document,localStorage,console,Date,JSON,Math,Promise,setTimeout,clearTimeout,CustomEvent:function(){},alert(){},prompt(){return''}});
+for(const file of ["google-calendar-config-v1.js", "google-script-loader-v1.js", "google-auth-session-v1.js", "google-calendar-client-v1.js", "google-calendar-store-v1.js", "google-calendar-sync-v1.js", "calendar-conflict-adapter-v1.js", "coach-google-calendar-bridge-v1.js", "google-calendar-ui-v1.js", "google-calendar-diagnostics-v1.js", "google-calendar-acceptance-v1.js"]){vm.runInContext(fs.readFileSync(new URL('../../modules/google-calendar-real-v1/'+file,import.meta.url),'utf8'),context);}
+test('Sprint 656',()=>{assert.equal(context.window.SigmaGoogleCalendarAcceptanceV1.validate().release,659);});

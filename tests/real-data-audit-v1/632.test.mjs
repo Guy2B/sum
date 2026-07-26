@@ -1,0 +1,8 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import vm from 'node:vm';
+const store=new Map();const localStorage={get length(){return store.size},key(i){return [...store.keys()][i]??null},getItem:k=>store.has(k)?store.get(k):null,setItem:(k,v)=>store.set(k,String(v))};
+class BlobX{constructor(parts=[]){this.size=parts.reduce((n,x)=>n+Buffer.byteLength(String(x)),0)}}
+const document={readyState:'loading',addEventListener(){},querySelector(){return null},querySelectorAll(){return[]},getElementById(){return null},createElement(){return{click(){},set href(v){this._href=v},get href(){return this._href},set download(v){this._download=v}}}};
+const window={localStorage,document,addEventListener(){},dispatchEvent(){},setTimeout,clearTimeout,URL:{createObjectURL(){return'blob:test'},revokeObjectURL(){}},Blob:BlobX};window.window=window;
+const context=vm.createContext({window,document,localStorage,console,Date,JSON,Math,Promise,setTimeout,clearTimeout,Blob:BlobX,URL:window.URL,CustomEvent:function(){}});
+for(const file of ["data-source-registry-v1.js", "freshness-engine-v1.js", "reality-score-engine-v1.js", "local-storage-inventory-v1.js", "firebase-canonical-model-v1.js", "migration-planner-v1.js", "coach-data-guard-v1.js", "provenance-labels-v1.js", "data-reality-dashboard-v1.js", "data-audit-report-v1.js", "real-data-audit-acceptance-v1.js"]){vm.runInContext(fs.readFileSync(new URL('../../modules/real-data-audit-v1/'+file,import.meta.url),'utf8'),context);}
+test('Sprint 632',()=>{assert.equal(context.window.SigmaFreshnessEngineV1.classify(new Date().toISOString()),'fresh');});
