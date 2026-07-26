@@ -20,4 +20,14 @@ service cloud.firestore {
     match /socialWebhookEvents/{document=**} { allow read, write: if false; }
     match /{document=**} { allow read, write: if false; }
   }
+
+    // SIGMA-USER-OWNERSHIP-RULES-719
+    match /users/{uid} {
+      allow read, create, update, delete: if request.auth != null && request.auth.uid == uid;
+
+      match /{document=**} {
+        allow read, create, update, delete: if request.auth != null && request.auth.uid == uid;
+      }
+    }
+
 }

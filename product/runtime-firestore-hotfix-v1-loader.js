@@ -1,0 +1,1 @@
+(function(){for(const f of ['runtime-firestore-hotfix-v1.js','runtime-firestore-hotfix-acceptance-v1.js'])document.write('<script src="modules/runtime-firestore-hotfix-v1/'+f+'?v=719"><\/script>');})();

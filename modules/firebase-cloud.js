@@ -1,3 +1,15 @@
+/* SIGMA-FIREBASE-PERMISSION-GUARD-719 */
+function __sigmaFirebasePermissionGuard719(error, context) {
+  const code = error?.code || "";
+  const message = String(error?.message || error || "");
+  if (code === "permission-denied" || /missing or insufficient permissions/i.test(message)) {
+    window.SigmaRuntimeFirestoreHotfixV1?.recordPermissionError?.(error, context || "firebase-cloud");
+    console.error("[Sigma] Firestore permission denied:", context || "firebase-cloud", error);
+    return true;
+  }
+  return false;
+}
+
 const cfg = window.SIGMA_FIREBASE_CONFIG || {};
 const configured = Boolean(cfg.apiKey && !String(cfg.apiKey).startsWith('REPLACE_'));
 const cloud = { configured, ready:false, user:null, db:null, auth:null, api:null, syncStatus:'local' };

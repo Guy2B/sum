@@ -1,0 +1,19 @@
+{
+  "release": 719,
+  "target": "C:\\Dev\\sum",
+  "i18n": {
+    "file": "C:\\Dev\\sum\\i18n.js",
+    "changed": true,
+    "method": "getByPath-patched"
+  },
+  "health": {
+    "file": "C:\\Dev\\sum\\modules\\health.js",
+    "changed": true
+  },
+  "firebaseCloud": {
+    "file": "C:\\Dev\\sum\\modules\\firebase-cloud.js",
+    "changed": true
+  },
+  "app": "C:\\Dev\\sum\\app.html",
+  "generatedAt": "2026-07-26T15:51:40.888Z"
+}

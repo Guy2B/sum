@@ -1,3 +1,4 @@
+/* SIGMA-HEALTH-I18N-FALLBACK-719 */
 'use strict';
 (() => {
   let healthChart;
