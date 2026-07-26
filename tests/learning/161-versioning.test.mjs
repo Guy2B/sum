@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createModelVersion,chooseBetterModel} from '../../modules/learning/model-versioning.mjs';test('Sprint 161 versioning',()=>{const a=createModelVersion({name:'m',metrics:{score:1}}),b=createModelVersion({name:'m',metrics:{score:2}});assert.equal(chooseBetterModel(a,b),b);});

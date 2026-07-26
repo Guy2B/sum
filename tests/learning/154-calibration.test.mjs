@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {calculateCalibration} from '../../modules/learning/calibration-engine.mjs';test('Sprint 154 calibration',()=>{assert.equal(calculateCalibration([{confidence:1,correct:true}]).score,100);});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {interpretFeedback} from '../../modules/learning/feedback-interpreter.mjs';test('Sprint 152 feedback',()=>{assert.equal(interpretFeedback({accepted:false}).weight,-1);});

@@ -1,0 +1,12 @@
+:root{font-family:Inter,system-ui,sans-serif;color:#182033;background:#f3f5f9}
+*{box-sizing:border-box}body{margin:0;display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+aside{padding:28px 20px;background:#111827;color:#fff}aside strong{font-size:22px}
+nav{display:grid;gap:8px;margin:32px 0}nav button{border:0;background:transparent;color:#cbd5e1;text-align:left;padding:11px;border-radius:10px}
+nav .active{background:#253047;color:#fff}aside p{color:#94a3b8;font-size:13px;line-height:1.5}
+main{padding:36px;max-width:1400px;width:100%}header{display:flex;justify-content:space-between;align-items:flex-start}
+small{letter-spacing:.13em;color:#667085}h1{margin:.45rem 0 1.5rem;font-size:32px}
+button{cursor:pointer;border:1px solid #d0d5dd;background:#fff;padding:10px 14px;border-radius:10px}
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}.columns{display:grid;grid-template-columns:2fr 1fr;gap:24px}
+.metric,.card,.preference,.routine{background:#fff;border:1px solid #e3e7ee;border-radius:16px;padding:18px}.metric b{display:block;font-size:24px;margin-top:6px}
+.preference,.routine{margin:10px 0}.bar{height:10px;background:#e5e7eb;border-radius:99px;overflow:hidden}.bar span{display:block;height:100%;background:#111827}
+@media(max-width:900px){body{grid-template-columns:1fr}aside{display:none}main{padding:20px}.summary,.columns{grid-template-columns:1fr}}

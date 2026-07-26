@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {inferExplanationDepth} from '../../modules/learning/explanation-preference.mjs';test('Sprint 157 explanation',()=>{assert.equal(inferExplanationDepth([{type:'explanation-expanded'},{type:'explanation-expanded'},{type:'explanation-expanded'}]),'detailed');});

@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {recommendTimeWindow} from '../../modules/learning/timing-model.mjs';test('Sprint 155 timing',()=>{const r=recommendTimeWindow([{occurredAt:'2026-01-01T10:00:00Z',feedback:{accepted:true}}]);assert.ok(r.startHour<=10&&r.endHour>=10);});

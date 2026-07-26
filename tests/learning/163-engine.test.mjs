@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {runLearningEngine} from '../../modules/learning/learning-engine.mjs';test('Sprint 163 engine',()=>{const r=runLearningEngine({events:[]});assert.equal(r.processedEvents,0);});

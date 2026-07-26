@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createLearningEvent} from '../../modules/learning/event-schema.mjs';test('Sprint 150 event-schema',()=>{const e=createLearningEvent({type:'feedback'});assert.equal(e.type,'feedback');});

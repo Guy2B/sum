@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {detectBehaviorAnomalies} from '../../modules/learning/anomaly-detector.mjs';test('Sprint 159 anomaly',()=>{const a=detectBehaviorAnomalies([{id:'1',type:'x',occurredAt:'2026-01-01T20:00:00Z'}],{x:{hour:8}});assert.equal(a.length,1);});

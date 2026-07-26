@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createRollbackStack} from '../../modules/learning/rollback-engine.mjs';test('Sprint 162 rollback',()=>{const s=createRollbackStack({id:1});s.push({id:2});assert.equal(s.rollback().id,1);});

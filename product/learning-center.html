@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Σ Centre d’apprentissage</title>
+  <link rel="stylesheet" href="./learning-center.css">
+</head>
+<body>
+  <aside>
+    <strong>Σ Life OS</strong>
+    <nav>
+      <button>Attention</button>
+      <button>Aujourd’hui</button>
+      <button>Décisions</button>
+      <button>Sources</button>
+      <button>Confiance</button>
+      <button class="active">Apprentissage</button>
+    </nav>
+    <p>Sigma apprend uniquement à partir de signaux explicites, avec contrôle, calibration et retour arrière.</p>
+  </aside>
+  <main>
+    <header>
+      <div><small>LEARNING & PERSONALIZATION ENGINE</small><h1>Un assistant qui s’adapte sans devenir opaque.</h1></div>
+      <button id="recompute">Recalculer</button>
+    </header>
+    <section id="summary" class="summary"></section>
+    <section class="columns">
+      <div><h2>Préférences apprises</h2><div id="preferences"></div></div>
+      <div><h2>Calibration</h2><div id="calibration" class="card"></div></div>
+    </section>
+    <section><h2>Routines détectées</h2><div id="routines"></div></section>
+  </main>
+  <script type="module" src="./learning-center.js"></script>
+</body>
+</html>

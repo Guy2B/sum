@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createPreferenceProfile,updateAffinity} from '../../modules/learning/preference-profile.mjs';test('Sprint 151 preference-profile',()=>{const p=updateAffinity(createPreferenceProfile(),'schedule',2);assert.equal(p.optionAffinity.schedule,2);});

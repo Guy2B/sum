@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {createPrivacyBudget} from '../../modules/learning/privacy-budget.mjs';test('Sprint 160 privacy-budget',()=>{const b=createPrivacyBudget(1);assert.equal(b.consume(1).allowed,true);assert.equal(b.consume(1).allowed,false);});

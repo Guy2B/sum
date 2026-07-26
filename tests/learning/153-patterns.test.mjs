@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {detectPatterns} from '../../modules/learning/pattern-detector.mjs';test('Sprint 153 patterns',()=>{const p=detectPatterns([{type:'x',occurredAt:'2026-01-01T09:00:00Z'}]);assert.equal(p.dominantType,'x');});

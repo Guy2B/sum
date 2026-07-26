@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {learnRoutines} from '../../modules/learning/routine-learner.mjs';test('Sprint 158 routine',()=>{const e=Array.from({length:3},()=>({type:'review',occurredAt:'2026-01-05T09:00:00Z'}));assert.equal(learnRoutines(e).length,1);});

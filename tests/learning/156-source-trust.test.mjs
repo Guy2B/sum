@@ -1,0 +1,1 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {updateSourceTrust} from '../../modules/learning/source-trust-model.mjs';test('Sprint 156 source-trust',()=>{assert.equal(updateSourceTrust({}, {source:'mail',correct:true}).sourceTrust.mail,.55);});
