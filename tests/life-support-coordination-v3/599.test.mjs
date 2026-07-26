@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import vm from 'node:vm';
+const store=new Map();const document={readyState:'loading',addEventListener(){},querySelector(){return null},getElementById(){return null},createElement(){return{addEventListener(){}}},body:{prepend(){}}};
+const window={localStorage:{getItem:k=>store.get(k)||null,setItem:(k,v)=>store.set(k,v)},document,addEventListener(){},dispatchEvent(){},crypto:globalThis.crypto,setTimeout,clearTimeout};window.window=window;
+const context=vm.createContext({window,document,localStorage:window.localStorage,console,Date,JSON,Math,Promise,crypto:globalThis.crypto,setTimeout,clearTimeout,CustomEvent:function(){},prompt(){return null}});
+for(const file of ["household-member-store-v3.js", "support-plan-store-v3.js", "support-profile-presets-v3.js", "school-support-engine-v3.js", "job-search-pipeline-v3.js", "application-followup-engine-v3.js", "care-load-engine-v3.js", "weekly-family-brief-v3.js", "support-recommendation-engine-v3.js", "support-coordination-ui-v3.js", "life-support-coordination-acceptance-v3.js"]){vm.runInContext(fs.readFileSync(new URL('../../modules/life-support-coordination-v3/'+file,import.meta.url),'utf8'),context);}
+test('Sprint 599',()=>{assert.equal(context.window.SigmaLifeSupportCoordinationAcceptanceV3.validate().ok,true);});
