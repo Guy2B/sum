@@ -359,7 +359,10 @@
         const firebaseUser = window.SigmaCloud?.auth?.currentUser || window.SigmaCloud?.user || window.firebase?.auth?.()?.currentUser || null;
         const firebaseName = String(firebaseUser?.displayName || '').trim();
         const emailName = String(firebaseUser?.email || '').split('@')[0].trim();
-        state.settings.name = firebaseName || emailName || '';
+        const savedName = String(state.settings?.name || '').trim();
+        if (!savedName) {
+          state.settings.name = firebaseName || emailName || '';
+        }
         state.settings.onboardingComplete = true;
         state.contextProfile.primaryGoal = profile === 'creator' ? 'Publier une offre rentable sans épuisement' : profile === 'life' ? 'Retrouver une semaine stable et plus légère' : 'Stabiliser les revenus de la microactivité';
         state.contextProfile.successDefinition = 'Trois résultats utiles, une charge réaliste et aucune demande client oubliée.';
