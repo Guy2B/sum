@@ -356,7 +356,10 @@
       const now = new Date(); const iso = (days) => { const date = new Date(now); date.setDate(date.getDate() + days); return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 10); };
       ctx.updateState((state) => {
         state.settings.profile = profile;
-        state.settings.name = profile === 'creator' ? 'Camille' : profile === 'life' ? 'Alex' : 'Michael';
+        const firebaseUser = window.SigmaCloud?.auth?.currentUser || window.SigmaCloud?.user || window.firebase?.auth?.()?.currentUser || null;
+        const firebaseName = String(firebaseUser?.displayName || '').trim();
+        const emailName = String(firebaseUser?.email || '').split('@')[0].trim();
+        state.settings.name = firebaseName || emailName || '';
         state.settings.onboardingComplete = true;
         state.contextProfile.primaryGoal = profile === 'creator' ? 'Publier une offre rentable sans épuisement' : profile === 'life' ? 'Retrouver une semaine stable et plus légère' : 'Stabiliser les revenus de la microactivité';
         state.contextProfile.successDefinition = 'Trois résultats utiles, une charge réaliste et aucune demande client oubliée.';

@@ -203,7 +203,7 @@
     function demoInteractions(provider, accountId) {
       const common = [
         { id: ctx.uid(), accountId, provider, type: 'message', title: ctx.t('social.demoLead'), content: ctx.t('social.demoLeadCopy'), sender: 'Nadia Martin', receivedAt: nowMinus(3), unread: true, requiresReply: true, priority: 92, contentIdea: false, handled: false, sourceUrl: '' },
-        { id: ctx.uid(), accountId, provider, type: 'comment', title: ctx.t('social.demoComment'), content: ctx.t('social.demoCommentCopy'), sender: 'Alex Studio', receivedAt: nowMinus(15), unread: true, requiresReply: true, priority: 74, contentIdea: false, handled: false, sourceUrl: '' },
+        { id: ctx.uid(), accountId, provider, type: 'comment', title: ctx.t('social.demoComment'), content: ctx.t('social.demoCommentCopy'), sender: 'Studio Démo', receivedAt: nowMinus(15), unread: true, requiresReply: true, priority: 74, contentIdea: false, handled: false, sourceUrl: '' },
         { id: ctx.uid(), accountId, provider, type: 'mention', title: ctx.t('social.demoIdea'), content: ctx.t('social.demoIdeaCopy'), sender: 'Audience signal', receivedAt: nowMinus(28), unread: false, requiresReply: false, priority: 58, contentIdea: true, handled: false, sourceUrl: '' }
       ];
       if (provider === 'youtube') common[0].type = 'comment';
