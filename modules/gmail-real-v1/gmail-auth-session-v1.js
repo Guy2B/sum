@@ -7,7 +7,10 @@
     await new Promise((resolve,reject)=>{
       window.gapi.load('client',async()=>{
         try{
-          await window.gapi.client.init({apiKey:config.apiKey,discoveryDocs:[config.discoveryDoc]});
+          const initConfig={discoveryDocs:[config.discoveryDoc]};
+          if(String(config.apiKey||'').trim())initConfig.apiKey=String(config.apiKey).trim();
+          await window.gapi.client.init(initConfig);
+          await window.gapi.client.load('gmail','v1');
           resolve();
         }catch(e){reject(e);}
       });
