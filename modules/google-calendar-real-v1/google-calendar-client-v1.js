@@ -1,27 +1,54 @@
 (function(g){
-  function ensure(){
+  const API='https://www.googleapis.com/calendar/v3';
+  function token(){
     if(!window.SigmaGoogleAuthSessionV1?.status?.().authenticated)throw new Error('Google Calendar is not authenticated');
-    if(!window.gapi?.client?.calendar)throw new Error('Google Calendar API client is not initialized');
+    return window.SigmaGoogleAuthSessionV1.getAccessToken();
+  }
+  async function request(path,{method='GET',query,body}={}){
+    const url=new URL(`${API}${path}`);
+    Object.entries(query||{}).forEach(([key,value])=>{
+      if(value!==undefined&&value!==null&&value!=='')url.searchParams.set(key,String(value));
+    });
+    const response=await fetch(url,{
+      method,
+      headers:{
+        Authorization:`Bearer ${token()}`,
+        Accept:'application/json',
+        ...(body?{'Content-Type':'application/json'}:{})
+      },
+      body:body?JSON.stringify(body):undefined
+    });
+    const text=await response.text();
+    let data={};
+    if(text){
+      try{data=JSON.parse(text);}
+      catch{data={message:text};}
+    }
+    if(!response.ok){
+      const message=data?.error?.message||data?.message||`Google Calendar API error ${response.status}`;
+      const error=new Error(message);
+      error.status=response.status;
+      error.details=data;
+      throw error;
+    }
+    return data;
   }
   async function listCalendars(){
-    ensure();
-    const response=await window.gapi.client.calendar.calendarList.list({minAccessRole:'reader',showHidden:false});
-    return(response.result.items||[]).map(x=>({
+    const data=await request('/users/me/calendarList',{query:{minAccessRole:'reader',showHidden:false}});
+    return(data.items||[]).map(x=>({
       id:x.id,summary:x.summary,primary:Boolean(x.primary),accessRole:x.accessRole,
       backgroundColor:x.backgroundColor,foregroundColor:x.foregroundColor,
       timeZone:x.timeZone,selected:x.selected!==false
     }));
   }
   async function listEvents({calendarId='primary',timeMin=new Date().toISOString(),timeMax,limit=250,pageToken}={}){
-    ensure();
-    const response=await window.gapi.client.calendar.events.list({
-      calendarId,timeMin,timeMax,maxResults:limit,singleEvents:true,orderBy:'startTime',
-      showDeleted:false,pageToken
+    const data=await request(`/calendars/${encodeURIComponent(calendarId)}/events`,{
+      query:{timeMin,timeMax,maxResults:limit,singleEvents:true,orderBy:'startTime',showDeleted:false,pageToken}
     });
     return{
-      items:(response.result.items||[]).map(normalize),
-      nextPageToken:response.result.nextPageToken||null,
-      nextSyncToken:response.result.nextSyncToken||null
+      items:(data.items||[]).map(normalize),
+      nextPageToken:data.nextPageToken||null,
+      nextSyncToken:data.nextSyncToken||null
     };
   }
   function normalize(x){
@@ -36,18 +63,21 @@
     };
   }
   async function createEvent(calendarId,event){
-    ensure();
-    const response=await window.gapi.client.calendar.events.insert({calendarId,resource:event,sendUpdates:'all'});
-    return normalize(response.result);
+    const data=await request(`/calendars/${encodeURIComponent(calendarId)}/events`,{
+      method:'POST',query:{sendUpdates:'all'},body:event
+    });
+    return normalize(data);
   }
   async function updateEvent(calendarId,eventId,event){
-    ensure();
-    const response=await window.gapi.client.calendar.events.patch({calendarId,eventId,resource:event,sendUpdates:'all'});
-    return normalize(response.result);
+    const data=await request(`/calendars/${encodeURIComponent(calendarId)}/events/${encodeURIComponent(eventId)}`,{
+      method:'PATCH',query:{sendUpdates:'all'},body:event
+    });
+    return normalize(data);
   }
   async function deleteEvent(calendarId,eventId){
-    ensure();
-    await window.gapi.client.calendar.events.delete({calendarId,eventId,sendUpdates:'all'});
+    await request(`/calendars/${encodeURIComponent(calendarId)}/events/${encodeURIComponent(eventId)}`,{
+      method:'DELETE',query:{sendUpdates:'all'}
+    });
     return{ok:true,calendarId,eventId};
   }
   g.SigmaGoogleCalendarClientV1={listCalendars,listEvents,createEvent,updateEvent,deleteEvent,normalize};

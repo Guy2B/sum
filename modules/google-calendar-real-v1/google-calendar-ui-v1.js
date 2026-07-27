@@ -1,5 +1,13 @@
 (function(g){
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function errorMessage(error){
+    if(!error)return 'Erreur Google inconnue.';
+    if(typeof error==='string')return error;
+    const details=[error.message,error.error_description,typeof error.error==='string'?error.error:'',error.details?.error?.message,error.result?.error?.message,error.body].filter(Boolean).map(String);
+    if(details.length)return [...new Set(details)].join(' · ');
+    try{return JSON.stringify(error);}
+    catch{return String(error);}
+  }
   function host(){
     const panel=document.getElementById('panel-plan')||document.getElementById('panel-calendar')||document.getElementById('panel-context');
     return panel?.querySelector('.main-content')||panel||null;
@@ -24,7 +32,7 @@
     const current=window.SigmaGoogleCalendarConfigV1.read();
     const clientId=prompt('Google OAuth Client ID',current.clientId)||current.clientId;
     const apiKey=prompt('Google API Key',current.apiKey)||current.apiKey;
-    const enabled=Boolean(clientId&&apiKey);
+    const enabled=Boolean(clientId);
     window.SigmaGoogleCalendarConfigV1.write({clientId,apiKey,enabled});
     render();
   }
@@ -33,11 +41,11 @@
       await window.SigmaGoogleAuthSessionV1.init();
       await window.SigmaGoogleAuthSessionV1.requestToken();
       await syncNow();
-    }catch(e){alert(`Connexion Google impossible : ${e.message||e}`);render();}
+    }catch(e){console.error('[SigmaGoogleCalendar] connection failed',e);alert(`Connexion Google impossible : ${errorMessage(e)}`);render();}
   }
   async function syncNow(){
     try{await window.SigmaGoogleCalendarSyncV1.sync();render();}
-    catch(e){alert(`Synchronisation impossible : ${e.message||e}`);render();}
+    catch(e){console.error('[SigmaGoogleCalendar] sync failed',e);alert(`Synchronisation impossible : ${errorMessage(e)}`);render();}
   }
   function boot(){mount();}
   window.addEventListener('sigma:google-calendar-synced',render);
