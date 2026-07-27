@@ -47,3 +47,7 @@ functions/.env.project-sum-b961a
 *.before-*
 reports/waves-1-5/
 sum-wave-backups/
+# SUM wave-generated files
+*.backup-*
+sum-wave-backups/
+reports/wave-*/
