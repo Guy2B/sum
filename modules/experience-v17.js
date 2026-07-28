@@ -42,10 +42,6 @@
     let attentionFilter = 'all';
     let fullDashboard = false;
     let lastReport = null;
-    let renderSequence = 0;
-    let pendingRenderTimer = null;
-    const renderHistory = [];
-
     const copy = () => COPY[ctx.language()] || COPY.en;
     const esc = ctx.escape;
     const tomorrow = () => { const date = new Date(); date.setDate(date.getDate() + 1); return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 10); };
@@ -75,17 +71,10 @@
      * - An empty V6 result is respected; it does not reactivate ignored promotions.
      */
     function todayRecommendations(state) {
-      const engine = window.SUM_DECISION_ENGINE_V6 || window.SIGMA_DECISION_ENGINE;
+      const engine = window.SUM_DECISION_ENGINE_V6;
 
       if (!engine?.decideLegacyState) {
-        const fallback = INTEL.recommendations(state).slice(0, 3);
-        window.SigmaDecisionPipeline = {
-          status: 'fallback',
-          reason: 'decision-engine-unavailable',
-          produced: fallback.length,
-          selected: fallback.length
-        };
-        return fallback;
+        return INTEL.recommendations(state);
       }
 
       try {
@@ -102,10 +91,6 @@
           ? decisionResult.decisions
           : [];
 
-        const actionable = decisions
-          .filter((decision) => decision && decision.action !== 'ignore')
-          .sort((a, b) => Number(b.score || 0) - Number(a.score || 0));
-
         const decisionById = new Map(
           decisions.map((decision) => [
             String(decision.signalId || decision.id || ''),
@@ -117,229 +102,117 @@
           ? decisionResult.today.items
           : [];
 
-        // The arbitrator may return fewer than three "today" items because of
-        // capacity or diversity constraints. The dashboard still promises up
-        // to three useful decisions, so complete the selection with the best
-        // remaining actionable engine decisions, without reintroducing ignored
-        // signals or legacy ranking.
-        const candidates = [];
-        const seen = new Set();
-        [...selected, ...actionable].forEach((candidate) => {
-          const id = String(candidate?.signalId || candidate?.id || '');
-          if (!id || seen.has(id)) return;
-          const decision = decisionById.get(id) || candidate;
-          if (decision?.action === 'ignore') return;
-          seen.add(id);
-          candidates.push(decision);
-        });
+        return selected
+          .map((selectedItem) => {
+            const id = String(
+              selectedItem?.signalId ||
+              selectedItem?.id ||
+              ''
+            );
 
-        function mapDecision(candidate) {
-          const id = String(candidate?.signalId || candidate?.id || '');
-          const decision = decisionById.get(id) || candidate;
-          if (!id || decision?.action === 'ignore') return null;
+            const decision =
+              decisionById.get(id) ||
+              selectedItem;
 
-          const sourceItem = legacyById.get(id) || {};
-          const intent = decision?.classification?.intent;
-          let category = sourceItem.category || 'communication';
-          if (intent === 'opportunity') category = 'opportunity';
-          else if (intent === 'transactional' || intent === 'administrative') category = 'admin';
+            if (!id || decision?.action === 'ignore') {
+              return null;
+            }
 
-          return {
-            ...sourceItem,
-            id,
-            sourceType: sourceItem.sourceType || id.split(':')[0] || 'signal',
-            sourceId: sourceItem.sourceId || id.split(':').slice(1).join(':'),
-            provider: sourceItem.provider || id.split(':')[0] || 'Sigma',
-            title: sourceItem.title || decision?.title || 'Décision',
-            body: sourceItem.body || decision?.body || '',
-            sender: sourceItem.sender || decision?.sender || '',
-            score: Number(decision?.score ?? sourceItem.score ?? 0),
-            needsReply: decision?.action === 'reply' || Boolean(sourceItem.needsReply),
-            category,
-            reasons: Array.isArray(decision?.explanation?.reasons)
-              ? decision.explanation.reasons
-              : (Array.isArray(decision?.reasons) ? decision.reasons : (sourceItem.reasons || [])),
-            explanationSummary: decision?.explanation?.summary || '',
-            uncertainties: Array.isArray(decision?.explanation?.uncertainties)
-              ? decision.explanation.uncertainties
-              : [],
-            evidence: decision?.explanation?.evidence || {},
-            dimensions: decision?.dimensions || decision?.scoreBreakdown || {},
-            firedRules: Array.isArray(decision?.rules)
-              ? decision.rules
-              : (Array.isArray(decision?.firedRules) ? decision.firedRules : []),
-            action: decision?.action || 'review',
-            confidence: Number(decision?.confidence || 0),
-            priorityBand: decision?.priorityBand || 'low',
-            mergedSources: sourceItem.mergedSources || decision?.provenance?.sources || [sourceItem.provider || id.split(':')[0]],
-            decision
-          };
-        }
+            const sourceItem = legacyById.get(id) || {};
+            const intent = decision?.classification?.intent;
 
-        const mapped = candidates.slice(0, 3).map(mapDecision).filter(Boolean);
-        const selectedRecommendations = mapped;
-        window.SigmaDecisionPipeline = {
-          status: 'engine',
-          produced: decisions.length,
-          actionable: actionable.length,
-          selected: selected.length,
-          mapped: mapped.length,
-          displayed: selectedRecommendations.length
-        };
-        return selectedRecommendations;
+            let category = sourceItem.category || 'communication';
+
+            if (intent === 'opportunity') {
+              category = 'opportunity';
+            } else if (
+              intent === 'transactional' ||
+              intent === 'administrative'
+            ) {
+              category = 'admin';
+            }
+
+            return {
+              ...sourceItem,
+              id,
+              sourceType:
+                sourceItem.sourceType ||
+                id.split(':')[0] ||
+                'signal',
+              sourceId:
+                sourceItem.sourceId ||
+                id.split(':').slice(1).join(':'),
+              provider:
+                sourceItem.provider ||
+                id.split(':')[0] ||
+                'Sigma',
+              title:
+                sourceItem.title ||
+                decision?.title ||
+                'Décision',
+              body:
+                sourceItem.body ||
+                decision?.body ||
+                '',
+              sender:
+                sourceItem.sender ||
+                decision?.sender ||
+                '',
+              score: Number(decision?.score ?? sourceItem.score ?? 0),
+              needsReply:
+                decision?.action === 'reply' ||
+                Boolean(sourceItem.needsReply),
+              category,
+              reasons: Array.isArray(decision?.reasons)
+                ? decision.reasons
+                : (sourceItem.reasons || []),
+              action: decision?.action || 'review',
+              confidence: Number(decision?.confidence || 0),
+              priorityBand:
+                decision?.priorityBand ||
+                'low',
+              decision
+            };
+          })
+          .filter(Boolean);
       } catch (error) {
-        console.error('Decision Engine dashboard bridge failed', error);
-        const fallback = INTEL.recommendations(state).slice(0, 3);
-        window.SigmaDecisionPipeline = {
-          status: 'error-fallback',
-          reason: String(error?.message || error),
-          produced: fallback.length,
-          selected: fallback.length
-        };
-        return fallback;
+        console.error(
+          'Decision Engine V6 dashboard bridge failed',
+          error
+        );
+
+        return INTEL.recommendations(state);
       }
     }
 
-    function normalizeText(value) {
-      if (value === null || value === undefined) return '';
-      let text = String(value);
-      if (typeof document !== 'undefined' && /&(?:#\d+|#x[0-9a-f]+|[a-z]+);/i.test(text)) {
-        const decoder = document.createElement('textarea');
-        decoder.innerHTML = text;
-        text = decoder.value;
-      }
-      const replacements = new Map([
-        ['Ã©', 'é'], ['Ã¨', 'è'], ['Ãª', 'ê'], ['Ã«', 'ë'],
-        ['Ã ', 'à'], ['Ã¢', 'â'], ['Ã®', 'î'], ['Ã¯', 'ï'],
-        ['Ã´', 'ô'], ['Ã¶', 'ö'], ['Ã¹', 'ù'], ['Ã»', 'û'],
-        ['Ã§', 'ç'], ['Å“', 'œ'], ['Ã‰', 'É'], ['Ã€', 'À'],
-        ['â€™', '’'], ['â€œ', '“'], ['â€', '”'], ['â€“', '–'],
-        ['â€”', '—'], ['â€¦', '…'], ['Â·', '·'], ['Â', '']
-      ]);
-      replacements.forEach((replacement, broken) => {
-        text = text.split(broken).join(replacement);
-      });
-      return text;
-    }
-    function safe(value) {
-      return esc(normalizeText(value));
-    }
-
-    function normalizeKnownUiText(root = document) {
-      if (!root || typeof document === 'undefined') return;
-      const selector = '#app-shell, #panel-dashboard, #v17-today-recommendations, #v17-context-summary, nav, aside, header';
-      const scopes = root === document
-        ? [...document.querySelectorAll(selector)]
-        : [root];
-      const seen = new Set();
-      scopes.forEach((scope) => {
-        if (!scope || seen.has(scope)) return;
-        seen.add(scope);
-        const walker = document.createTreeWalker(scope, NodeFilter.SHOW_TEXT);
-        const nodes = [];
-        while (walker.nextNode()) nodes.push(walker.currentNode);
-        nodes.forEach((node) => {
-          const parent = node.parentElement;
-          if (!parent || ['SCRIPT', 'STYLE', 'NOSCRIPT'].includes(parent.tagName)) return;
-          const fixed = normalizeText(node.nodeValue);
-          if (fixed !== node.nodeValue) node.nodeValue = fixed;
-        });
-        scope.querySelectorAll('[title],[aria-label],[placeholder]').forEach((element) => {
-          ['title', 'aria-label', 'placeholder'].forEach((name) => {
-            if (!element.hasAttribute(name)) return;
-            const current = element.getAttribute(name);
-            const fixed = normalizeText(current);
-            if (fixed !== current) element.setAttribute(name, fixed);
-          });
-        });
-      });
-    }
-
-    function translateReason(reason) {
+    function reasonText(item) {
       const lang = ctx.language();
       const map = {
-        fr: { 'reply expected': 'une réponse est attendue', 'high priority': 'le score de priorité est élevé', 'due now': 'l’échéance est immédiate', 'commercial opportunity': 'une opportunité commerciale est détectée', 'reduced capacity': 'votre capacité semble réduite', 'linked to your main goal': 'cela soutient votre objectif principal', 'Act now': 'Agir maintenant', 'Handle today': 'À traiter aujourd’hui', 'Review when capacity allows': 'À revoir lorsque votre capacité le permet', 'Low priority': 'Priorité faible' },
+        fr: { 'reply expected': 'une réponse est attendue', 'high priority': 'le score de priorité est élevé', 'due now': 'l’échéance est immédiate', 'commercial opportunity': 'une opportunité commerciale est détectée', 'reduced capacity': 'votre capacité semble réduite', 'linked to your main goal': 'cela soutient votre objectif principal' },
         en: { 'reply expected': 'a reply is expected', 'high priority': 'the priority score is high', 'due now': 'the deadline is immediate', 'commercial opportunity': 'a commercial opportunity was detected', 'reduced capacity': 'your capacity appears reduced', 'linked to your main goal': 'it supports your main goal' },
         de: { 'reply expected': 'eine Antwort wird erwartet', 'high priority': 'die Priorität ist hoch', 'due now': 'die Frist ist sofort', 'commercial opportunity': 'eine Geschäftschance wurde erkannt', 'reduced capacity': 'Ihre Kapazität ist reduziert', 'linked to your main goal': 'es unterstützt Ihr Hauptziel' },
         es: { 'reply expected': 'se espera una respuesta', 'high priority': 'la prioridad es alta', 'due now': 'el plazo es inmediato', 'commercial opportunity': 'se detectó una oportunidad comercial', 'reduced capacity': 'tu capacidad parece reducida', 'linked to your main goal': 'apoya tu objetivo principal' }
       };
       const dict = map[lang] || map.en;
-      return dict[reason] || reason;
-    }
-    function reasonText(item) {
-      return (item.reasons || []).map(translateReason).join(' · ');
-    }
-    function priorityLabel(item) {
-      const labels = {
-        critical: 'Critique', high: 'Haute', medium: 'Moyenne', low: 'Faible'
-      };
-      return labels[String(item.priorityBand || '').toLowerCase()] || 'À examiner';
-    }
-    function metricValue(value) {
-      const number = Number(value);
-      return Number.isFinite(number) ? Math.max(0, Math.min(100, Math.round(number))) : null;
-    }
-    function explanationDetails(item) {
-      const reasonValues = [...new Set((item.reasons || []).map((value) => normalizeText(translateReason(value))).filter(Boolean))].slice(0, 4);
-      const summary = normalizeText(translateReason(item.explanationSummary || ''));
-      const reasons = reasonValues.length
-        ? `<div class="v17-explanation-section v17-reason-section"><h4>Signaux principaux</h4><ul class="v17-explanation-list">${reasonValues.map((reason) => `<li><span aria-hidden="true">✓</span><span>${safe(reason)}</span></li>`).join('')}</ul></div>`
-        : `<p class="v17-explanation-empty">Le moteur n’a fourni aucun signal explicatif détaillé.</p>`;
-
-      const dimensions = item.dimensions || {};
-      const metrics = [
-        ['Importance', dimensions.importance],
-        ['Urgence', dimensions.urgency],
-        ['Impact', dimensions.impact],
-        ['Coût de l’inaction', dimensions.costOfInaction]
-      ].map(([label, raw]) => [label, metricValue(raw)]).filter(([, value]) => value !== null);
-      const metricHtml = metrics.length
-        ? `<div class="v17-explanation-section"><h4>Évaluation</h4><div class="v17-explanation-metrics">${metrics.map(([label, value]) => `<div class="v17-metric"><div><span>${safe(label)}</span><b>${value}/100</b></div><i><span style="width:${value}%"></span></i></div>`).join('')}</div></div>`
-        : '';
-
-      const effort = Number(dimensions.effortMinutes ?? item.decision?.effortMinutes);
-      const confidence = Number(item.confidence);
-      const facts = [
-        Number.isFinite(effort) ? `<span><small>Effort estimé</small><b>${Math.max(1, Math.round(effort))} min</b></span>` : '',
-        Number.isFinite(confidence) && confidence > 0 ? `<span><small>Confiance</small><b>${Math.round(confidence)}%</b></span>` : ''
-      ].filter(Boolean).join('');
-
-      const reasonSet = new Set(reasonValues.map((value) => value.toLowerCase()));
-      const rules = (item.firedRules || [])
-        .map((rule) => normalizeText(translateReason(rule?.reason || rule?.label || rule?.id || '')))
-        .filter((value) => value && !reasonSet.has(value.toLowerCase()))
-        .slice(0, 3);
-      const ruleHtml = rules.length
-        ? `<div class="v17-explanation-section v17-secondary-explanation"><h4>Logique appliquée</h4><ul>${rules.map((rule) => `<li>${safe(rule)}</li>`).join('')}</ul></div>`
-        : '';
-
-      const uncertainties = [...new Set((item.uncertainties || []).map(normalizeText).filter(Boolean))].slice(0, 2);
-      const uncertaintyHtml = uncertainties.length
-        ? `<div class="v17-explanation-section v17-uncertainty"><h4>À confirmer</h4><ul>${uncertainties.map((value) => `<li>${safe(value)}</li>`).join('')}</ul></div>`
-        : '';
-
-      return `${summary ? `<p class="v17-explanation-summary">${safe(summary)}</p>` : ''}${facts ? `<div class="v17-explanation-facts">${facts}</div>` : ''}${reasons}${metricHtml}${ruleHtml}${uncertaintyHtml}`;
+      return (item.reasons || []).map((reason) => dict[reason] || reason).join(' · ');
     }
     function card(item, index, compact = false) {
-      const sources = [...new Set((item.mergedSources || [item.provider]).map(normalizeText).filter(Boolean))]
-        .map((source) => `<span>${safe(source)}</span>`).join('');
-      const confidence = Number(item.confidence);
-      return `<article class="v17-recommendation ${compact ? 'compact' : ''}" data-attention-id="${safe(item.id)}">
+      const sources = (item.mergedSources || [item.provider]).map((source) => `<span>${esc(source)}</span>`).join('');
+      return `<article class="v17-recommendation ${compact ? 'compact' : ''}" data-attention-id="${esc(item.id)}">
         <div class="v17-recommendation-rank">${compact ? sourceIcon(item) : index + 1}</div>
         <div class="v17-recommendation-main">
-          <div class="v17-recommendation-meta"><span>${safe(providerLabel(item))}</span><div class="v17-card-scores"><em data-band="${safe(item.priorityBand)}">${safe(priorityLabel(item))}</em><b>${Math.round(item.score)}</b></div></div>
-          <h3>${safe(item.title)}</h3>${item.sender ? `<p class="v17-sender">${safe(item.sender)}</p>` : ''}<p>${safe(item.body || '')}</p>
-          ${compact ? '' : `<details class="v17-explanation"><summary><span>${safe(copy().why)}</span>${Number.isFinite(confidence) && confidence > 0 ? `<small>${Math.round(confidence)}% confiance</small>` : ''}</summary><div class="v17-explanation-body">${explanationDetails(item)}<div class="v17-source-wrap"><small>Sources</small><div class="v17-source-badges">${sources}</div></div></div></details>`}
+          <div class="v17-recommendation-meta"><span>${esc(providerLabel(item))}</span><b>${Math.round(item.score)}</b></div>
+          <h3>${esc(item.title)}</h3>${item.sender ? `<p class="v17-sender">${esc(item.sender)}</p>` : ''}<p>${esc(item.body || '')}</p>
+          ${compact ? '' : `<details><summary>${copy().why}</summary><p>${esc(reasonText(item) || copy().todayTitle)}</p><div class="v17-source-badges">${sources}</div></details>`}
         </div>
         <div class="v17-recommendation-actions">
-          <button class="button primary small" type="button" data-v17-action="act" data-v17-id="${safe(item.id)}">${safe(actionLabel(item))}</button>
-          ${item.sourceType !== 'task' && item.sourceType !== 'health' ? `<button class="text-button" type="button" data-v17-action="snooze" data-v17-id="${safe(item.id)}">${safe(copy().snooze)}</button>` : ''}
-          ${item.sourceType === 'mail' || item.sourceType === 'social' ? `<button class="icon-button" type="button" data-v17-action="resolve" data-v17-id="${safe(item.id)}" title="${safe(copy().markHandled)}">✓</button>` : ''}
-          ${item.sourceUrl ? `<a class="icon-button" href="${safe(item.sourceUrl)}" target="_blank" rel="noopener" title="${safe(copy().open)}">↗</a>` : ''}
+          <button class="button primary small" type="button" data-v17-action="act" data-v17-id="${esc(item.id)}">${esc(actionLabel(item))}</button>
+          ${item.sourceType !== 'task' && item.sourceType !== 'health' ? `<button class="text-button" type="button" data-v17-action="snooze" data-v17-id="${esc(item.id)}">${copy().snooze}</button>` : ''}
+          ${item.sourceType === 'mail' || item.sourceType === 'social' ? `<button class="icon-button" type="button" data-v17-action="resolve" data-v17-id="${esc(item.id)}" title="${copy().markHandled}">✓</button>` : ''}
+          ${item.sourceUrl ? `<a class="icon-button" href="${esc(item.sourceUrl)}" target="_blank" rel="noopener" title="${copy().open}">↗</a>` : ''}
         </div>
       </article>`;
     }
-
     function activeSourceCount(state) {
       let count = (state.mailAccounts || []).length + (state.socialAccounts || []).length + (state.healthSources || []).filter((source) => source.status === 'connected').length;
       if ((state.events || []).length) count += 1;
@@ -351,43 +224,16 @@
       const recs = todayRecommendations(state);
       const root = document.getElementById('v17-today-recommendations');
       root.innerHTML = recs.length ? recs.map((item, index) => card(item, index)).join('') : `<div class="empty-state">${copy().todayEmpty}</div>`;
-      const engineConfidences = recs
-        .map((item) => Number(item.confidence))
-        .filter((value) => Number.isFinite(value) && value > 0);
-      const confidence = engineConfidences.length
-        ? Math.round(engineConfidences.reduce((sum, value) => sum + value, 0) / engineConfidences.length)
-        : INTEL.confidence(state);
+      const confidence = INTEL.confidence(state);
       document.getElementById('v17-confidence-value').textContent = `${confidence}%`;
       document.getElementById('v17-confidence-bar').style.width = `${confidence}%`;
       const sources = activeSourceCount(state);
-      document.getElementById('v17-source-count').textContent = normalizeText(copy().sourceCount.replace('{count}', sources));
+      document.getElementById('v17-source-count').textContent = copy().sourceCount.replace('{count}', sources);
       document.getElementById('v17-full-dashboard-toggle').textContent = fullDashboard ? copy().calm : copy().full;
       document.body.classList.toggle('v17-full-dashboard', fullDashboard);
       const graph = INTEL.graph(state);
       const graphText = document.getElementById('v17-context-graph-summary');
       if (graphText) graphText.textContent = `${graph.nodes.length} signals · ${graph.edges.length} relations`;
-      window.SigmaDecisionDebug = {
-        engine: (window.SUM_DECISION_ENGINE_V6 || window.SIGMA_DECISION_ENGINE)?.version || '8.x',
-        pipeline: window.SigmaDecisionPipeline || {},
-        produced: Number(window.SigmaDecisionPipeline?.produced ?? recs.length),
-        selected: Number(window.SigmaDecisionPipeline?.selected ?? recs.length),
-        mapped: Number(window.SigmaDecisionPipeline?.mapped ?? recs.length),
-        displayedRecommendations: recs.length,
-        displayed: root.querySelectorAll('.v17-recommendation').length,
-        explained: recs.filter((item) => (item.reasons || []).length > 0 || item.explanationSummary).length,
-        confidences: engineConfidences,
-        decisions: recs.map((item) => ({
-          id: item.id,
-          title: item.title,
-          score: item.score,
-          confidence: item.confidence,
-          reasons: item.reasons,
-          rules: item.firedRules,
-          uncertainties: item.uncertainties,
-          evidence: item.evidence
-        }))
-      };
-      window.dispatchEvent(new CustomEvent('sigma:decision-debug-updated', { detail: window.SigmaDecisionDebug }));
     }
     function matchesFilter(item) {
       if (attentionFilter === 'all') return true;
@@ -507,25 +353,37 @@
       ctx.toast(copy().itemHandled);
     }
     function seedScenario(profile) {
+      const demoAllowed = ['localhost', '127.0.0.1'].includes(location.hostname) || new URLSearchParams(location.search).get('demo') === '1';
+      if (!demoAllowed) {
+        ctx.toast('Les scénarios de démonstration sont désactivés en production.', 'error');
+        return;
+      }
+      const now = new Date(); const iso = (days) => { const date = new Date(now); date.setDate(date.getDate() + days); return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 10); };
       ctx.updateState((state) => {
-        state.settings = state.settings || {};
-        state.contextProfile = state.contextProfile || {};
         state.settings.profile = profile;
-
-        const firebaseUser = window.SigmaCloud?.auth?.currentUser || window.SigmaCloud?.user || window.firebase?.auth?.()?.currentUser || null;
-        const firebaseName = String(firebaseUser?.displayName || '').trim();
-        const emailName = String(firebaseUser?.email || '').split('@')[0].trim();
-        const savedName = String(state.settings.name || '').trim();
-        if (!savedName) state.settings.name = firebaseName || emailName || '';
-
+        state.settings.name = profile === 'creator' ? 'Camille' : profile === 'life' ? 'Alex' : 'Michael';
         state.settings.onboardingComplete = true;
-        state.contextProfile.primaryGoal = profile === 'creator'
-          ? 'Publier une offre rentable sans épuisement'
-          : profile === 'life'
-            ? 'Retrouver une semaine stable et plus légère'
-            : 'Stabiliser les revenus de la microactivité';
+        state.contextProfile.primaryGoal = profile === 'creator' ? 'Publier une offre rentable sans épuisement' : profile === 'life' ? 'Retrouver une semaine stable et plus légère' : 'Stabiliser les revenus de la microactivité';
         state.contextProfile.successDefinition = 'Trois résultats utiles, une charge réaliste et aucune demande client oubliée.';
         state.contextProfile.weeklyHours = profile === 'life' ? 12 : 28;
+        state.tasks = [
+          { id: ctx.uid(), title: profile === 'creator' ? 'Finaliser la page de lancement' : 'Finaliser le devis Martin', category: 'Client', priority: 'high', urgent: true, important: true, essential: true, estimate: 50, dueDate: iso(0), done: false, createdAt: now.toISOString() },
+          { id: ctx.uid(), title: 'Préparer la semaine prochaine', category: 'Planification', priority: 'medium', urgent: false, important: true, essential: true, estimate: 30, dueDate: iso(1), done: false, createdAt: now.toISOString() },
+          { id: ctx.uid(), title: 'Classer les justificatifs', category: 'Admin', priority: 'low', urgent: false, important: false, estimate: 40, dueDate: iso(4), done: false, createdAt: now.toISOString() }
+        ];
+        state.calendarAccounts = [{ id: 'demo-calendar', provider: 'google', email: 'agenda@sum.test', label: 'Google Calendar démo', demo: true, status: 'connected' }];
+        state.events = [{ id: ctx.uid(), title: 'Rendez-vous client', date: iso(0), time: '16:00', externalProvider: 'google', accountId: 'demo-calendar', createdAt: now.toISOString() }];
+        state.mailAccounts = [{ id: 'demo-mail', provider: 'gmail', email: 'demo@sum.test', demo: true, status: 'connected' }];
+        state.mailMessages = [
+          { id: ctx.uid(), accountId: 'demo-mail', provider: 'gmail', subject: 'Proposition et délai pour vendredi', sender: 'Martin Client', snippet: 'Pouvez-vous confirmer le tarif et le calendrier aujourd’hui ?', receivedAt: new Date(now.getTime() - 22 * 3600000).toISOString(), unread: true, importance: 'high', needsReply: true },
+          { id: ctx.uid(), accountId: 'demo-mail', provider: 'gmail', subject: 'Renouvellement assurance', sender: 'Assurance', snippet: 'Un document est nécessaire avant le renouvellement.', receivedAt: new Date(now.getTime() - 30 * 3600000).toISOString(), unread: true, importance: 'normal', needsReply: false }
+        ];
+        state.socialAccounts = [{ id: 'demo-social', provider: 'youtube', label: 'Compte démo', demo: true, status: 'connected' }];
+        state.socialInteractions = [{ id: ctx.uid(), accountId: 'demo-social', provider: 'youtube', type: 'comment', title: profile === 'creator' ? 'Question sur votre offre' : 'Demande de prix', content: 'Bonjour, pouvez-vous m’envoyer les conditions et le tarif ?', sender: 'Nadia', receivedAt: new Date(now.getTime() - 5 * 3600000).toISOString(), unread: true, requiresReply: true, priority: 88, contentIdea: profile === 'creator', handled: false }];
+        state.health = [{ id: ctx.uid(), date: iso(0), source: 'demo', sleep: profile === 'life' ? 6.1 : 6.4, energy: profile === 'life' ? 4 : 5, stress: 7, steps: 4100, hrv: 38 }];
+        state.healthSources = [{ provider: 'apple', status: 'connected', mode: 'demo', lastSync: now.toISOString() }];
+        state.finance = [{ id: ctx.uid(), type: 'income', amount: 1200, description: 'Acompte client', category: 'Client', date: iso(-3) }, { id: ctx.uid(), type: 'expense', amount: 180, description: 'Logiciels', category: 'Abonnements', date: iso(-2) }];
+        state.ownerPreview = true;
       });
       ctx.toast(`${copy().generated} ${profile}`);
     }
@@ -589,48 +447,11 @@
         'v17-mobile-today': copy().navToday, 'v17-mobile-attention': copy().navAttention, 'v17-mobile-plan': copy().navPlan,
         'v17-attention-sources-label': copy().navSources, 'v17-plan-today-label': copy().navToday, 'v17-plan-refresh-label': copy().refresh
       };
-      Object.entries(values).forEach(([id, value]) => { const el = document.getElementById(id); if (el) el.textContent = normalizeText(value); });
+      Object.entries(values).forEach(([id, value]) => { const el = document.getElementById(id); if (el) el.textContent = value; });
       const tabValues = { all: copy().all, reply: copy().replies, opportunity: copy().opportunities, admin: copy().admin, wellbeing: copy().wellbeing };
-      Object.entries(tabValues).forEach(([key, label]) => { const el = document.querySelector(`[data-v17-attention-filter="${key}"] span`); if (el) el.textContent = normalizeText(label); });
+      Object.entries(tabValues).forEach(([key, label]) => { const el = document.querySelector(`[data-v17-attention-filter="${key}"] span`); if (el) el.textContent = label; });
     }
-    function stateFingerprint(state) {
-      return {
-        tasks: (state.tasks || []).length,
-        mail: (state.mailMessages || []).length,
-        social: (state.socialInteractions || []).length,
-        events: (state.events || []).length,
-        accounts: (state.mailAccounts || []).length + (state.socialAccounts || []).length
-      };
-    }
-    function render(reason = 'direct') {
-      renderSequence += 1;
-      const before = stateFingerprint(ctx.getState());
-      updateStaticCopy();
-      renderToday();
-      renderAttention();
-      renderPlan();
-      renderConnections();
-      normalizeKnownUiText(document);
-      const entry = {
-        sequence: renderSequence,
-        at: new Date().toISOString(),
-        reason,
-        state: before,
-        pipeline: { ...(window.SigmaDecisionPipeline || {}) },
-        displayed: document.querySelectorAll('#v17-today-recommendations .v17-recommendation').length
-      };
-      renderHistory.push(entry);
-      if (renderHistory.length > 25) renderHistory.shift();
-      window.SigmaDecisionRenderHistory = renderHistory;
-      if (window.SigmaDecisionDebug) window.SigmaDecisionDebug.renderHistory = [...renderHistory];
-    }
-    function scheduleRender(reason = 'state-update') {
-      if (pendingRenderTimer) window.clearTimeout(pendingRenderTimer);
-      pendingRenderTimer = window.setTimeout(() => {
-        pendingRenderTimer = null;
-        render(reason);
-      }, 160);
-    }
+    function render() { updateStaticCopy(); renderToday(); renderAttention(); renderPlan(); renderConnections(); }
 
     document.addEventListener('click', (event) => {
       const filter = event.target.closest('[data-v17-attention-filter]');
@@ -702,9 +523,9 @@
       if (adminNav) adminNav.hidden = !show;
       if (adminPanel) adminPanel.dataset.available = show ? 'true' : 'false';
     }
-    ctx.subscribe(() => { adminVisibility(); scheduleRender('state-subscription'); });
-    document.addEventListener('languagechange', () => render('language-change'));
-    adminVisibility(); render('initial');
+    ctx.subscribe(() => { adminVisibility(); render(); });
+    document.addEventListener('languagechange', render);
+    adminVisibility(); render();
     if (config.adminQaEnabled) window.setTimeout(runAdminTests, 400);
     return { render, runAdminTests };
   }

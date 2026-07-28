@@ -1,10 +1,10 @@
 'use strict';
 (() => {
   const COPY = {
-    fr: { title:'Calendriers connectés', sub:'Importez les événements en lecture seule pour que Σ connaisse vos échéances et votre disponibilité.', google:'Google Calendar', microsoft:'Outlook / Microsoft 365', connect:'Connecter', disconnect:'Déconnecter', sync:'Synchroniser', demo:'Démo explicite', connected:'Connecté', none:'Aucun calendrier connecté.', imported:'Calendrier synchronisé.', failed:'Le connecteur calendrier est indisponible.', readOnly:'Lecture seule : Σ ne crée, ne modifie et ne supprime aucun événement distant.' },
-    en: { title:'Connected calendars', sub:'Import read-only events so Σ can understand deadlines and availability.', google:'Google Calendar', microsoft:'Outlook / Microsoft 365', connect:'Connect', disconnect:'Disconnect', sync:'Sync', demo:'Explicit demo', connected:'Connected', none:'No calendar connected.', imported:'Calendar synchronised.', failed:'The calendar connector is unavailable.', readOnly:'Read only: Σ does not create, edit or delete remote events.' },
-    de: { title:'Verbundene Kalender', sub:'Importieren Sie Termine schreibgeschützt, damit Σ Fristen und Verfügbarkeit versteht.', google:'Google Kalender', microsoft:'Outlook / Microsoft 365', connect:'Verbinden', disconnect:'Trennen', sync:'Synchronisieren', demo:'Explizite Demo', connected:'Verbunden', none:'Kein Kalender verbunden.', imported:'Kalender synchronisiert.', failed:'Der Kalender-Connector ist nicht verfügbar.', readOnly:'Nur Lesen: Σ erstellt, ändert oder löscht keine entfernten Termine.' },
-    es: { title:'Calendarios conectados', sub:'Importa eventos en modo lectura para que Σ comprenda plazos y disponibilidad.', google:'Google Calendar', microsoft:'Outlook / Microsoft 365', connect:'Conectar', disconnect:'Desconectar', sync:'Sincronizar', demo:'Demo explícita', connected:'Conectado', none:'Ningún calendario conectado.', imported:'Calendario sincronizado.', failed:'El conector de calendario no está disponible.', readOnly:'Solo lectura: Σ no crea, modifica ni elimina eventos remotos.' }
+    fr: { title:'Calendriers connectés', sub:'Importez les événements en lecture seule pour que Σ connaisse vos échéances et votre disponibilité.', google:'Google Calendar', microsoft:'Outlook / Microsoft 365', connect:'Connecter', disconnect:'Déconnecter', sync:'Synchroniser', demo:'Configuration requise', connected:'Connecté', none:'Aucun calendrier connecté.', imported:'Calendrier synchronisé.', failed:'Le connecteur calendrier est indisponible.', readOnly:'Lecture seule : Σ ne crée, ne modifie et ne supprime aucun événement distant.' },
+    en: { title:'Connected calendars', sub:'Import read-only events so Σ can understand deadlines and availability.', google:'Google Calendar', microsoft:'Outlook / Microsoft 365', connect:'Connect', disconnect:'Disconnect', sync:'Sync', demo:'Configuration required', connected:'Connected', none:'No calendar connected.', imported:'Calendar synchronised.', failed:'The calendar connector is unavailable.', readOnly:'Read only: Σ does not create, edit or delete remote events.' },
+    de: { title:'Verbundene Kalender', sub:'Importieren Sie Termine schreibgeschützt, damit Σ Fristen und Verfügbarkeit versteht.', google:'Google Kalender', microsoft:'Outlook / Microsoft 365', connect:'Verbinden', disconnect:'Trennen', sync:'Synchronisieren', demo:'Konfiguration erforderlich', connected:'Verbunden', none:'Kein Kalender verbunden.', imported:'Kalender synchronisiert.', failed:'Der Kalender-Connector ist nicht verfügbar.', readOnly:'Nur Lesen: Σ erstellt, ändert oder löscht keine entfernten Termine.' },
+    es: { title:'Calendarios conectados', sub:'Importa eventos en modo lectura para que Σ comprenda plazos y disponibilidad.', google:'Google Calendar', microsoft:'Outlook / Microsoft 365', connect:'Conectar', disconnect:'Desconectar', sync:'Sincronizar', demo:'Configuración necesaria', connected:'Conectado', none:'Ningún calendario conectado.', imported:'Calendario sincronizado.', failed:'El conector de calendario no está disponible.', readOnly:'Solo lectura: Σ no crea, modifica ni elimina eventos remotos.' }
   };
   function initCalendarConnect(ctx) {
     const dialog = document.getElementById('calendar-connect-dialog');
@@ -27,15 +27,12 @@
       const accounts = ctx.getState().calendarAccounts || [];
       list.innerHTML = accounts.length ? accounts.map((account)=>`<article class="calendar-account-chip"><span>${account.provider==='google'?'G':'M'}</span><div><strong>${esc(account.label || account.email || providerName(account.provider))}</strong><small>${esc(providerName(account.provider))} · ${account.demo ? esc(copy().demo) : esc(copy().connected)}</small></div><button class="icon-button danger" type="button" data-calendar-disconnect="${esc(account.id)}" aria-label="${esc(copy().disconnect)}">×</button></article>`).join('') : `<div class="empty-state compact">${esc(copy().none)}</div>`;
     }
-    function demo(provider) {
-      const id=`demo-calendar-${provider}`; const today=new Date(); const date=(offset)=>{const d=new Date(today);d.setDate(d.getDate()+offset);return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10);};
-      ctx.updateState((state)=>{
-        state.calendarAccounts=(state.calendarAccounts||[]).filter((a)=>a.provider!==provider);
-        state.calendarAccounts.push({id,provider,email:`demo@${provider}.test`,label:providerName(provider),demo:true,status:'connected',createdAt:new Date().toISOString()});
-        const rows=[{id:`${id}-1`,externalId:`${id}-1`,externalProvider:provider,title:'Rendez-vous client',date:date(0),time:'15:30',startAt:`${date(0)}T15:30:00`,source:'calendar-demo',demo:true,accountId:id},{id:`${id}-2`,externalId:`${id}-2`,externalProvider:provider,title:'Échéance de proposition',date:date(1),time:'10:00',startAt:`${date(1)}T10:00:00`,source:'calendar-demo',demo:true,accountId:id}];
-        state.events=(state.events||[]).filter((e)=>e.externalProvider!==provider); state.events.push(...rows);
+    function purgeLegacyDemoCalendar() {
+      ctx.updateState((state) => {
+        const demoAccountIds = new Set((state.calendarAccounts || []).filter((account) => account.demo || String(account.id || '').startsWith('demo-calendar')).map((account) => account.id));
+        state.calendarAccounts = (state.calendarAccounts || []).filter((account) => !account.demo && !String(account.id || '').startsWith('demo-calendar'));
+        state.events = (state.events || []).filter((event) => event.source !== 'calendar-demo' && !demoAccountIds.has(event.accountId) && !String(event.id || '').startsWith('demo-calendar'));
       });
-      ctx.toast(copy().imported); render();
     }
     async function refreshAccounts() {
       if(!base()) return render();
@@ -48,8 +45,7 @@
           try { const rows=await window.SigmaGoogle.importCalendar(); ctx.updateState(state=>{state.events=(state.events||[]).filter(e=>e.externalProvider!=='google').concat(rows);state.calendarSettings={...(state.calendarSettings||{}),lastSync:new Date().toISOString()};});ctx.toast(copy().imported); }
           catch(error){ctx.toast(error.message,'error');} return;
         }
-        ctx.toast(copy().failed, 'error');
-        return;
+        ctx.toast(copy().failed,'error'); return;
       }
       try { const payload=await request('/api/calendar/events'); ctx.updateState((state)=>{const providers=new Set((payload.events||[]).map((e)=>e.provider)); state.events=(state.events||[]).filter((e)=>!providers.has(e.externalProvider)); state.events.push(...(payload.events||[]).map((e)=>({...e,externalProvider:e.provider,source:'calendar-connector'}))); state.calendarSettings={...(state.calendarSettings||{}),lastSync:new Date().toISOString()};}); ctx.toast(copy().imported); }
       catch { ctx.toast(copy().failed,'error'); }
@@ -66,13 +62,14 @@
             ctx.updateState(state=>{state.calendarAccounts=(state.calendarAccounts||[]).filter(a=>a.provider!=='google');state.calendarAccounts.push({id:'google-calendar',provider:'google',email:window.SigmaCloud?.user?.email||'',label:'Google Calendar',demo:false,status:'connected',createdAt:new Date().toISOString()});state.events=(state.events||[]).filter(e=>e.externalProvider!=='google').concat(rows);state.calendarSettings={...(state.calendarSettings||{}),lastSync:new Date().toISOString()};});
             ctx.toast(copy().imported); render();
           } catch(error){ctx.toast(error.message,'error');}
-        } else demo(provider);
+        } else ctx.toast(copy().failed,'error');
       }
       const id=event.target.closest('[data-calendar-disconnect]')?.dataset.calendarDisconnect;
       if(id) { const account=(ctx.getState().calendarAccounts||[]).find((a)=>a.id===id); if(base()&&!account?.demo) request(`/api/calendar/accounts/${encodeURIComponent(id)}`,{method:'DELETE'}).catch(()=>{}); ctx.updateState((state)=>{state.calendarAccounts=(state.calendarAccounts||[]).filter((a)=>a.id!==id);state.events=(state.events||[]).filter((e)=>e.accountId!==id && e.externalProvider!==account?.provider);}); render(); }
     });
     document.getElementById('calendar-connect-close')?.addEventListener('click',()=>dialog.close());
     document.getElementById('calendar-sync')?.addEventListener('click',sync);
+    purgeLegacyDemoCalendar();
     const params=new URLSearchParams(location.search); if(params.get('calendar')==='connected'){refreshAccounts().then(sync);history.replaceState({},'',`${location.pathname}${location.hash||'#connections'}`);} else render();
     ctx.subscribe(render); document.addEventListener('languagechange',render); render();
     return { render, sync };
