@@ -1,0 +1,42 @@
+/* Sigma Decision Cards Step 5 stabilization */
+/* Sigma Decision Wave 1.1 Step 4 — cards, explanations and responsive layout */
+.v17-recommendations{align-items:start}
+.v17-recommendation{overflow:hidden;padding:18px;grid-template-columns:auto minmax(0,1fr);gap:12px}
+.v17-recommendation-main h3{font-size:1rem;overflow-wrap:anywhere}
+.v17-card-scores{display:flex;align-items:center;gap:6px}
+.v17-card-scores em{font-style:normal;padding:4px 7px;border-radius:999px;background:var(--soft);color:var(--muted);font-size:.62rem;font-weight:800;letter-spacing:.03em;text-transform:none}
+.v17-card-scores em[data-band="critical"],.v17-card-scores em[data-band="high"]{background:color-mix(in srgb,var(--danger) 12%,transparent);color:var(--danger)}
+.v17-card-scores em[data-band="medium"]{background:color-mix(in srgb,var(--warning) 14%,transparent);color:color-mix(in srgb,var(--warning) 80%,var(--text))}
+.v17-explanation{margin-top:14px!important;border:1px solid var(--border)!important;border-radius:15px;padding:0!important;background:color-mix(in srgb,var(--soft) 45%,transparent)}
+.v17-explanation summary{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px 12px;color:var(--text)!important;list-style:none}
+.v17-explanation summary::-webkit-details-marker{display:none}
+.v17-explanation summary span{font-weight:850}
+.v17-explanation summary span:before{content:'▸';display:inline-block;margin-right:7px;color:var(--accent);transition:transform .2s ease}
+.v17-explanation[open] summary span:before{transform:rotate(90deg)}
+.v17-explanation summary small{color:var(--muted);font-size:.68rem;white-space:nowrap}
+.v17-explanation-body{border-top:1px solid var(--border);padding:12px;display:grid;gap:13px}
+.v17-explanation-summary{margin:0!important;color:var(--text)!important;font-weight:780;line-height:1.45}
+.v17-explanation-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.v17-explanation-facts span{display:grid;gap:2px;padding:9px 10px;border:1px solid var(--border);border-radius:11px;background:var(--card)}
+.v17-explanation-facts small,.v17-source-wrap>small{color:var(--muted);font-size:.67rem;text-transform:uppercase;letter-spacing:.06em}
+.v17-explanation-facts b{font-size:.86rem}
+.v17-explanation-section{display:grid;gap:8px}
+.v17-explanation-section h4{margin:0;font-size:.76rem;letter-spacing:.02em}
+.v17-explanation-section ul{margin:0;padding-left:18px;color:var(--muted);font-size:.76rem;line-height:1.5}
+.v17-explanation-list{list-style:none!important;padding:0!important;display:grid;gap:7px}
+.v17-explanation-list li{display:grid;grid-template-columns:auto 1fr;gap:7px;align-items:start;color:var(--text)}
+.v17-explanation-list li>span:first-child{display:grid;place-items:center;width:17px;height:17px;border-radius:50%;background:color-mix(in srgb,var(--success) 14%,transparent);color:var(--success);font-size:.65rem;font-weight:900;margin-top:1px}
+.v17-explanation-metrics{display:grid;gap:8px}
+.v17-metric{display:grid;gap:4px}
+.v17-metric>div{display:flex;justify-content:space-between;gap:8px;font-size:.7rem}
+.v17-metric>div span{color:var(--muted)}
+.v17-metric>i{display:block;height:6px;border-radius:999px;background:var(--border);overflow:hidden}
+.v17-metric>i span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,var(--accent),var(--success))}
+.v17-secondary-explanation,.v17-uncertainty{padding-top:10px;border-top:1px dashed var(--border)}
+.v17-uncertainty h4{color:var(--warning)}
+.v17-source-wrap{display:grid;gap:6px;padding-top:10px;border-top:1px solid var(--border)}
+.v17-source-badges span{background:var(--card);border:1px solid var(--border)}
+.v17-explanation-empty{margin:0!important;color:var(--muted)!important;font-size:.76rem!important}
+@media(min-width:1101px) and (max-width:1450px){.v17-recommendations{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:1100px){.v17-recommendations{grid-template-columns:1fr}.v17-recommendation{grid-template-columns:auto minmax(0,1fr)}.v17-recommendation-actions{grid-column:1/-1;flex-direction:row;justify-content:flex-end}}
+@media(max-width:560px){.v17-explanation-facts{grid-template-columns:1fr}.v17-recommendation{padding:14px}.v17-card-scores em{display:none}}

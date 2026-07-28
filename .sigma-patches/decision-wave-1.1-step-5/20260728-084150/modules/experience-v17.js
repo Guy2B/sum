@@ -42,10 +42,43 @@
     let attentionFilter = 'all';
     let fullDashboard = false;
     let lastReport = null;
-    let renderSequence = 0;
-    let pendingRenderTimer = null;
-    const renderHistory = [];
 
+    function removeLegacyDemoData(state) {
+      state.settings = state.settings || {};
+      if (state.settings.demoDataCleanedAt) return;
+
+      const isDemoAccount = (row) => Boolean(row?.demo) || String(row?.id || '').startsWith('demo-');
+      const demoAccountIds = new Set([
+        ...(state.calendarAccounts || []).filter(isDemoAccount).map((row) => row.id),
+        ...(state.mailAccounts || []).filter(isDemoAccount).map((row) => row.id),
+        ...(state.socialAccounts || []).filter(isDemoAccount).map((row) => row.id)
+      ]);
+      const legacyScenarioDetected = Boolean(state.ownerPreview) || demoAccountIds.size > 0;
+      if (!legacyScenarioDetected) return;
+
+      const demoTaskTitles = new Set([
+        'Finaliser la page de lancement',
+        'Finaliser le devis Martin',
+        'Préparer la semaine prochaine',
+        'Classer les justificatifs'
+      ]);
+      const demoFinanceDescriptions = new Set(['Acompte client', 'Logiciels']);
+
+      state.tasks = (state.tasks || []).filter((row) => !row?.demo && !demoTaskTitles.has(String(row?.title || '')));
+      state.calendarAccounts = (state.calendarAccounts || []).filter((row) => !isDemoAccount(row));
+      state.events = (state.events || []).filter((row) => !row?.demo && !demoAccountIds.has(row?.accountId));
+      state.mailAccounts = (state.mailAccounts || []).filter((row) => !isDemoAccount(row));
+      state.mailMessages = (state.mailMessages || []).filter((row) => !row?.demo && !demoAccountIds.has(row?.accountId));
+      state.socialAccounts = (state.socialAccounts || []).filter((row) => !isDemoAccount(row));
+      state.socialInteractions = (state.socialInteractions || []).filter((row) => !row?.demo && !demoAccountIds.has(row?.accountId));
+      state.health = (state.health || []).filter((row) => row?.source !== 'demo' && !row?.demo);
+      state.healthSources = (state.healthSources || []).filter((row) => row?.mode !== 'demo' && !row?.demo);
+      state.finance = (state.finance || []).filter((row) => !row?.demo && !demoFinanceDescriptions.has(String(row?.description || '')));
+      state.ownerPreview = false;
+      state.settings.demoDataCleanedAt = new Date().toISOString();
+    }
+
+    ctx.updateState(removeLegacyDemoData);
     const copy = () => COPY[ctx.language()] || COPY.en;
     const esc = ctx.escape;
     const tomorrow = () => { const date = new Date(); date.setDate(date.getDate() + 1); return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 10); };
@@ -177,16 +210,14 @@
         }
 
         const mapped = candidates.slice(0, 3).map(mapDecision).filter(Boolean);
-        const selectedRecommendations = mapped;
         window.SigmaDecisionPipeline = {
           status: 'engine',
           produced: decisions.length,
           actionable: actionable.length,
           selected: selected.length,
-          mapped: mapped.length,
-          displayed: selectedRecommendations.length
+          mapped: mapped.length
         };
-        return selectedRecommendations;
+        return mapped;
       } catch (error) {
         console.error('Decision Engine dashboard bridge failed', error);
         const fallback = INTEL.recommendations(state).slice(0, 3);
@@ -223,36 +254,6 @@
     }
     function safe(value) {
       return esc(normalizeText(value));
-    }
-
-    function normalizeKnownUiText(root = document) {
-      if (!root || typeof document === 'undefined') return;
-      const selector = '#app-shell, #panel-dashboard, #v17-today-recommendations, #v17-context-summary, nav, aside, header';
-      const scopes = root === document
-        ? [...document.querySelectorAll(selector)]
-        : [root];
-      const seen = new Set();
-      scopes.forEach((scope) => {
-        if (!scope || seen.has(scope)) return;
-        seen.add(scope);
-        const walker = document.createTreeWalker(scope, NodeFilter.SHOW_TEXT);
-        const nodes = [];
-        while (walker.nextNode()) nodes.push(walker.currentNode);
-        nodes.forEach((node) => {
-          const parent = node.parentElement;
-          if (!parent || ['SCRIPT', 'STYLE', 'NOSCRIPT'].includes(parent.tagName)) return;
-          const fixed = normalizeText(node.nodeValue);
-          if (fixed !== node.nodeValue) node.nodeValue = fixed;
-        });
-        scope.querySelectorAll('[title],[aria-label],[placeholder]').forEach((element) => {
-          ['title', 'aria-label', 'placeholder'].forEach((name) => {
-            if (!element.hasAttribute(name)) return;
-            const current = element.getAttribute(name);
-            const fixed = normalizeText(current);
-            if (fixed !== current) element.setAttribute(name, fixed);
-          });
-        });
-      });
     }
 
     function translateReason(reason) {
@@ -360,7 +361,7 @@
       document.getElementById('v17-confidence-value').textContent = `${confidence}%`;
       document.getElementById('v17-confidence-bar').style.width = `${confidence}%`;
       const sources = activeSourceCount(state);
-      document.getElementById('v17-source-count').textContent = normalizeText(copy().sourceCount.replace('{count}', sources));
+      document.getElementById('v17-source-count').textContent = copy().sourceCount.replace('{count}', sources);
       document.getElementById('v17-full-dashboard-toggle').textContent = fullDashboard ? copy().calm : copy().full;
       document.body.classList.toggle('v17-full-dashboard', fullDashboard);
       const graph = INTEL.graph(state);
@@ -371,8 +372,7 @@
         pipeline: window.SigmaDecisionPipeline || {},
         produced: Number(window.SigmaDecisionPipeline?.produced ?? recs.length),
         selected: Number(window.SigmaDecisionPipeline?.selected ?? recs.length),
-        mapped: Number(window.SigmaDecisionPipeline?.mapped ?? recs.length),
-        displayedRecommendations: recs.length,
+        mapped: recs.length,
         displayed: root.querySelectorAll('.v17-recommendation').length,
         explained: recs.filter((item) => (item.reasons || []).length > 0 || item.explanationSummary).length,
         confidences: engineConfidences,
@@ -589,48 +589,11 @@
         'v17-mobile-today': copy().navToday, 'v17-mobile-attention': copy().navAttention, 'v17-mobile-plan': copy().navPlan,
         'v17-attention-sources-label': copy().navSources, 'v17-plan-today-label': copy().navToday, 'v17-plan-refresh-label': copy().refresh
       };
-      Object.entries(values).forEach(([id, value]) => { const el = document.getElementById(id); if (el) el.textContent = normalizeText(value); });
+      Object.entries(values).forEach(([id, value]) => { const el = document.getElementById(id); if (el) el.textContent = value; });
       const tabValues = { all: copy().all, reply: copy().replies, opportunity: copy().opportunities, admin: copy().admin, wellbeing: copy().wellbeing };
-      Object.entries(tabValues).forEach(([key, label]) => { const el = document.querySelector(`[data-v17-attention-filter="${key}"] span`); if (el) el.textContent = normalizeText(label); });
+      Object.entries(tabValues).forEach(([key, label]) => { const el = document.querySelector(`[data-v17-attention-filter="${key}"] span`); if (el) el.textContent = label; });
     }
-    function stateFingerprint(state) {
-      return {
-        tasks: (state.tasks || []).length,
-        mail: (state.mailMessages || []).length,
-        social: (state.socialInteractions || []).length,
-        events: (state.events || []).length,
-        accounts: (state.mailAccounts || []).length + (state.socialAccounts || []).length
-      };
-    }
-    function render(reason = 'direct') {
-      renderSequence += 1;
-      const before = stateFingerprint(ctx.getState());
-      updateStaticCopy();
-      renderToday();
-      renderAttention();
-      renderPlan();
-      renderConnections();
-      normalizeKnownUiText(document);
-      const entry = {
-        sequence: renderSequence,
-        at: new Date().toISOString(),
-        reason,
-        state: before,
-        pipeline: { ...(window.SigmaDecisionPipeline || {}) },
-        displayed: document.querySelectorAll('#v17-today-recommendations .v17-recommendation').length
-      };
-      renderHistory.push(entry);
-      if (renderHistory.length > 25) renderHistory.shift();
-      window.SigmaDecisionRenderHistory = renderHistory;
-      if (window.SigmaDecisionDebug) window.SigmaDecisionDebug.renderHistory = [...renderHistory];
-    }
-    function scheduleRender(reason = 'state-update') {
-      if (pendingRenderTimer) window.clearTimeout(pendingRenderTimer);
-      pendingRenderTimer = window.setTimeout(() => {
-        pendingRenderTimer = null;
-        render(reason);
-      }, 160);
-    }
+    function render() { updateStaticCopy(); renderToday(); renderAttention(); renderPlan(); renderConnections(); }
 
     document.addEventListener('click', (event) => {
       const filter = event.target.closest('[data-v17-attention-filter]');
@@ -702,9 +665,9 @@
       if (adminNav) adminNav.hidden = !show;
       if (adminPanel) adminPanel.dataset.available = show ? 'true' : 'false';
     }
-    ctx.subscribe(() => { adminVisibility(); scheduleRender('state-subscription'); });
-    document.addEventListener('languagechange', () => render('language-change'));
-    adminVisibility(); render('initial');
+    ctx.subscribe(() => { adminVisibility(); render(); });
+    document.addEventListener('languagechange', render);
+    adminVisibility(); render();
     if (config.adminQaEnabled) window.setTimeout(runAdminTests, 400);
     return { render, runAdminTests };
   }

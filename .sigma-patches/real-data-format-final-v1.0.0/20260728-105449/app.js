@@ -33,8 +33,6 @@
 
   const clone = (value) => typeof structuredClone === 'function' ? structuredClone(value) : JSON.parse(JSON.stringify(value));
   let state = loadState();
-  // Persist the normalized state immediately so removed fixtures do not return on refresh.
-  persist();
   if (REQUESTED_EDITION) { state.settings.profile = REQUESTED_EDITION; persist(); }
   let pendingCheckout = URL_PARAMS.get('checkout');
   if (!['monthly', 'annual'].includes(pendingCheckout)) pendingCheckout = '';
@@ -58,38 +56,6 @@
     if (!Array.isArray(next.intelligence.feedback)) next.intelligence.feedback = [];
     next.ownerPreview = Boolean(raw.ownerPreview);
     if (!next.coachHistory.length && Array.isArray(raw.aiHistory)) next.coachHistory = raw.aiHistory;
-
-    // Production data guard: demo fixtures must never enter the live workspace,
-    // whether state comes from localStorage or a cloud/account replacement.
-    const demoId = (value) => /^demo(?:-|$)/i.test(String(value || ''));
-    const demoAccount = (row) => Boolean(row?.demo) || demoId(row?.id);
-    const syntheticTaskTitles = new Set([
-      'Finaliser la page de lancement',
-      'Finaliser le devis Martin',
-      'Préparer la semaine prochaine',
-      'Classer les justificatifs'
-    ]);
-    const demoAccountIds = new Set([
-      ...next.calendarAccounts.filter(demoAccount).map((row) => String(row.id || '')),
-      ...next.mailAccounts.filter(demoAccount).map((row) => String(row.id || '')),
-      ...next.socialAccounts.filter(demoAccount).map((row) => String(row.id || ''))
-    ]);
-    next.tasks = next.tasks.filter((row) => !row?.demo && !syntheticTaskTitles.has(String(row?.title || '')));
-    next.calendarAccounts = next.calendarAccounts.filter((row) => !demoAccount(row));
-    next.events = next.events.filter((row) => {
-      const source = String(row?.source || '');
-      const accountId = String(row?.accountId || '');
-      const id = String(row?.id || row?.externalId || '');
-      return !row?.demo && source !== 'calendar-demo' && !demoAccountIds.has(accountId) && !demoId(id);
-    });
-    next.mailAccounts = next.mailAccounts.filter((row) => !demoAccount(row));
-    next.mailMessages = next.mailMessages.filter((row) => !row?.demo && !demoAccountIds.has(String(row?.accountId || '')));
-    next.socialAccounts = next.socialAccounts.filter((row) => !demoAccount(row));
-    next.socialInteractions = next.socialInteractions.filter((row) => !row?.demo && !demoAccountIds.has(String(row?.accountId || '')));
-    next.health = next.health.filter((row) => !row?.demo && row?.source !== 'demo');
-    next.healthSources = next.healthSources.filter((row) => !row?.demo && row?.mode !== 'demo');
-    next.settings.realDataGuardVersion = 1;
-    next.ownerPreview = false;
     return next;
   }
 

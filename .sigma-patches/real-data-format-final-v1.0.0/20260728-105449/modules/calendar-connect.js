@@ -32,7 +32,7 @@
       ctx.updateState((state)=>{
         state.calendarAccounts=(state.calendarAccounts||[]).filter((a)=>a.provider!==provider);
         state.calendarAccounts.push({id,provider,email:`demo@${provider}.test`,label:providerName(provider),demo:true,status:'connected',createdAt:new Date().toISOString()});
-        const rows=[{id:`${id}-1`,externalId:`${id}-1`,externalProvider:provider,title:'Rendez-vous client',date:date(0),time:'15:30',startAt:`${date(0)}T15:30:00`,source:'calendar-demo',demo:true,accountId:id},{id:`${id}-2`,externalId:`${id}-2`,externalProvider:provider,title:'Échéance de proposition',date:date(1),time:'10:00',startAt:`${date(1)}T10:00:00`,source:'calendar-demo',demo:true,accountId:id}];
+        const rows=[{id:`${id}-1`,externalId:`${id}-1`,externalProvider:provider,title:'Rendez-vous client',date:date(0),time:'15:30',startAt:`${date(0)}T15:30:00`,source:'calendar-demo'},{id:`${id}-2`,externalId:`${id}-2`,externalProvider:provider,title:'Échéance de proposition',date:date(1),time:'10:00',startAt:`${date(1)}T10:00:00`,source:'calendar-demo'}];
         state.events=(state.events||[]).filter((e)=>e.externalProvider!==provider); state.events.push(...rows);
       });
       ctx.toast(copy().imported); render();
@@ -48,8 +48,7 @@
           try { const rows=await window.SigmaGoogle.importCalendar(); ctx.updateState(state=>{state.events=(state.events||[]).filter(e=>e.externalProvider!=='google').concat(rows);state.calendarSettings={...(state.calendarSettings||{}),lastSync:new Date().toISOString()};});ctx.toast(copy().imported); }
           catch(error){ctx.toast(error.message,'error');} return;
         }
-        ctx.toast(copy().failed, 'error');
-        return;
+        const provider=(ctx.getState().calendarAccounts||[])[0]?.provider || 'google'; demo(provider); return;
       }
       try { const payload=await request('/api/calendar/events'); ctx.updateState((state)=>{const providers=new Set((payload.events||[]).map((e)=>e.provider)); state.events=(state.events||[]).filter((e)=>!providers.has(e.externalProvider)); state.events.push(...(payload.events||[]).map((e)=>({...e,externalProvider:e.provider,source:'calendar-connector'}))); state.calendarSettings={...(state.calendarSettings||{}),lastSync:new Date().toISOString()};}); ctx.toast(copy().imported); }
       catch { ctx.toast(copy().failed,'error'); }

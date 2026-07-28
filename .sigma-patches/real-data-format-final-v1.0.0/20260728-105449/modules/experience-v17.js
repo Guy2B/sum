@@ -42,10 +42,48 @@
     let attentionFilter = 'all';
     let fullDashboard = false;
     let lastReport = null;
+    let stableTodayRecommendations = [];
+    let stableTodayUpdatedAt = 0;
     let renderSequence = 0;
     let pendingRenderTimer = null;
     const renderHistory = [];
 
+    function removeLegacyDemoData(state) {
+      state.settings = state.settings || {};
+      if (state.settings.demoDataCleanedAt) return;
+
+      const isDemoAccount = (row) => Boolean(row?.demo) || String(row?.id || '').startsWith('demo-');
+      const demoAccountIds = new Set([
+        ...(state.calendarAccounts || []).filter(isDemoAccount).map((row) => row.id),
+        ...(state.mailAccounts || []).filter(isDemoAccount).map((row) => row.id),
+        ...(state.socialAccounts || []).filter(isDemoAccount).map((row) => row.id)
+      ]);
+      const legacyScenarioDetected = Boolean(state.ownerPreview) || demoAccountIds.size > 0;
+      if (!legacyScenarioDetected) return;
+
+      const demoTaskTitles = new Set([
+        'Finaliser la page de lancement',
+        'Finaliser le devis Martin',
+        'Préparer la semaine prochaine',
+        'Classer les justificatifs'
+      ]);
+      const demoFinanceDescriptions = new Set(['Acompte client', 'Logiciels']);
+
+      state.tasks = (state.tasks || []).filter((row) => !row?.demo && !demoTaskTitles.has(String(row?.title || '')));
+      state.calendarAccounts = (state.calendarAccounts || []).filter((row) => !isDemoAccount(row));
+      state.events = (state.events || []).filter((row) => !row?.demo && !demoAccountIds.has(row?.accountId));
+      state.mailAccounts = (state.mailAccounts || []).filter((row) => !isDemoAccount(row));
+      state.mailMessages = (state.mailMessages || []).filter((row) => !row?.demo && !demoAccountIds.has(row?.accountId));
+      state.socialAccounts = (state.socialAccounts || []).filter((row) => !isDemoAccount(row));
+      state.socialInteractions = (state.socialInteractions || []).filter((row) => !row?.demo && !demoAccountIds.has(row?.accountId));
+      state.health = (state.health || []).filter((row) => row?.source !== 'demo' && !row?.demo);
+      state.healthSources = (state.healthSources || []).filter((row) => row?.mode !== 'demo' && !row?.demo);
+      state.finance = (state.finance || []).filter((row) => !row?.demo && !demoFinanceDescriptions.has(String(row?.description || '')));
+      state.ownerPreview = false;
+      state.settings.demoDataCleanedAt = new Date().toISOString();
+    }
+
+    ctx.updateState(removeLegacyDemoData);
     const copy = () => COPY[ctx.language()] || COPY.en;
     const esc = ctx.escape;
     const tomorrow = () => { const date = new Date(); date.setDate(date.getDate() + 1); return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 10); };
@@ -85,7 +123,7 @@
           produced: fallback.length,
           selected: fallback.length
         };
-        return fallback;
+        return stabilizeTodayRecommendations(fallback, state);
       }
 
       try {
@@ -177,16 +215,17 @@
         }
 
         const mapped = candidates.slice(0, 3).map(mapDecision).filter(Boolean);
-        const selectedRecommendations = mapped;
+        const stabilized = stabilizeTodayRecommendations(mapped, state);
         window.SigmaDecisionPipeline = {
           status: 'engine',
           produced: decisions.length,
           actionable: actionable.length,
           selected: selected.length,
           mapped: mapped.length,
-          displayed: selectedRecommendations.length
+          stabilized: stabilized.length,
+          retained: Math.max(0, stabilized.length - mapped.length)
         };
-        return selectedRecommendations;
+        return stabilized;
       } catch (error) {
         console.error('Decision Engine dashboard bridge failed', error);
         const fallback = INTEL.recommendations(state).slice(0, 3);
@@ -196,7 +235,7 @@
           produced: fallback.length,
           selected: fallback.length
         };
-        return fallback;
+        return stabilizeTodayRecommendations(fallback, state);
       }
     }
 
@@ -253,6 +292,34 @@
           });
         });
       });
+    }
+
+    function stabilizeTodayRecommendations(current, state) {
+      const now = Date.now();
+      const attentionIds = new Set(
+        INTEL.attention(state).map((item) => String(item?.id || '')).filter(Boolean)
+      );
+      const currentIds = new Set(current.map((item) => String(item?.id || '')).filter(Boolean));
+      const transientWindowMs = 15000;
+      const previousStillValid = stableTodayRecommendations.filter((item) => {
+        const id = String(item?.id || '');
+        if (!id || currentIds.has(id)) return false;
+        return attentionIds.has(id) || (now - stableTodayUpdatedAt) < transientWindowMs;
+      });
+      const merged = [];
+      const seen = new Set();
+      [...current, ...previousStillValid].forEach((item) => {
+        const id = String(item?.id || '');
+        if (!id || seen.has(id)) return;
+        seen.add(id);
+        merged.push(item);
+      });
+      const stable = merged.slice(0, 3);
+      if (stable.length >= current.length || current.length >= 3) {
+        stableTodayRecommendations = stable;
+        stableTodayUpdatedAt = now;
+      }
+      return stable;
     }
 
     function translateReason(reason) {
@@ -372,7 +439,8 @@
         produced: Number(window.SigmaDecisionPipeline?.produced ?? recs.length),
         selected: Number(window.SigmaDecisionPipeline?.selected ?? recs.length),
         mapped: Number(window.SigmaDecisionPipeline?.mapped ?? recs.length),
-        displayedRecommendations: recs.length,
+        stabilized: recs.length,
+        retained: Number(window.SigmaDecisionPipeline?.retained ?? 0),
         displayed: root.querySelectorAll('.v17-recommendation').length,
         explained: recs.filter((item) => (item.reasons || []).length > 0 || item.explanationSummary).length,
         confidences: engineConfidences,
