@@ -102,7 +102,28 @@
           ? decisionResult.today.items
           : [];
 
-        return selected
+        /*
+         * The Today projection can be capacity-limited to a single item even
+         * when the engine has produced several valid decisions. The dashboard
+         * promise is to surface up to three decisions, without inventing any:
+         * keep the engine-selected items first, then complete from the engine's
+         * already-ranked actionable decisions.
+         */
+        const selectedIds = new Set(
+          selected
+            .map((item) => String(item?.signalId || item?.id || ''))
+            .filter(Boolean)
+        );
+
+        const dashboardSelection = [
+          ...selected,
+          ...decisions.filter((decision) => {
+            const id = String(decision?.signalId || decision?.id || '');
+            return id && !selectedIds.has(id) && decision?.action !== 'ignore';
+          })
+        ].slice(0, 3);
+
+        return dashboardSelection
           .map((selectedItem) => {
             const id = String(
               selectedItem?.signalId ||
@@ -163,9 +184,38 @@
                 decision?.action === 'reply' ||
                 Boolean(sourceItem.needsReply),
               category,
-              reasons: Array.isArray(decision?.reasons)
-                ? decision.reasons
-                : (sourceItem.reasons || []),
+              reasons: (() => {
+                const values = [
+                  ...(Array.isArray(decision?.reasons) ? decision.reasons : []),
+                  ...(Array.isArray(decision?.explanation?.reasons) ? decision.explanation.reasons : []),
+                  ...(Array.isArray(decision?.evidence) ? decision.evidence : []),
+                  decision?.reason,
+                  decision?.rationale,
+                  decision?.why,
+                  decision?.explanation?.summary,
+                  decision?.explanation?.text,
+                  ...(Array.isArray(sourceItem.reasons) ? sourceItem.reasons : [])
+                ];
+
+                return [...new Set(
+                  values
+                    .flatMap((value) => {
+                      if (typeof value === 'string') return [value];
+                      if (value && typeof value === 'object') {
+                        return [
+                          value.label,
+                          value.reason,
+                          value.summary,
+                          value.text,
+                          value.description
+                        ].filter(Boolean);
+                      }
+                      return [];
+                    })
+                    .map((value) => String(value).trim())
+                    .filter(Boolean)
+                )];
+              })(),
               action: decision?.action || 'review',
               confidence: Number(decision?.confidence || 0),
               priorityBand:
@@ -223,6 +273,7 @@
       const state = ctx.getState();
       const recs = todayRecommendations(state);
       const root = document.getElementById('v17-today-recommendations');
+      root.dataset.count = String(recs.length);
       root.innerHTML = recs.length ? recs.map((item, index) => card(item, index)).join('') : `<div class="empty-state">${copy().todayEmpty}</div>`;
       const confidence = INTEL.confidence(state);
       document.getElementById('v17-confidence-value').textContent = `${confidence}%`;

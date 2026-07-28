@@ -2802,3 +2802,13 @@ a.social-icon-action {
 @media (max-width: 760px) { .v1-signal-card { grid-template-columns: 30px minmax(0,1fr); } .v1-signal-action { grid-column: 2; } .v1-beta-heading { align-items: flex-start; flex-direction: column; } }
 .v1-primary-toggle{display:flex;align-items:center;gap:.45rem;font-size:.78rem;color:var(--text-muted,#6b7280)}
 .v1-primary-toggle input{accent-color:currentColor}.v1-signal-action button{width:100%}.v1-signal-action small{max-width:190px;line-height:1.35}
+
+
+/* A0.2 functional baseline: decision cards keep a readable layout for 1–3 items. */
+.v17-recommendations[data-count="1"]{grid-template-columns:minmax(0,1fr)}
+.v17-recommendations[data-count="2"]{grid-template-columns:repeat(2,minmax(0,1fr))}
+.v17-recommendation{grid-template-rows:auto 1fr auto;align-content:start}
+.v17-recommendation-main{display:flex;flex-direction:column;min-height:0}
+.v17-recommendation-main details{margin-top:auto}
+.v17-recommendation details p{white-space:normal;overflow-wrap:anywhere;line-height:1.5}
+.v17-recommendation-actions{margin-top:4px}
