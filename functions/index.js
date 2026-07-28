@@ -236,6 +236,34 @@ const TIKTOK_CLIENT_KEY=defineString('TIKTOK_CLIENT_KEY',{default:''});
 const TIKTOK_REDIRECT_URI=defineString('TIKTOK_REDIRECT_URI',{default:''});
 const TIKTOK_PUBLIC_APP_URL=defineString('TIKTOK_PUBLIC_APP_URL',{default:'https://guy2b.github.io/sum/app.html'});
 
+exports.socialProviders=onRequest((req,res)=>{
+  res.set('Cache-Control','private, max-age=60');
+  res.set('Access-Control-Allow-Origin',String(req.headers.origin||'*'));
+  res.set('Vary','Origin');
+  if(req.method==='OPTIONS'){
+    res.set('Access-Control-Allow-Methods','GET, OPTIONS');
+    res.set('Access-Control-Allow-Headers','Content-Type, Authorization');
+    return res.status(204).send('');
+  }
+  if(req.method!=='GET'){
+    return res.status(405).json({ok:false,error:'method-not-allowed'});
+  }
+
+  const configured=(clientId,redirectUri)=>Boolean(clientId&&redirectUri);
+  const providers={
+    linkedin:{configured:configured(LINKEDIN_CLIENT_ID.value(),LINKEDIN_REDIRECT_URI.value())},
+    x:{configured:configured(X_CLIENT_ID.value(),X_REDIRECT_URI.value())},
+    tiktok:{configured:configured(TIKTOK_CLIENT_KEY.value(),TIKTOK_REDIRECT_URI.value())},
+    youtube:{configured:true,message:'Connexion via le compte Google de l’utilisateur'},
+    facebook:{configured:false,message:'Intégration désactivée'},
+    instagram:{configured:false,message:'Intégration désactivée'}
+  };
+  Object.values(providers).forEach((provider)=>{
+    if(!provider.message) provider.message=provider.configured?'Disponible':'Configuration OAuth incomplète';
+  });
+  return res.status(200).json({ok:true,providers});
+});
+
 function tiktokConfig(){
   const clientKey=TIKTOK_CLIENT_KEY.value();
   const redirectUri=TIKTOK_REDIRECT_URI.value();
@@ -474,8 +502,23 @@ exports.tiktokSync=onCall({secrets:[TIKTOK_CLIENT_SECRET]},async req=>{
       syncedAt:new Date().toISOString()
     };
   }catch(error){
+    const message=String(error?.message||'TikTok profile request failed');
+    const invalidToken=/access token|invalid token|token.*invalid|unauthoriz|401/i.test(message);
     console.error('tiktokSync',error);
-    throw new HttpsError('internal',error.message||'TikTok profile request failed');
+    if(invalidToken){
+      await Promise.all([
+        db.doc(`socialPrivateTokens/${uid}/providers/tiktok`).delete(),
+        db.doc(`users/${uid}/socialProviders/tiktok`).set({
+          provider:'tiktok',
+          connected:false,
+          accounts:[],
+          errorCode:'token-invalid',
+          updatedAt:admin.firestore.FieldValue.serverTimestamp()
+        },{merge:true})
+      ]);
+      throw new HttpsError('failed-precondition','Le jeton TikTok a expiré. Reconnectez le compte.');
+    }
+    throw new HttpsError('internal',message);
   }
 });
 

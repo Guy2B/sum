@@ -158,7 +158,6 @@
       const current=await status();
       if(current?.connected){
         if(Array.isArray(current.accounts)&&current.accounts[0])mirrorAccount(current.accounts[0]);
-        try{ await sync(); }catch(error){ console.warn('[SigmaTikTok] profile sync deferred',error?.message||error); }
       }else{
         removeMirroredAccount();
       }
@@ -190,7 +189,7 @@
     await waitForSigmaAuth();
     const current=await status();
     if(current?.connected&&Array.isArray(current.accounts)&&current.accounts[0])mirrorAccount(current.accounts[0]);
-    try{ await sync(); }catch(error){ console.warn('[SigmaTikTok] profile sync deferred',error?.message||error); }
+    // TikTok reste en sandbox : la synchronisation doit être lancée manuellement.
 
     url.searchParams.delete('sigmaTikTok');
     url.searchParams.delete('provider');

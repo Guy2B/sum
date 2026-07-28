@@ -19,7 +19,7 @@
   }
   function ready(){
     const c=read();
-    return Boolean(c.enabled&&c.clientId&&c.apiKey&&c.discoveryDoc&&c.scopes);
+    return Boolean(c.enabled&&c.clientId&&c.discoveryDoc&&c.scopes);
   }
   function publicView(){
     const c=read();

@@ -40,6 +40,71 @@
       tasks.forEach((task) => { if (selected.length < 3 && !selected.some((item) => item.id === task.id)) selected.push(task); });
       return selected;
     }
+
+    function decisionItems(state) {
+      const engine = window.SIGMA_DECISION_ENGINE;
+      if (!engine?.decideLegacyState) return [];
+
+      try {
+        const capacityMinutes = Number(
+          state.settings?.todayCapacityMinutes ||
+          Number(state.settings?.todayEnergy || 0) * 45 ||
+          180
+        );
+
+        const result = engine.decideLegacyState(state, { capacityMinutes });
+        const items = result?.today?.items || result?.decisions || [];
+
+        return Array.isArray(items) ? items.slice(0, 3) : [];
+      } catch (error) {
+        console.error('[Dashboard] Decision engine failed', error);
+        return [];
+      }
+    }
+
+    function decisionTitle(decision) {
+      return (
+        decision?.title ||
+        decision?.signal?.title ||
+        decision?.source?.title ||
+        decision?.subject ||
+        decision?.actionLabel ||
+        decision?.action ||
+        'Décision à examiner'
+      );
+    }
+
+    function decisionMeta(decision) {
+      const reason =
+        decision?.explanation?.reasons?.[0] ||
+        decision?.explanation?.summary ||
+        '';
+
+      const confidence = Number(decision?.confidence);
+
+      return {
+        reason,
+        confidence: Number.isFinite(confidence)
+          ? Math.round(confidence)
+          : null
+      };
+    }
+
+    function decisionMinutes(decision) {
+      return Number(
+        decision?.effortMinutes ||
+        decision?.dimensions?.effortMinutes ||
+        decision?.estimate ||
+        30
+      );
+    }
+
+    function decisionPanel(decision) {
+      const sourceType = String(decision?.sourceType || '').toLowerCase();
+      return sourceType === 'calendar' || sourceType === 'event'
+        ? 'planner'
+        : 'tasks';
+    }
     function habitDone(state, habitId) { return state.habitLogs.some((log) => log.habitId === habitId && log.date === ctx.today() && log.done); }
     function progressRow(label, value) { return `<div class="progress-row"><div><span>${ctx.escape(label)}</span><strong>${Math.round(value)}%</strong></div><div class="progress-track"><span style="width:${Math.max(0, Math.min(100, value))}%"></span></div></div>`; }
 
@@ -52,17 +117,65 @@
     }
 
     function renderDay(state) {
-      const essentials = essentialTasks(state); const priority = essentials[0];
-      document.getElementById('dashboard-priority-one').innerHTML = priority ? `<div class="priority-one-content"><span class="priority-number">01</span><div><h2>${ctx.escape(priority.title)}</h2><p>${priority.estimate || 30} min · ${priority.dueDate ? ctx.formatDate(priority.dueDate) : ctx.t('tasks.v12.noDeadline')}</p></div><button class="button primary small" type="button" data-panel="tasks">${ctx.t('dashboard.v12.start')}</button></div>` : `<div class="empty-state compact">${ctx.t('dashboard.v12.noPriority')}</div>`;
-      document.getElementById('dashboard-essential-tasks').innerHTML = essentials.length ? essentials.map((task, index) => `<button class="mini-task" type="button" data-panel="tasks"><span>${index + 1}</span><div><strong>${ctx.escape(task.title)}</strong><small>${task.estimate || 30} min</small></div></button>`).join('') : `<div class="empty-state compact">${ctx.t('dashboard.v12.noEssential')}</div>`;
+      const engineDecisions = decisionItems(state);
+      const essentials = engineDecisions.length
+        ? engineDecisions
+        : essentialTasks(state);
+      const priority = essentials[0];
+
+      const priorityTitle = priority ? decisionTitle(priority) : '';
+      const priorityMeta = priority
+        ? decisionMeta(priority)
+        : { reason: '', confidence: null };
+      const priorityMinutes = priority ? decisionMinutes(priority) : 30;
+
+      document.getElementById('dashboard-priority-one').innerHTML = priority
+        ? `<div class="priority-one-content">
+            <span class="priority-number">01</span>
+            <div>
+              <h2>${ctx.escape(priorityTitle)}</h2>
+              <p>${priorityMinutes} min${priorityMeta.confidence !== null ? ` · confiance ${priorityMeta.confidence}%` : ''}</p>
+              ${priorityMeta.reason ? `<small>${ctx.escape(priorityMeta.reason)}</small>` : ''}
+            </div>
+            <button class="button primary small" type="button" data-panel="${decisionPanel(priority)}">${ctx.t('dashboard.v12.start')}</button>
+          </div>`
+        : `<div class="empty-state compact">${ctx.t('dashboard.v12.noPriority')}</div>`;
+
+      document.getElementById('dashboard-essential-tasks').innerHTML = essentials.length
+        ? essentials.map((item, index) => {
+            const title = decisionTitle(item);
+            const meta = decisionMeta(item);
+            const minutes = decisionMinutes(item);
+
+            return `<button class="mini-task" type="button" data-panel="${decisionPanel(item)}">
+              <span>${index + 1}</span>
+              <div>
+                <strong>${ctx.escape(title)}</strong>
+                <small>${minutes} min${meta.reason ? ` · ${ctx.escape(meta.reason)}` : ''}</small>
+              </div>
+            </button>`;
+          }).join('')
+        : `<div class="empty-state compact">${ctx.t('dashboard.v12.noEssential')}</div>`;
+
       const habits = state.habits.slice(0, 5);
       document.getElementById('dashboard-habits-today').innerHTML = habits.length ? habits.map((habit) => `<button class="habit-mini ${habitDone(state, habit.id) ? 'done' : ''}" type="button" data-dashboard-habit="${habit.id}"><span>${habitDone(state, habit.id) ? '✓' : ''}</span><strong>${ctx.escape(habit.name)}</strong></button>`).join('') : `<div class="empty-state compact">${ctx.t('dashboard.v12.noHabits')}</div>`;
       const energy = Number(state.settings.todayEnergy || [...state.health].sort((a, b) => String(b.date).localeCompare(String(a.date)))[0]?.energy || 7);
       energyRange.value = String(energy); document.getElementById('dashboard-energy-value').textContent = String(energy);
 
       const insights = window.SUM_COACH_ENGINE?.analyse(state, ctx) || []; const insight = insights[0];
-      document.getElementById('dashboard-focus-title').textContent = priority ? ctx.t('dashboard.v12.focusTask', { task: priority.title }) : (insight?.title || ctx.t('dashboard.v12.focusEmptyTitle'));
-      document.getElementById('dashboard-focus-text').textContent = priority ? ctx.t('dashboard.v12.focusTaskText', { minutes: priority.estimate || 30, energy }) : (insight?.text || ctx.t('dashboard.v12.focusEmptyText'));
+      document.getElementById('dashboard-focus-title').textContent = priority
+        ? ctx.t('dashboard.v12.focusTask', { task: decisionTitle(priority) })
+        : (insight?.title || ctx.t('dashboard.v12.focusEmptyTitle'));
+
+      document.getElementById('dashboard-focus-text').textContent = priority
+        ? (
+            decisionMeta(priority).reason ||
+            ctx.t('dashboard.v12.focusTaskText', {
+              minutes: decisionMinutes(priority),
+              energy
+            })
+          )
+        : (insight?.text || ctx.t('dashboard.v12.focusEmptyText'));
     }
 
     function renderWeek(state) {

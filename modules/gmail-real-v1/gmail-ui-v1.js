@@ -24,7 +24,7 @@
     const current=window.SigmaGmailConfigV1.read();
     const clientId=prompt('Google OAuth Client ID',current.clientId)||current.clientId;
     const apiKey=prompt('Google API Key',current.apiKey)||current.apiKey;
-    window.SigmaGmailConfigV1.write({clientId,apiKey,enabled:Boolean(clientId&&apiKey)});
+    window.SigmaGmailConfigV1.write({clientId,apiKey,enabled:Boolean(clientId)});
     render();
   }
   async function connect(){
